@@ -9,7 +9,7 @@ from states.states import Start
 from keyboards.inline.choice_buttons import choice01
 from utils.notify_admins import on_notify
 
-on_notify(dp, "в start_mess")
+logging.info("в start_mess")
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
 @dp.message_handler(state=Start.Name)

@@ -21,6 +21,7 @@ async def answer_q0(message: Message, state: FSMContext):
                          " то я начну регулярно измерять твою «эмоциональную температуру» в "
                          "течение дня.".format(answer), reply_markup=choice01)
     logging.info(f"{state=}")
+    #await state.finish()
 
 
 # Обработчик нажатия кнопок для предыдущего сообщения
@@ -38,10 +39,10 @@ async def press_key1(call: CallbackQuery, state: FSMContext):
     logging.info(f"{callback_data=}")
     # Отправляем пустую клваиатуру изменяя сообщение, для того, чтобы убрать ее из сообщения
     await call.message.edit_reply_markup(reply_markup=None)
-    await Start.Q2.set()  # или можно await Start.next()
+    await Start.next()  # или можно await Start.next()
 
 
-@dp.message_handler(state=Start.Q2)
+@dp.message_handler(state=Start.Q1)
 async def answer_q1(message: Message, state: FSMContext):
     answer = message.text
     data = await state.get_data()  # Достаем имя пользователя

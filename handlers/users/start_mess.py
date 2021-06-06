@@ -25,7 +25,7 @@ async def answer_q0(message: Message, state: FSMContext):
 
 # Обработчик нажатия кнопок для предыдущего сообщения
 # @dp.callback_query_handler(text_contains="c")  # text_contains="choice:Start:Начнем"
-@dp.callback_query_handler(text_contains="choice")
+@dp.callback_query_handler(state=Start.Name, text_contains="choice")
 async def press_key1(call: CallbackQuery, state: FSMContext):
     # Обязательно сразу сделать answer, чтобы убрать "часики" после нажатия на кнопку.
     # Укажем cache_time, чтобы бот не получал какое-то время апдейты, тогда нижний код не будет выполняться.

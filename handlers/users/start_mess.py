@@ -29,7 +29,7 @@ async def answer_q0(message: Message, state: FSMContext):
 async def press_key1(call: CallbackQuery):
     # Обязательно сразу сделать answer, чтобы убрать "часики" после нажатия на кнопку.
     # Укажем cache_time, чтобы бот не получал какое-то время апдейты, тогда нижний код не будет выполняться.
-    await call.answer(cache_time=60)
+    #await call.answer(cache_time=60)
     callback_data = call.data
     # Отобразим что у нас лежит в callback_data
     # logging.info(f"callback_data='{callback_data}'")

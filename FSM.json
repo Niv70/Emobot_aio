@@ -1,0 +1,17 @@
+{
+    "800980568": {
+        "800980568": {
+            "state": null,
+            "data": {},
+            "bucket": {
+                "antiflood__bot_help": {
+                    "result": true,
+                    "rate_limit": 0.1,
+                    "called_at": 1623143814.9806204,
+                    "delta": 0.0,
+                    "exceeded": 1
+                }
+            }
+        }
+    }
+}

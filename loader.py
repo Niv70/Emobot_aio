@@ -5,5 +5,5 @@ from aiogram.contrib.fsm_storage.files import JSONStorage
 from data import config
 
 bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
-storage = JSONStorage(path=".\FSM")
+storage = JSONStorage(path="FSM.json")
 dp = Dispatcher(bot, storage=storage)

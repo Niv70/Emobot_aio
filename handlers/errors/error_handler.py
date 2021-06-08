@@ -18,40 +18,40 @@ async def errors_handler(update, exception):
     #    :return: stdout logging
 
     if isinstance(exception, CantDemoteChatCreator):
-        logging.exception("Can't demote chat creator")
+        logging.exception("ОшИбКа: Can't demote chat creator")
         return True
 
     if isinstance(exception, MessageNotModified):
-        logging.exception('Message is not modified')
+        logging.exception('ОшИбКа: Message is not modified')
         return True
     if isinstance(exception, MessageCantBeDeleted):
-        logging.exception('Message cant be deleted')
+        logging.exception('ОшИбКа: Message cant be deleted')
         return True
 
     if isinstance(exception, MessageToDeleteNotFound):
-        logging.exception('Message to delete not found')
+        logging.exception('ОшИбКа: Message to delete not found')
         return True
 
     if isinstance(exception, MessageTextIsEmpty):
-        logging.exception('MessageTextIsEmpty')
+        logging.exception('ОшИбКа: MessageTextIsEmpty')
         return True
 
     if isinstance(exception, Unauthorized):
-        logging.exception(f'Unauthorized: {exception}')
+        logging.exception(f'ОшИбКа: Unauthorized: {exception}')
         return True
 
     if isinstance(exception, InvalidQueryID):
-        logging.exception(f'InvalidQueryID: {exception} \nUpdate: {update}')
+        logging.exception(f'ОшИбКа: InvalidQueryID: {exception} \nUpdate: {update}')
         return True
 
     if isinstance(exception, TelegramAPIError):
-        logging.exception(f'TelegramAPIError: {exception} \nUpdate: {update}')
+        logging.exception(f'ОшИбКа: TelegramAPIError: {exception} \nUpdate: {update}')
         return True
     if isinstance(exception, RetryAfter):
-        logging.exception(f'RetryAfter: {exception} \nUpdate: {update}')
+        logging.exception(f'ОшИбКа: RetryAfter: {exception} \nUpdate: {update}')
         return True
     if isinstance(exception, CantParseEntities):
-        logging.exception(f'CantParseEntities: {exception} \nUpdate: {update}')
+        logging.exception(f'ОшИбКа: CantParseEntities: {exception} \nUpdate: {update}')
         return True
     
-    logging.exception(f'Update: {update} \n{exception}')
+    logging.exception(f'ОшИбКа: Update: {update} \n{exception}')

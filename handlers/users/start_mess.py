@@ -1,18 +1,22 @@
 # Выделил обработку стартовых сообщени в отдельный файл, чтобы корректно отрабатывала команда /stop
+import datetime
 # from aiogram import types
 from aiogram.types import Message, CallbackQuery
+# Ключи FSMContext: name_user(str[10]),result(int),Tmz(int),StartT(int),EndT(int),Period(int),TskT(int),PrevData(int),
+# CurrentDay(int),RunPool(int),RunTask(int)
 from aiogram.dispatcher import FSMContext
 # import logging
 
 from loader import dp
 from states.states import Start
+from utils.common_func import get_digit
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05
 
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
 @dp.message_handler(state=Start.Name)
 async def answer_name(message: Message, state: FSMContext):
-    answer = message.text
+    answer = message.text[:10]  # ограничиваем фантазию пользователя 10ю символами
     await state.update_data(name_user=answer)
     await message.answer("{0}, я хочу помочь тебе исследовать и фиксировать "
                          "собственные эмоции. Если ты соглашаешься участвовать в этой работе,"
@@ -112,24 +116,41 @@ async def answer_tst(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     if answer == "я чувствую интерес":
         await message.answer("У тебя здорово получается!\nНачиная со 2-го дня работы, один раз в день, я буду задавать"
-                             " тебе интересное задание на «прокачку». Постарайся выполнить его честно и быстро - это"
+                             " тебе интересное задание «на прокачку». Постарайся выполнить его честно и быстро - это"
                              " ОЧЕНЬ ВАЖНО! ")
         await message.answer("Отлично, {0}! Блок ознакомительной информации закончен, можно "
-                             "перейти к настройкам времени опроса...".format(name_user))
-        await set_settings()  # следующее состояние установится внутри этой функции
+                             "перейти к настройкам времени опроса.".format(name_user))
+        await set_settings(message, state)  # следующее состояние установится внутри этой функции
     else:
         await message.answer("{0}, попробуй все-таки написать: <b><i>Я чувствую интерес</i></b>".format(name_user))
 
 
-# Функция для настроек времени опроса бота (при вызове в период опроса м.б. прервана без записи в БД)
-async def set_settings():
-    await Start.Q6.set()  # или можно await Start.next()
-"""
-     # my_comm.c_sett(message)
-        curr_data = datetime.datetime.now()
-        curr_time = curr_data.time()
-        gv.bot.send_message(message.chat.id,
-                            "Текущее время {0:0>2}:{1:0>2}".format(curr_time.hour, curr_time.minute))
-        gv.bot.send_message(message.from_user.id, "{0}, пожалуйста, введи удобное время начала опроса в "
-                                                  "часах от 0 до 22".format(name_user))
-"""
+# Функция для настроек времени опроса бота (при наступлении времени опроса м.б. прервана без записи в БД)
+async def set_settings(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    curr_data = datetime.datetime.now()
+    curr_time = curr_data.time()
+    await message.answer("Мое текущее время {0:0>2}:{1:0>2}".format(curr_time.hour, curr_time.minute))
+    await message.answer("{0}, пожалуйста, введи одним числом в часах от 0 до 23 насколько оно отличается от твоего"
+                         " текущего времени".format(name_user))
+    await Start.SetTmz.set()  # или можно await Start.next()
+
+
+# Обработчик ввода цифры Часовой пояс
+@dp.message_handler(state=Start.SetTmz)
+async def answer_tmz(message: Message, state: FSMContext):
+    data = await state.get_data()  # достаем имя пользователя
+    name_user = data.get("name_user")
+    await get_digit(message, state, 0, 23)  # преобразовываем сообщение в цифру для ключа result
+    data = await state.get_data()
+    d = data.get("result")  # достаем результат выполнения функции
+    if d < 0:  # проверка коррктностии ввода пользователя
+        return
+    await state.update_data(Tmz=d)
+    curr_data = datetime.datetime.now()
+    curr_time = curr_data.time()
+    await message.answer("Сей час мое текущее время {0:0>2}:{1:0>2}".format(curr_time.hour, curr_time.minute))
+    await message.answer("Оно совпадает с твоим (минуты м.б. чуть меньше твоих)?")  # !!! Доделать клавиатуру
+    await message.answer("Отлично, {0}! Ты ввел: {1}.".format(name_user, d))
+    await Start.SetStartT.set()  # или можно await Start.next()

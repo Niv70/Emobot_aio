@@ -7,6 +7,8 @@ from utils.set_bot_commands import set_default_commands
 
 
 async def on_startup(dispatcher):
+    # пропуск накопившихся апдейтов
+    await dispatcher.skip_updates()
     # Устанавливаем дефолтные команды
     await set_default_commands(dispatcher)
     # Уведомляем про запуск

@@ -283,11 +283,11 @@ async def answer_tsk_t(message: Message, state: FSMContext):
         t = ((24 - c_time__hour) * 3600 - c_time.minute * 60) + start_t * 3600
     if d == start_t:
         await state.update_data(flag_task=1)  # взводим флажок выполнения задачи
-    t = 60  # !!!!!!!DEBUG
+    t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info('answer_tsk_t 2: засыпаю на {0} сек. c_time__hour={1} c_time.minute='
                  '{2}'.format(t, c_time__hour, c_time.minute))
-    # !!! Добавить создание текстовой клавиатуры
-    # !!! Добавить запись настроек в БД
+    # TODO Добавить создание текстовой клавиатуры
+    # TODO Добавить запись настроек в БД
     await Pool.Wait.set()
     await sleep(t)
     await run_poll(message, state)  # вызов функции опроса

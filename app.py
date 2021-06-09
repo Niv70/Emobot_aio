@@ -14,10 +14,10 @@ async def on_startup(dispatcher):
     # Уведомляем про запуск
     await on_startup_notify(dispatcher)
 
+
 async def on_shutdown(dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
-
 
 
 if __name__ == '__main__':

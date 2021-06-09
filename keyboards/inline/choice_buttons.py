@@ -44,3 +44,10 @@ choice05 = InlineKeyboardMarkup(inline_keyboard=[
         InlineKeyboardButton(text="Договорились! Понятно.", callback_data="choice:Start_Call03:Договорились")
     ]
 ])
+
+choice06 = InlineKeyboardMarkup(inline_keyboard=[
+    [
+        InlineKeyboardButton(text="Да", callback_data="choice:Start_Call04:Да"),
+        InlineKeyboardButton(text="нет", callback_data="choice:Start_Call04:Нет")
+    ]
+])

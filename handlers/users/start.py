@@ -16,7 +16,7 @@ async def bot_start(message: types.Message):
     sti = open("./a_stickers/AnimatedSticker9.tgs", 'rb')  # Подмигивает, снимая очки
     await message.answer_sticker(sticker=sti)
     await message.answer("Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот. А тебя как зовут?")
-    await Start.Name.set()  # или можно await Start.first()
+    await Start.set_user_name.set()  # или можно await Start.first()
 
 
 # Обработка повторного вызова команды /start

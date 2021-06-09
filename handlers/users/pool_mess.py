@@ -12,7 +12,7 @@ import datetime
 from loader import dp
 from states.states import Pool, Task
 from utils.common_func import get_time_next_action
-from .task_mess import run_task
+from .task_mess import run_tsk2
 
 
 # Запуск опроса эмоции
@@ -113,8 +113,10 @@ async def answer_reason(message: Message, state: FSMContext):
     await run_task(message, state)
     return
 
-"""
-# Запуск опроса по задаче
+
+# ================= ПЕРЕНЕС СЮДА БЛОК ИЗ task_mess.py ЧТОБЫ ИЗБЕЖАТЬ ОШИБОК ЦИКЛИЧНОСТИ ИНТЕРПРИТАТОРА =================
+
+# Запуск задач текущего дня
 async def run_task(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
@@ -138,30 +140,19 @@ async def run_task(message: Message, state: FSMContext):
         await run_poll(message, state)  # вызов функции опроса
 
 
-# Запуск задачки "на прокачку" 2-го дня
-async def run_tsk2(message: Message, state: FSMContext):
-    data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
-    await message.answer("Приветствую тебя {0} на этапе выполнения задачи 2-го дня".format(name_user))
-    await message.answer("{0}, пожалуйста, напиши <b><i>Привет!!</i></b>".format(name_user))
-    await Task.Answer_02_05.set()  # Здесь д.б. 02_01. Написал 02_05 просто для демонстрации
-
-
-# Обработчик ввода ответа к задаче
+# Обработчик ввода ПОСЛЕДНЕГО ответа к задачке "на прокачку" 2-го дня
 @dp.message_handler(state=Task.Answer_02_05)
 async def answer_02_05(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
-    if s.lower() != "привет!!":
+    if s.lower() != "привет_2":
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет!!</i></b>".format(name_user))
         return
-    # !!! Добавить запись настроек в БД
-    # !!!!! bd_save_task_answer(s, state)
+    # TODO !!!!! bd_save_task_answer(s, state)
     logging.info("answer_02_05 0: Пользователь {0}(id={1}) ввел ответ: {2}".format(name_user, message.from_user.id, s))
     t = get_time_next_action(state)
     logging.info('answer_02_05 1: засыпаю на {0}'.format(t))
     await Pool.Wait.set()
     await sleep(t)
     await run_poll(message, state)  # вызов функции опроса
-"""

@@ -35,9 +35,9 @@ async def run_poll(message: Message, state: FSMContext):
     logging.info('run_poll 1: c_data.day={0} prev_data={1} current_day={2}'.format(c_data.day, prev_data, current_day))
     if current_day > 18:
         await run_bye(message, state)
-    if c_state is Pool.Wait:
-        await message.answer('{0}! Текущее действие прервано из-за наступления времени очередного '
-                             'опроса.'.format(name_user))
+    if c_state != "Pool:Wait":
+        await message.answer('{0}, ожидание твоего текущего ответа прервано из-за наступления времени очередного '
+                             'опроса!'.format(name_user))
     # начинаем опрос
     sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
     await message.answer_sticker(sticker=sti)

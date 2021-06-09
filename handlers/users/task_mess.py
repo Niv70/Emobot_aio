@@ -10,7 +10,7 @@ import logging
 from loader import dp
 from states.states import Pool, Task
 from utils.common_func import get_time_next_action
-from .pool_mess import run_poll
+# from .pool_mess import run_poll
 
 
 # Запуск опроса по задаче
@@ -34,7 +34,7 @@ async def run_task(message: Message, state: FSMContext):
         logging.info("run_task 0: засыпаю на {0} сек.".format(t))
         await Pool.Wait.set()
         await sleep(t)
-        await run_poll(message, state)  # вызов функции опроса
+    #    await run_poll(message, state)  # вызов функции опроса
 
 
 # Запуск задачки "на прокачку" 2-го дня
@@ -46,7 +46,7 @@ async def run_tsk2(message: Message, state: FSMContext):
     await Task.Answer_02_05.set()  # Здесь д.б. 02_01. Написал 02_05 просто для демонстрации
 
 
-# Обработчик ввода эмоции
+# Обработчик ввода ответа к задаче
 @dp.message_handler(state=Task.Answer_02_05)
 async def answer_02_05(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
@@ -62,4 +62,4 @@ async def answer_02_05(message: Message, state: FSMContext):
     logging.info('answer_02_05 1: засыпаю на {0}'.format(t))
     await Pool.Wait.set()
     await sleep(t)
-    await run_poll(message, state)  # вызов функции опроса
+#    await run_poll(message, state)  # вызов функции опроса

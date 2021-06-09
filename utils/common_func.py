@@ -1,5 +1,5 @@
 # Модуль общих функций (Common functions)
-import aiogram
+# import aiogram
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 import datetime

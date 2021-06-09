@@ -22,9 +22,8 @@ class Emo_users(db.Model):
     __tablename__ = 'emo_users'
     query: sql.Select
     # Уникальный идентификатор
-    user_id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True, unique=True)
     first_name = Column(String(20))
-    # Название категории (для отображения в кнопке)
     name = Column(String(50))
     StartTime = Column(Integer)
     EndTime = Column(Integer)
@@ -38,12 +37,13 @@ class Emo_users(db.Model):
 
     def __repr__(self):
         return "{}<{}>".format(self.name, self.user_id)
-    # 2. Emotions имеет графы:
-    # * user_id – цифра – id пользователя, взятое из его УЗ телеграмм;
-    # * fix_date – ?строка? – дата ответа пользователя;
-    # * fix_time –  ?строка? – время ответа пользователя;
-    # * emotion – цифра – ответ пользователя в виде индекса из списка эмоций;
-    #
+
+# 2. Emotions имеет графы:
+# * user_id – цифра – id пользователя, взятое из его УЗ телеграмм;
+# * fix_date – ?строка? – дата ответа пользователя;
+# * fix_time –  ?строка? – время ответа пользователя;
+# * emotion – цифра – ответ пользователя в виде индекса из списка эмоций;
+#
 class Emotions(db.Model):
     __tablename__ = 'emotions'
     query: sql.Select
@@ -55,12 +55,12 @@ class Emotions(db.Model):
     def __repr__(self):
         return "{}<{}>".format(self.user_id, self.emotion)
 
-    # 2. Tasks имеет графы:
-    # * user_id – цифра – id пользователя, взятое из его УЗ телеграмм;
-    # * task_number – цифра – значение равное значению CurrentDay на момент вызова задачи;
-    # * fix_date – ?строка? – дата ответа пользователя;
-    # * fix_time – ?строка? – время ответа пользователя;
-    # * answer – строка – ответ пользователя (записывается в необработанном виде с ограничением на ?50? символов)
+# 2. Tasks имеет графы:
+# * user_id – цифра – id пользователя, взятое из его УЗ телеграмм;
+# * task_number – цифра – значение равное значению CurrentDay на момент вызова задачи;
+# * fix_date – ?строка? – дата ответа пользователя;
+# * fix_time – ?строка? – время ответа пользователя;
+# * answer – строка – ответ пользователя (записывается в необработанном виде с ограничением на ?50? символов)
 class Tasks(db.Model):
     __tablename__ = 'tasks'
     query: sql.Select

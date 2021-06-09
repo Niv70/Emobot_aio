@@ -7,6 +7,6 @@ async def set_default_commands(dp):
             types.BotCommand("start", "Запустить бота"),
             types.BotCommand("help", "Вывести справку"),
             types.BotCommand("stop", "Остановить бота"),
-            types.BotCommand("dbcreate", "Зачистить базу")  # !!! лучше убрать, чтобы сделать невидимой пользователю
+            types.BotCommand("dbcreate", "Зачистить базу"),
         ]
     )

@@ -12,17 +12,12 @@ async def open_db():
 
 async def create_db():
     # Создаем таблицы
-    await db.set_bind(POSTGRES_URI)
-    db.gino: GinoSchemaVisitor
-    #await db.gino.drop_all()
     await db.gino.create_all()
-    await db.pop_bind().close()
+
 
 async def drop_db():
-    await db.set_bind(POSTGRES_URI)
-    db.gino: GinoSchemaVisitor
     await db.gino.drop_all()
-    await db.pop_bind().close()
+
 
 async def close_db():
     await db.pop_bind().close()

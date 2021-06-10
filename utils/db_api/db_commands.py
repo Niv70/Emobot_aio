@@ -59,7 +59,7 @@ lastEmotions = None
 
 async def db_save_emotions(user_id, emotion):
     global lastEmotions
-    lastEmotions: Emotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
+    lastEmotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
                                          fix_time=datetime.datetime.now().time(), emotion=emotion)
 
 

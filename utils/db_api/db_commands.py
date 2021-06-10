@@ -49,10 +49,10 @@ async def db_add_user(user_id, first_name, name):
 
 async def get_name_by_item(user_id):
     item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
-    if item:
-        return item.name
-    else:
+    if item is None:
         return None
+    else:
+        return item.name
 
 async def db_save_emotions(user_id, emotion):
     item: Emotions

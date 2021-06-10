@@ -13,7 +13,7 @@ from loader import dp
 from states.states import Pool, Task
 from utils.common_func import get_time_next_action
 from .task_mess import run_tsk2
-from utils.db_api.db_commands import db_save_reason, db_save_emotions, db_save_task
+from utils.db_api.db_commands import db_save_reason, db_save_emotions, db_save_task, lastEmotions
 
 # Запуск опроса эмоции
 async def run_poll(message: Message, state: FSMContext):
@@ -145,11 +145,11 @@ async def run_task(message: Message, state: FSMContext):
         await run_poll(message, state)  # вызов функции опроса
 
 
-# Обработчик ввода ПОСЛЕДНЕГО ответа к задачке "на прокачку" 2-го дня
+# Обработчик ввода ПОname_userСЛЕДНЕГО ответа к задачке "на прокачку" 2-го дня
 @dp.message_handler(state=Task.Answer_02_05)
 async def answer_02_05(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
+    name_user = data.get("")
     s = message.text
     if s.lower() != "привет_2":
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет_2</i></b>".format(name_user))

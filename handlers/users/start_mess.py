@@ -40,6 +40,28 @@ async def answer_name(message: Message, state: FSMContext):
     await Start.Call_01.set()  # или можно await Start.next()
 
 
+@dp.message_handler(state=Start.from_db_user_name)
+async def answer_name(message: Message, state: FSMContext):
+    answer = await get_name_by_item(message.from_user.id)
+    # инициализируем список ключей данных
+    await state.update_data(name_user=answer)
+    await state.update_data(tmz=0)
+    await state.update_data(start_t=10)
+    await state.update_data(end_t=17)
+    await state.update_data(period=2)
+    await state.update_data(tsk_t=13)
+    c_data = datetime.datetime.now()
+    await state.update_data(prev_data=c_data.day)
+    await state.update_data(current_day=0)
+    await state.update_data(flag_pool=1)  # взводим флажок выполнения опроса, чтобы не делать этого в Start.set_tsk_t
+    await state.update_data(flag_task=0)  # сбрасываем флажок выполнения задачи, чтобы не делать этого в Start.set_tsk_t
+    await message.answer("{0}, я хочу помочь тебе исследовать и фиксировать "
+                         "собственные эмоции. Если ты соглашаешься участвовать в этой работе,"
+                         " то я начну регулярно измерять твою «эмоциональную температуру» в "
+                         "течение дня.".format(answer), reply_markup=choice01)
+    await Start.Call_01.set()  # или можно await Start.next()
+
+
 # Обработчик нажатия кнопки "Зачем?"
 @dp.callback_query_handler(text="choice:Start_Call01:Зачем?", state=Start.Call_01)
 async def press_call01_key2(call: CallbackQuery):

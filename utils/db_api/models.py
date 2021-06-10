@@ -47,7 +47,7 @@ class Emo_users(db.Model):
 class Emotions(db.Model):
     __tablename__ = 'emotions'
     query: sql.Select
-    user_id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger)
     fix_date = Column(Date)
     fix_time = Column(Time)
     emotion = Column(String(20))
@@ -65,7 +65,7 @@ class Emotions(db.Model):
 class Tasks(db.Model):
     __tablename__ = 'tasks'
     query: sql.Select
-    user_id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger)
     fix_date = Column(Date)
     fix_time = Column(Time)
     task_number = Column(Integer)

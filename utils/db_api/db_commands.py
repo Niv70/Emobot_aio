@@ -42,10 +42,7 @@ Possible_Emotions = ['злость',	'трепет',	'угрюмость',	'от
 
 async def db_add_user(user_id, first_name, name):
     item: Emo_users
-    item.user_id = user_id
-    item.first_name = first_name
-    item.name = name
-    return item.create()
+    return item.create(user_id=user_id, first_name=first_name, name=name)
 
 async def get_name_by_item(user_id):
     item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()

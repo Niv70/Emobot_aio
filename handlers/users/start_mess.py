@@ -179,7 +179,7 @@ async def set_settings(message: Message, state: FSMContext):
 @dp.message_handler(state=Start.set_tmz)
 async def answer_tmz(message: Message, state: FSMContext):
     d = await get_digit(message, state, 0, 23)  # преобразовываем сообщение в цифру
-    if d < 0:  # проверка коррктностии ввода пользователя
+    if d < 0:  # проверка корректности ввода пользователя
         return
     await state.update_data(tmz=d)
     data = await state.get_data()  # Достаем имя пользователя

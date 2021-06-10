@@ -25,7 +25,7 @@ async def bot_start(message: types.Message):
         await Start.set_user_name.set()  # или можно await Start.first()
     else:
         await message.answer(
-            "Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот.\n Рад еще раз видеть тебя ".format(str0))
+            "Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот.\n Рад еще раз видеть тебя {0}!".format(str0))
         await Start.from_db_user_name.set()
 
 

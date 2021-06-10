@@ -73,7 +73,7 @@ async def answer_emo(message: Message, state: FSMContext):
         return
     s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
     # TODO запись в БД эмоции bd_save_emotion(... s2)
-    db_save_emotions(message.from_user.id, s2)
+    await db_save_emotions(message.from_user.id, s2)
     logging.info("answer_emo 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer("Как думаешь, {0}, чем эта эмоция вызвана?".format(name_user))
     await Pool.Reason.set()  # или можно await Start.next()
@@ -88,7 +88,7 @@ async def answer_reason(message: Message, state: FSMContext):
 
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
     # TODO запись в БД причины bd_save_reason(..., s) -- Вопрос к какой эмоции прицепить?
-    db_save_reason(message.from_user.id, s)
+    await db_save_reason(message.from_user.id, s)
     logging.info("answer_reason 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     # проверяем требуется ли дополнительно запускать задачу
@@ -155,7 +155,7 @@ async def answer_02_05(message: Message, state: FSMContext):
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет_2</i></b>".format(name_user))
         return
     # TODO Добавить запись ответа на задачу БД bd_save_task_answer(...s)
-    db_save_task(message.from_user.id, 2,  s)
+    await db_save_task(message.from_user.id, 2,  s)
     logging.info("answer_02_05 0: Пользователь {0}(id={1}) ввел ответ: {2}".format(name_user, message.from_user.id, s))
     t = await get_time_next_action(state)
     t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!

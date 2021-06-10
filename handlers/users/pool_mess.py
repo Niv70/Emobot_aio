@@ -87,7 +87,7 @@ async def answer_reason(message: Message, state: FSMContext):
     flag_task = data.get("flag_task")
 
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
-    # TODO запись в БД причины bd_save_reason(..., s) -- Вопрос к какой эмоции прицепить?
+    # TODO запись в БД причины bd_save_reason(..., s)
     await db_save_reason(message.from_user.id, s)
     logging.info("answer_reason 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))

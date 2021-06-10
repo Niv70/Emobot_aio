@@ -51,7 +51,7 @@ class Emotions(db.Model):
     fix_date = Column(Date)
     fix_time = Column(Time)
     emotion = Column(String(20))
-    reason =  Column(String(20))
+    reason =  Column(String(50))
     fk = db.ForeignKeyConstraint(['user_id'], ['emo_users.user_id'], name="fk")
     def __repr__(self):
         return "{}<{}>".format(self.user_id, self.emotion)

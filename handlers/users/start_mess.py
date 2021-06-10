@@ -13,13 +13,15 @@ from states.states import Start, Pool
 from utils.common_func import get_digit
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06
 from .pool_mess import run_poll
-
+from utils.db_api.db_commands import get_name_by_item, db_add_user
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
 @dp.message_handler(state=Start.set_user_name)
 async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
+    # TODO: добавиление пользователя в БД
+    l
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=10)

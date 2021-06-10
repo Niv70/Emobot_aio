@@ -1,18 +1,22 @@
+import logging
+
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import Command
 
 from loader import dp
 from states.states import Start
-
+from utils.db_api.db_commands import db_add_user, get_name_by_item
 
 # Обработка первого вызова команды /start
 @dp.message_handler(Command("start"), state=None)
 async def bot_start(message: types.Message):
     # TODO Добавить проверку существования пользователя в БД и, если он есть, инициализацию переменных или сейчас
+    name = get_name_by_item(message.from_user.id)
+    logging.log(name)
     #  это делается из FSM.json файла?
-    # Для удобства использования задаем лкальные для модуля переменные
+    # Для удобства использования задаем локальные для модуля переменные
     help_m = "При ответах на вопрос боту регистр букв неважен.\n" \
-             "!!ВАЖНО: Для продолжения работы после использования команды, селдует ответить на заданный ранее вопрос."
+             "!!ВАЖНО: Для продолжения работы после использования команды, следует ответить на заданный ранее вопрос."
     await message.answer(help_m)
     sti = open("./a_stickers/AnimatedSticker9.tgs", 'rb')  # Подмигивает, снимая очки
     await message.answer_sticker(sticker=sti)

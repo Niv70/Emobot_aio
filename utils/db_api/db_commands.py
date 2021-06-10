@@ -59,13 +59,14 @@ lastEmotions = None
 
 async def db_save_emotions(user_id, emotion):
     global lastEmotions
-    lastEmotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
-                                         fix_time=datetime.datetime.now().time(), emotion=emotion)
+    lastEmotions = emotion
 
 
-async def db_save_reason(reason):
+async def db_save_reason(user_id, reason):
     global lastEmotions
-    await lastEmotions.update(reason=reason).apply()
+    await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
+                          fix_time=datetime.datetime.now().time(), emotion=lastEmotions, reason=reason)
+
 
 #task_number = Column(Integer)
 async def db_save_task(user_id, task_number, answer):

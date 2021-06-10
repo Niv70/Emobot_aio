@@ -54,11 +54,12 @@ async def get_name_by_item(user_id):
         return item.name
 
 
-lastEmotions: Emotions
+lastEmotions = None
 
 
 async def db_save_emotions(user_id, emotion):
-    lastEmotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
+    global lastEmotions
+    lastEmotions: Emotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
                                          fix_time=datetime.datetime.now().time(), emotion=emotion)
 
 

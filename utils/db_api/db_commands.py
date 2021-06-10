@@ -64,6 +64,7 @@ async def db_save_emotions(user_id, emotion):
 
 
 async def db_save_reason(reason):
+    global lastEmotions
     await lastEmotions.update(reason=reason).apply()
 
 #task_number = Column(Integer)

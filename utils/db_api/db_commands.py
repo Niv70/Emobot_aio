@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import sqlalchemy
 from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey)
@@ -48,6 +49,7 @@ async def db_add_user(user_id, first_name, name):
 
 async def get_name_by_item(user_id):
     item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
+    logging.info(item)
     return item.name
 
 async def db_save_emotions(user_id, emotion):

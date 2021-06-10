@@ -11,8 +11,8 @@ from utils.db_api.db_commands import db_add_user, get_name_by_item
 @dp.message_handler(Command("start"), state=None)
 async def bot_start(message: types.Message):
     # TODO Добавить проверку существования пользователя в БД и, если он есть, инициализацию переменных или сейчас
-    name = await get_name_by_item(message.from_user.id)
-    logging.info(name)
+    str0 = await get_name_by_item(message.from_user.id)
+    logging.info(str0)
     #  это делается из FSM.json файла?
     # Для удобства использования задаем локальные для модуля переменные
     help_m = "При ответах на вопрос боту регистр букв неважен.\n" \

@@ -7,3 +7,8 @@ from data import config
 bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 storage = JSONStorage(path="FSM.json")
 dp = Dispatcher(bot, storage=storage)
+
+LAST_DAY = 18  # Последний день опроса
+SEC_IN_H = 3600  # секунд в часу - во время отладки меняем c 3600 на 60
+SEC_IN_M = 60  # секунд в минуте - во время отладки меняем c 60 на 1
+HOUR_IN_DAY = 24  # часов в дне - во время отладки меняем c 24 на 60 (чтобы отсчет шел с конца часа)

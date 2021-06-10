@@ -10,6 +10,7 @@ from loader import dp
 from states.states import Task
 from utils.db_api.db_commands import db_save_task
 
+
 # Запуск задачки "на прокачку" 2-го дня
 async def run_tsk2(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
@@ -29,7 +30,7 @@ async def answer_02_05(message: Message, state: FSMContext):
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет_1</i></b>".format(name_user))
         return
     # TODO Добавить запись ответа на задачу БД bd_save_task_answer(...s)
-    db_save_task(message.from_user.id, data.get("current_day"), s)
+    await db_save_task(message.from_user.id, data.get("current_day"), s)
     await message.answer("Еще раз, приветствую тебя, {0}, на этапе выполнения задачи 2-го дня".format(name_user))
     await message.answer("{0}, пожалуйста, напиши <b><i>Привет_2</i></b>".format(name_user))
     await Task.Answer_02_05.set()  # Здесь д.б. 02_02. Написал 02_05 просто для демонстрации

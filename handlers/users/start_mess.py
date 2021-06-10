@@ -8,12 +8,13 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 import logging
 
-from loader import dp
+from loader import dp, SEC_IN_H, SEC_IN_M, HOUR_IN_DAY
 from states.states import Start, Pool
 from utils.common_func import get_digit
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06
 from .pool_mess import run_poll
 from utils.db_api.db_commands import get_name_by_item, db_add_user
+
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
 @dp.message_handler(state=Start.set_user_name)
@@ -21,7 +22,7 @@ async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
     # TODO: добавление пользователя в БД
-    await db_add_user(message.from_user.id,message.from_user.first_name, answer)
+#    await db_add_user(message.from_user.id, message.from_user.first_name, answer)   TODO  5 из 5 не запускается проект
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=10)
@@ -70,7 +71,7 @@ async def press_call01_key2(call: CallbackQuery):
     await call.answer(cache_time=60)
     # Отправляем пустую клваиатуру изменяя сообщение, для того, чтобы убрать ее из сообщения
     await call.message.edit_reply_markup(reply_markup=None)
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     await call.message.answer("Ну как зачем? Представь, что твоя жизнь – это суп. Если ты просто сваливаешь продукты в"
                               " кастрюлю, ставишь огонь наугад и варишь, не заглядывая под крышку, то что получится?"
                               " Так вот, жизнь, где игнорируются эмоции и их сигналы, выглядит примерно так же. А "
@@ -88,7 +89,7 @@ async def press_call01_key2(call: CallbackQuery):
 async def press_call01_key1(call: CallbackQuery):
     await call.answer(cache_time=60)
     await call.message.edit_reply_markup(reply_markup=None)
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     await call.message.answer("В предвкушении потираю лапы! Но, перед тем как приступить, предлагаю познакомиться с "
                               "<b><i>Эмоциональным термометром</i></b>. Это нужно, чтобы мы быстро и точно могли "
                               "измерить твою «эмоциональную температуру».", reply_markup=choice03)
@@ -100,7 +101,7 @@ async def press_call01_key1(call: CallbackQuery):
 async def press_call02_key2(call: CallbackQuery):
     await call.answer(cache_time=60)
     await call.message.edit_reply_markup(reply_markup=None)
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     await call.message.answer("Это шкала из 27 эмоций, расположенных по интенсивности, с помощью которой ты "
                               " ориентироваться в своем состоянии. Всегда обращайся к ней, особенно по началу, "
                               "чтобы дать максимально точный ответ, который я смогу считать и зафиксировать.",
@@ -112,7 +113,7 @@ async def press_call02_key2(call: CallbackQuery):
 async def press_call02_key2(call: CallbackQuery, state: FSMContext):
     await call.answer(cache_time=60)
     await call.message.edit_reply_markup(reply_markup=None)
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     await call.message.answer("Отлично, {0}! Всегда обращайся к нему особенно по началу, чтобы дать максимально точный"
@@ -131,7 +132,7 @@ async def press_call02_key2(call: CallbackQuery, state: FSMContext):
 async def press_call02_key2(call: CallbackQuery, state: FSMContext):
     await call.answer(cache_time=60)
     await call.message.edit_reply_markup(reply_markup=None)
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     await call.message.answer("Я смогу зарегистрировать эмоцию только тогда, когда ты напишешь ее в формулировке "
@@ -166,10 +167,9 @@ async def answer_tst(message: Message, state: FSMContext):
 async def set_settings(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
-    curr_data = datetime.datetime.now()
-    curr_time = curr_data.time()
+    c_data = datetime.datetime.now()
     await message.answer("Давай сверим наши часы!\nМое текущее время: "
-                         "{0:0>2}:{1:0>2}.".format(curr_time.hour, curr_time.minute))
+                         "{0:0>2}:{1:0>2}.".format(c_data.hour, c_data.minute))
     await message.answer("{0}, пожалуйста, введи <i>одним числом в часах</i> от 0 до 23 насколько оно отличается от "
                          "твоего текущего времени:".format(name_user))
     await Start.set_tmz.set()  # или можно await Start.next()
@@ -182,15 +182,8 @@ async def answer_tmz(message: Message, state: FSMContext):
     if d < 0:  # проверка корректности ввода пользователя
         return
     await state.update_data(tmz=d)
-    data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
-    curr_data = datetime.datetime.now()
-    curr_time = curr_data.time()
-    if curr_time.hour + d > 23:
-        await message.answer("Время {0:0>2}:{1:0>2} не существует!\n{2}, введи разницу внимательно, пожалуйста"
-                             "!".format(curr_time.hour + d, curr_time.minute, name_user))
-        return
-    await message.answer("Мое текущее время {0:0>2}:{1:0>2}.".format(curr_time.hour + d, curr_time.minute))
+    c_data = datetime.datetime.now() + datetime.timedelta(hours=d)
+    await message.answer("Мое текущее время {0:0>2}:{1:0>2}.".format(c_data.hour, c_data.minute))
     await message.answer("Сейчас мое время совпадает с твоим?\n(если оно меньше на минуту-другую - это нормально)",
                          reply_markup=choice06)
     await Start.Call_04.set()  # или можно await Start.next()
@@ -203,7 +196,7 @@ async def press_call04_key1(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup(reply_markup=None)
     data = await state.get_data()  # достаем имя пользователя
     name_user = data.get("name_user")
-    await call.message.answer("<i>------- обработка нажатия кнопки -------</i>")  # помечаю места откуда исчезли кнопки
+    await call.message.answer("<code>------- обработка нажатия кнопки -------</code>")  # отмечаю место, где были кнопки
     await call.message.answer("{0}, пожалуйста, введи <i>одним числом в часах</i> удобное время начала опроса от "
                               "0 до 22:".format(name_user))
     await Start.set_start_t.set()  # или можно await Start.next()
@@ -296,20 +289,21 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     await message.answer("Отлично, {0}! Настройки заверешены - начнем опрос после наступления времени его "
                          "начала!".format(name_user))
     logging.info('answer_tsk_t 1: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
-    c_data = datetime.datetime.now()
-    c_time = c_data.time()
-    c_time__hour = c_time.hour + tmz
-    if c_time__hour < start_t:  # настройки завершены сегодня до наступления начала опроса
-        t = (start_t - c_time__hour) * 3600 - c_time.minute * 60
+    c_data = datetime.datetime.now() + datetime.timedelta(hours=tmz)
+    if SEC_IN_H == 3600:  # Проверяем работаем ли мы по боевому или в режиме отладки
+        await state.update_data(prev_data=c_data.day)  # обновляем prev_data из-за ввода tmz и м.б изменения current_day
+    else:
+        await state.update_data(prev_data=c_data.hour)
+    if c_data.hour < start_t:  # настройки завершены сегодня до наступления начала опроса
+        t = (start_t - c_data.hour) * SEC_IN_H - c_data.minute * SEC_IN_M
         await state.update_data(current_day=1)  # считаем,что пошел 1й день опроса
-        await state.update_data(prev_data=c_data.day)  # сохраняем дату изменения current_day
     else:  # настройки завершены после наступления начала опроса - выполнение опроса начнется завтра
-        t = ((24 - c_time__hour) * 3600 - c_time.minute * 60) + start_t * 3600
+        t = ((HOUR_IN_DAY - c_data.hour) * SEC_IN_H - c_data.minute * SEC_IN_M) + start_t * SEC_IN_H
     if d == start_t:
         await state.update_data(flag_task=1)  # взводим флажок выполнения задачи
     t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info('answer_tsk_t 2: засыпаю на {0} сек. c_time__hour={1} c_time.minute='
-                 '{2}'.format(t, c_time__hour, c_time.minute))
+                 '{2}'.format(t, c_data.hour, c_data.minute))
     # TODO Добавить создание текстовой клавиатуры
     # TODO Добавить запись настроек в БД
     await Pool.Wait.set()

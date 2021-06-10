@@ -9,11 +9,12 @@ from random import choice
 import logging
 import datetime
 
-from loader import dp
+from loader import dp, SEC_IN_H, LAST_DAY
 from states.states import Pool, Task
 from utils.common_func import get_time_next_action
 from .task_mess import run_tsk2
-from utils.db_api.db_commands import db_save_reason, db_save_emotions, db_save_task, lastEmotions
+from utils.db_api.db_commands import db_save_reason, db_save_emotions, db_save_task  # , lastEmotions
+
 
 # Запуск опроса эмоции
 async def run_poll(message: Message, state: FSMContext):
@@ -21,19 +22,26 @@ async def run_poll(message: Message, state: FSMContext):
              ", прислушайся какая эмоция сейчас внутри тебя?", ", тук-тук-тук, что ты сейчас чувствуешь?"]
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
+    tmz = data.get("tmz")
     prev_data = data.get("prev_data")
     current_day = data.get("current_day")
     c_state = await state.get_state()
     # рассчет и изменение номера текущего дня
-    c_data = datetime.datetime.now()
+    c_data = datetime.datetime.now() + datetime.timedelta(hours=tmz)
     logging.info('run_poll 0: c_data.day={0} prev_data={1} current_day={2} c_state='
                  '{3}'.format(c_data.day, prev_data, current_day, c_state))
-    if c_data.day != prev_data:
-        current_day = current_day + 1
-        await state.update_data(current_day=current_day)
-        await state.update_data(prev_data=c_data.day)
+    if SEC_IN_H == 3600:  # Проверяем работаем ли мы по боевому или в режиме отладки
+        if c_data.day != prev_data:
+            current_day = current_day + 1
+            await state.update_data(current_day=current_day)
+            await state.update_data(prev_data=c_data.day)
+    else:
+        if c_data.hour != prev_data:
+            current_day = current_day + 1
+            await state.update_data(current_day=current_day)
+            await state.update_data(prev_data=c_data.hour)
     logging.info('run_poll 1: c_data.day={0} prev_data={1} current_day={2}'.format(c_data.day, prev_data, current_day))
-    if current_day > 18:
+    if current_day > LAST_DAY:
         await run_bye(message, state)
     if c_state != "Pool:Wait":
         await message.answer('{0}, ожидание твоего текущего ответа прервано из-за наступления времени очередного '

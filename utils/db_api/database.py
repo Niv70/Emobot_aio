@@ -10,6 +10,7 @@ async def open_db():
     await db.set_bind(POSTGRES_URI)
     db.gino: GinoSchemaVisitor
 
+
 async def create_db():
     # Создаем таблицы
     await db.gino.create_all()
@@ -21,7 +22,3 @@ async def drop_db():
 
 async def close_db():
     await db.pop_bind().close()
-
-
-
-

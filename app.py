@@ -21,7 +21,7 @@ async def on_shutdown(dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
     # Закрываем соединение с БД
-   await close_db()
+    await close_db()
 
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown)

@@ -21,7 +21,7 @@ async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
     # TODO: добавление пользователя в БД
-    db_add_user(message.from_user.id,message.from_user.first_name, answer)
+    await db_add_user(message.from_user.id,message.from_user.first_name, answer)
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=10)

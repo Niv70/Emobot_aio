@@ -53,20 +53,21 @@ async def get_name_by_item(user_id):
     else:
         return item.name
 
+
 lastEmotions: Emotions
+
 
 async def db_save_emotions(user_id, emotion):
     lastEmotions = await Emotions.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
-                                 fix_time=datetime.datetime.now().time(), emotion=emotion)
-
+                                         fix_time=datetime.datetime.now().time(), emotion=emotion)
 
 
 async def db_save_reason(reason):
-    lastEmotions.update(reason=reason).apply()
+    await lastEmotions.update(reason=reason).apply()
 
-
-
+#task_number = Column(Integer)
 async def db_save_task(user_id, task_number, answer):
     item: Tasks
-    item = Tasks.create(user_id = user_id,fix_date = datetime.datetime.now().date(), fix_time = datetime.datetime.now().time(),query = task_number,answer = answer)
+    item = await Tasks.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
+                        fix_time=datetime.datetime.now().time(), task_number=task_number, answer=answer)
     return item

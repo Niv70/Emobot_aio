@@ -68,6 +68,7 @@ class Tasks(db.Model):
     user_id = Column(BigInteger, primary_key=True)
     fix_date = Column(Date)
     fix_time = Column(Time)
+    task_number = Column(Integer)
     answer = Column(String(100))
     fk2 = db.ForeignKeyConstraint(['user_id'], ['emo_users.user_id'], name="fk2")
     def __repr__(self):

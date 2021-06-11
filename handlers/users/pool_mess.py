@@ -109,7 +109,7 @@ async def answer_reason(message: Message, state: FSMContext):
     data = await state.get_data()  # state меняется в функции get_time_next_action(state)
     flag_pool = data.get("flag_pool")
     flag_task = data.get("flag_task")
-    t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
+    # t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info("answer_reason 2: засыпаю на {0} сек. flag_pool={1} flag_task={2}".format(t, flag_pool, flag_task))
     if flag_pool:
         await Pool.Wait.set()
@@ -137,7 +137,7 @@ async def run_task(message: Message, state: FSMContext):
     sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # Пускает праздничный салют
     await message.answer_sticker(sticker=sti)
     await message.answer('{0}! Наступил час потехи - а именно задачки "на прокачку"!'.format(name_user))
-    current_day = 2  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
+    # current_day = 2  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info("run_task 0: current_day={0}".format(current_day))
     if current_day == 2:  # на 2-й (не на 0-й и 1-й) день работы боты запускаем задачи
         await run_tsk2(message, state)
@@ -166,7 +166,7 @@ async def answer_02_05(message: Message, state: FSMContext):
     await db_save_task(message.from_user.id, 2,  s)
     logging.info("answer_02_05 0: Пользователь {0}(id={1}) ввел ответ: {2}".format(name_user, message.from_user.id, s))
     t = await get_time_next_action(state)
-    t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
+    # t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info('answer_02_05 1: засыпаю на {0}'.format(t))
     await Pool.Wait.set()
     await sleep(t)

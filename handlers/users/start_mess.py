@@ -22,7 +22,7 @@ async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
     # TODO: добавление пользователя в БД
-#    await db_add_user(message.from_user.id, message.from_user.first_name, answer)   TODO  5 из 5 не запускается проект
+    await db_add_user(message.from_user.id, message.from_user.first_name, answer)  # TODO  5 из 5 не запускается проект
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=10)
@@ -301,7 +301,7 @@ async def answer_tsk_t(message: Message, state: FSMContext):
         t = ((HOUR_IN_DAY - c_data.hour) * SEC_IN_H - c_data.minute * SEC_IN_M) + start_t * SEC_IN_H
     if d == start_t:
         await state.update_data(flag_task=1)  # взводим флажок выполнения задачи
-    t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
+    # t = 10  # TODO использовать эту строчку для DEBUG-а  !!!!!!!!!!!
     logging.info('answer_tsk_t 2: засыпаю на {0} сек. c_time__hour={1} c_time.minute='
                  '{2}'.format(t, c_data.hour, c_data.minute))
     # TODO Добавить создание текстовой клавиатуры

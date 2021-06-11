@@ -15,7 +15,7 @@ async def on_startup(dispatcher):
     # Уведомляем про запуск
     await on_startup_notify(dispatcher)
     # Открываем соединение с БД
-    await open_db()  # TODO 1 из 5 не запускается проект
+    await open_db()  # TODO 1 из  5 не запускается проект
 
 
 async def on_shutdown(dispatcher):

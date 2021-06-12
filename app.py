@@ -15,14 +15,14 @@ async def on_startup(dispatcher):
     # Уведомляем про запуск
     await on_startup_notify(dispatcher)
     # Открываем соединение с БД
-    await open_db()  # TODO 1 из 5 не запускается проект
+    await open_db()
 
 
 async def on_shutdown(dispatcher):
     await dispatcher.storage.close()
     await dispatcher.storage.wait_closed()
     # Закрываем соединение с БД
-    await close_db()  # TODO 2 из 5 не запускается проект
+    await close_db()
 
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown)

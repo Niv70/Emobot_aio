@@ -16,8 +16,8 @@ async def run_task(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     current_day = data.get("current_day")
-    # начинаем опрос
-    if current_day != 1:  # and current_day != x
+    # начинаем выполнение задачки
+    if current_day != 0 and current_day != 1:
         sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # Пускает праздничный салют
         await message.answer_sticker(sticker=sti)
         await message.answer('{0}! Наступил час потехи - начинаем задачку "на прокачку"!'.format(name_user))
@@ -31,8 +31,8 @@ async def run_task(message: Message, state: FSMContext):
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
-        await message.answer('{0}, для {1} нет задачку "на прокачку" - можешь просто легонько помедитировать... :)'
-                             '...'.format(name_user, current_day))
+        await message.answer('{0}, для {1}-го дня опроса нет задачки ”на прокачку” - можешь просто немного '
+                             'помедитировать вместе со мной... :)'.format(name_user, current_day))
         await Start.Wait.set()
 
 

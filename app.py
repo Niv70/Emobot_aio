@@ -9,7 +9,7 @@ from utils.db_api.database import db, open_db, close_db
 
 async def on_startup(dispatcher):
     # пропуск накопившихся апдейтов
-    await dispatcher.skip_updates()
+    # await dispatcher.skip_updates() - использовал соответствующий ключ при запуске обработки
     # Устанавливаем дефолтные команды
     await set_default_commands(dispatcher)
     # Уведомляем про запуск
@@ -25,4 +25,4 @@ async def on_shutdown(dispatcher):
     await close_db()
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown)
+    executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown, skip_updates=True)

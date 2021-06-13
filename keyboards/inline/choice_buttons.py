@@ -41,13 +41,19 @@ choice04 = InlineKeyboardMarkup(inline_keyboard=[
 
 choice05 = InlineKeyboardMarkup(inline_keyboard=[
     [
-        InlineKeyboardButton(text="Договорились! Понятно.", callback_data="choice:Start_Call03:Договорились")
+        InlineKeyboardButton(text="Дальше...", callback_data="choice:Start_Call03_04:Дальше")
     ]
 ])
 
 choice06 = InlineKeyboardMarkup(inline_keyboard=[
     [
-        InlineKeyboardButton(text="Да", callback_data="choice:Start_Call04:Да"),
-        InlineKeyboardButton(text="нет", callback_data="choice:Start_Call04:Нет")
+        InlineKeyboardButton(text="Договорились! Понятно.", callback_data="choice:Start_Call05:Договорились")
+    ]
+])
+
+choice07 = InlineKeyboardMarkup(inline_keyboard=[
+    [
+        InlineKeyboardButton(text="Да", callback_data="choice:Start_Call06:Да"),
+        InlineKeyboardButton(text="нет", callback_data="choice:Start_Call06:Нет")
     ]
 ])

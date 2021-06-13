@@ -289,6 +289,6 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     # TODO Добавить создание текстовой клавиатуры
     await db_update_user_settings(message.from_user.id, start_time=data.get("start_t"), period=data.get("period"),
                                   end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("start_t"), task_time=d)
+                                  current_day=data.get("current_day"), task_time=d)
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
     await loop_action(message, state)  # вызов бесконечного цикла действий

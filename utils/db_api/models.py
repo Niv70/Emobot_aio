@@ -24,17 +24,12 @@ class Emo_users(db.Model):
     # Уникальный идентификатор
     user_id = Column(BigInteger, primary_key=True, unique=True)
     first_name = Column(String(20))
-    name = Column(String(50))
+    name = Column(String(20))
     StartTime = Column(Integer)
     EndTime = Column(Integer)
     ZoneTime = Column(Integer)
     Period = Column(Integer)
-    PrevData = Column(Integer)
     CurrentDay = Column(Integer)
-    RunTask = Column(Integer)
-    RunPoll = Column(Integer)
-    Stage = Column(Integer)
-
     def __repr__(self):
         return "{}<{}>".format(self.name, self.user_id)
 

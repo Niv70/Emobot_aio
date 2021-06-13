@@ -2,8 +2,8 @@ import datetime
 import logging
 
 import sqlalchemy
-from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey)
-from sqlalchemy import sql
+from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey, desc)
+from sqlalchemy import sql, func
 from gino import Gino
 
 from utils.db_api.models import Emo_users, Emotions, Tasks
@@ -68,9 +68,19 @@ async def db_save_reason(user_id, reason):
                           fix_time=datetime.datetime.now().time(), emotion=lastEmotions, reason=reason)
 
 
-#task_number = Column(Integer)
+# task_number = Column(Integer)
 async def db_save_task(user_id, task_number, answer):
     item: Tasks
     item = await Tasks.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
-                        fix_time=datetime.datetime.now().time(), task_number=task_number, answer=answer)
+                              fix_time=datetime.datetime.now().time(), task_number=task_number, answer=answer)
     return item
+
+
+async def stat_five_emotions(user_id):
+    stats = await db.select([Emotions.emotion, func.count(Emotions.emotion), ]).select_from(Emotions).group_by(
+        Emotions.emotion).order_by(desc(func.count(Emotions.emotion))).where(Emotions.user_id == user_id).limit(5).gino.all()
+    str_stats = " Самые часто испытываемые эмоции\n"\
+                "==================================\n"
+    for i in stats:
+        str_stats += "{0} : {1:3d}\n".format(i[0], i[1])
+    return str_stats

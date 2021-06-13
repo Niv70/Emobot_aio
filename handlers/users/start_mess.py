@@ -215,7 +215,7 @@ async def answer_tmz(message: Message, state: FSMContext):
     await state.update_data(tmz=d)
     c_data = datetime.datetime.now() + datetime.timedelta(hours=d)
     await message.answer("Мое текущее время {0:0>2}:{1:0>2}.".format(c_data.hour, c_data.minute))
-    await message.answer("Сейчас мое время совпадает с твоим?\n(если оно меньше на минуту-другую - это нормально)",
+    await message.answer("Сейчас мое время совпадает с твоим?\n(если оно отличается на минуту-другую - это нормально)",
                          reply_markup=choice07)
     await Start.Call_06.set()
 

@@ -28,6 +28,7 @@ class Emo_users(db.Model):
     StartTime = Column(Integer)
     EndTime = Column(Integer)
     ZoneTime = Column(Integer)
+    TaskTime = Column(Integer)
     Period = Column(Integer)
     CurrentDay = Column(Integer)
     def __repr__(self):

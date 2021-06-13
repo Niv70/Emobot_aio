@@ -10,7 +10,8 @@ from loader import dp
 from states.states import Start
 from utils.common_func import get_digit, loop_action
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06
-from utils.db_api.db_commands import get_name_by_item, db_add_user
+from utils.db_api.db_commands import get_name_by_id, db_add_user, get_settings_by_id, db_update_user_settings
+from utils.db_api.models import Emo_users
 
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
@@ -18,15 +19,13 @@ from utils.db_api.db_commands import get_name_by_item, db_add_user
 async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
-    # TODO: добавление пользователя в БД
-    await db_add_user(message.from_user.id, message.from_user.first_name, answer)
+    await db_add_user(message.from_user.id, message.from_user.first_name, answer, 0, 10, 17, 2, 13, 0)
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=10)
     await state.update_data(end_t=17)
     await state.update_data(period=2)
     await state.update_data(tsk_t=13)
-    await state.update_data(prev_data=0)
     await state.update_data(current_day=0)
     await state.update_data(flag_pool=0)
     await state.update_data(flag_task=0)
@@ -39,22 +38,21 @@ async def answer_name(message: Message, state: FSMContext):
 
 # функция инициализации переменных при повтороном запуске ботика пользователем
 async def user_settings_from_db(message: Message, state: FSMContext):
-    answer = await get_name_by_item(message.from_user.id)
+    user_settings: Emo_users = await get_settings_by_id(message.from_user.id)
     # инициализируем список ключей данных
-    await state.update_data(name_user=answer)
-    await state.update_data(tmz=0)
-    await state.update_data(start_t=10)
-    await state.update_data(end_t=17)
-    await state.update_data(period=2)
-    await state.update_data(tsk_t=13)
-    await state.update_data(prev_data=0)
-    await state.update_data(current_day=0)
+    await state.update_data(name_user=user_settings.name)
+    await state.update_data(tmz=user_settings.ZoneTime)
+    await state.update_data(start_t=user_settings.StartTime)
+    await state.update_data(end_t=user_settings.EndTime)
+    await state.update_data(period=user_settings.Period)
+    await state.update_data(tsk_t=user_settings.TaskTime)
+    await state.update_data(current_day=user_settings.CurrentDay)
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
     await message.answer("{0}, я хочу помочь тебе исследовать и фиксировать "
                          "собственные эмоции. Если ты соглашаешься участвовать в этой работе,"
                          " то я начну регулярно измерять твою «эмоциональную температуру» в "
-                         "течение дня.".format(answer), reply_markup=choice01)
+                         "течение дня.".format(user_settings.name), reply_markup=choice01)
     await Start.Call_01.set()  # или можно await Start.next()
     # await message.answer("Снова здравствуй, {0}! Твои настройки восстановлены из БД - опрос начнется с наступлением
     #                      "следующего дня.".format(name_user))
@@ -289,6 +287,8 @@ async def answer_tsk_t(message: Message, state: FSMContext):
                          "дня.".format(name_user))
     logging.info('answer_tsk_t 0: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
     # TODO Добавить создание текстовой клавиатуры
-    # TODO Добавить запись настроек в БД
+    await db_update_user_settings(message.from_user.id, start_time=data.get("start_t"), period=data.get("period"),
+                                  end_time=data.get("end_t"), zone_time=data.get("tmz"),
+                                  current_day=data.get("start_t"), task_time=d)
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
     await loop_action(message, state)  # вызов бесконечного цикла действий

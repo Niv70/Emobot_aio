@@ -7,14 +7,13 @@ from aiogram.dispatcher import FSMContext
 from handlers.users.start_mess import user_settings_from_db
 from loader import dp
 from states.states import Start
-from utils.db_api.db_commands import get_name_by_item
+from utils.db_api.db_commands import get_name_by_id
 
 
 # Обработка первого вызова команды /start
 @dp.message_handler(Command("start"), state=None)
 async def bot_start(message: types.Message, state: FSMContext):
-    # TODO Добавить проверку существования пользователя в БД и, если он есть, инициализацию переменных или сейчас
-    str0 = await get_name_by_item(message.from_user.id)
+    str0 = await get_name_by_id(message.from_user.id)
     #  это делается из FSM.json файла?
     # Для удобства использования задаем локальные для модуля переменные
     help_m = "При ответах на вопрос боту регистр букв неважен.\n" \

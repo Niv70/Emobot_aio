@@ -54,7 +54,6 @@ async def answer_02_01(message: Message, state: FSMContext):
     if s.lower() != "привет_1":
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет_1</i></b>".format(name_user))
         return
-    # TODO Добавить запись ответа на задачу БД bd_save_task_answer(...s)
     await db_save_task(message.from_user.id, data.get("current_day"), s)
     logging.info("answer_02_01 0: Пользователь {0}(id={1}) ввел ответ: {2}".format(name_user, message.from_user.id, s))
     await message.answer("Еще раз, приветствую тебя, {0}, на 5м этапе выполнения задачи 2-го дня".format(name_user))
@@ -71,7 +70,6 @@ async def answer_02_05(message: Message, state: FSMContext):
     if s.lower() != "привет_2":
         await message.answer("{0}, попробуй все-таки написать: <b><i>Привет_2</i></b>".format(name_user))
         return
-    # TODO Добавить запись ответа на задачу БД bd_save_task_answer(...s)
     await db_save_task(message.from_user.id, data.get("current_day"),  s)
     await message.answer("Спасибо, {0}, информация сохранена.".format(name_user))
     logging.info("answer_02_05 0: Пользователь {0}(id={1}) ввел ответ: {2}".format(name_user, message.from_user.id, s))

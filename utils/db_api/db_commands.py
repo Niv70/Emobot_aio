@@ -41,7 +41,7 @@ Possible_Emotions = ['злость', 'трепет', 'угрюмость', 'от
 
 
 async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
-                      task_time=12):
+                      task_time=99):
     item: Emo_users
     item = await Emo_users.create(user_id=user_id, first_name=first_name, name=name, StartTime=start_time,
                                   EndTime=end_time, ZoneTime=zone_time, Period=period, CurrentDay=current_day,
@@ -50,7 +50,7 @@ async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_tim
 
 
 async def db_update_user_settings(user_id, name="None", start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
-                                  task_time=12):
+                                  task_time=99):
     item: Emo_users
     item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
     await item.update(user_id=user_id, name=name, StartTime=start_time,

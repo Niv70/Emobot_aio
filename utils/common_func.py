@@ -12,6 +12,9 @@ import logging
 
 
 # Ввод неотрицательного числа
+from utils.db_api.db_commands import db_update_user_settings
+
+
 async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
@@ -155,6 +158,9 @@ async def run_bye(message: Message, state: FSMContext):
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
     # !!!!! м.б. следует добавить await dp....storage.close()
     # TODO д.б. добавлена команда по выводу статистики из БД
-    # TODO д.б. добавлена команда по закрытию БД
+    await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
+                                  period=data.get("period"),
+                                  end_time=data.get("end_t"), zone_time=data.get("tmz"),
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     logging.info("run_bye 0: Бот пользователя {0}(id={1}) штатно завершил работу. "
                  "current_day={2}".format(name_user, message.from_user.id, current_day))

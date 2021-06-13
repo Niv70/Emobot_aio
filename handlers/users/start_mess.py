@@ -19,13 +19,15 @@ from utils.db_api.models import Emo_users
 async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
-    await db_add_user(message.from_user.id, message.from_user.first_name, answer, 0, 10, 17, 2, 13, 0)
+    sss = await get_name_by_id(message.from_user.id)
+    if sss is None:
+        await db_add_user(message.from_user.id, message.from_user.first_name, answer)
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
-    await state.update_data(start_t=10)
+    await state.update_data(start_t=8)
     await state.update_data(end_t=17)
     await state.update_data(period=2)
-    await state.update_data(tsk_t=13)
+    await state.update_data(tsk_t=99)
     await state.update_data(current_day=0)
     await state.update_data(flag_pool=0)
     await state.update_data(flag_task=0)
@@ -49,17 +51,6 @@ async def user_settings_from_db(message: Message, state: FSMContext):
     await state.update_data(current_day=user_settings.CurrentDay)
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
-    await message.answer("{0}, я хочу помочь тебе исследовать и фиксировать "
-                         "собственные эмоции. Если ты соглашаешься участвовать в этой работе,"
-                         " то я начну регулярно измерять твою «эмоциональную температуру» в "
-                         "течение дня.".format(user_settings.name), reply_markup=choice01)
-    await Start.Call_01.set()  # или можно await Start.next()
-    # await message.answer("Снова здравствуй, {0}! Твои настройки восстановлены из БД - опрос начнется с наступлением
-    #                      "следующего дня.".format(name_user))
-    # logging.info('u_s_f_d 0: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
-    # TODO Добавить создание текстовой клавиатуры
-    # await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
-    # await loop_action(message, state)  # вызов бесконечного цикла действий
 
 
 # Обработчик нажатия кнопки "Зачем?"
@@ -283,11 +274,11 @@ async def answer_tsk_t(message: Message, state: FSMContext):
         return
     await state.update_data(tsk_t=d)
     await message.answer('Итак, выполнение задачки "на прокачку" в: {0:0>2}:00'.format(d))
-    await message.answer("Отлично, {0}! Настройки заверешены - опрос начнется с наступлением следующего "
+    await message.answer("Отлично, {0}! Настройки завершены - опрос начнется с наступлением следующего "
                          "дня.".format(name_user))
     logging.info('answer_tsk_t 0: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
     # TODO Добавить создание текстовой клавиатуры
-    await db_update_user_settings(message.from_user.id, start_time=data.get("start_t"), period=data.get("period"),
+    await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"), period=data.get("period"),
                                   end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=d)
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо

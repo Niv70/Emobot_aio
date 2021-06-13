@@ -1,4 +1,5 @@
 # import logging
+import logging
 
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import Command
@@ -7,6 +8,7 @@ from aiogram.dispatcher import FSMContext
 from handlers.users.start_mess import user_settings_from_db
 from loader import dp
 from states.states import Start
+from utils.common_func import loop_action
 from utils.db_api.db_commands import get_name_by_id
 
 
@@ -25,9 +27,19 @@ async def bot_start(message: types.Message, state: FSMContext):
         await message.answer("Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот. А тебя как зовут?")
         await Start.set_user_name.set()  # или можно await Start.first()
     else:
-        await message.answer(
-            "Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот.\n Рад еще раз видеть тебя {0}!".format(str0))
         await user_settings_from_db(message, state)
+        data = await state.get_data()
+        tskd = data.get("tsk_t")
+        if tskd > 90:
+            await message.answer("Привет! Я - ЗаБотик - заботливый и веселый Телеграм-бот. А тебя как зовут?")
+            await Start.set_user_name.set()  # или можно await Start.first()
+            return
+        await message.answer("Снова здравствуй, {0}! Твои настройки восстановлены из БД - опрос начнется с наступлением" \
+                             " следующего дня.".format(str0))
+        # TODO      Добавить   создание  текстовой        клавиатуры
+        await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
+        logging.info('answer_tsk_t 0:  data={0}'.format(data))
+        await loop_action(message, state)  # вызов бесконечного цикла действий
 
 
 # Обработка повторного вызова команды /start

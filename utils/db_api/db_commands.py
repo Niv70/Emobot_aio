@@ -49,11 +49,11 @@ async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_tim
     return item
 
 
-async def db_update_user_settings(user_id, start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
+async def db_update_user_settings(user_id, name="None", start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
                                   task_time=12):
     item: Emo_users
     item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
-    await item.update(user_id=user_id, StartTime=start_time,
+    await item.update(user_id=user_id, name=name, StartTime=start_time,
                       EndTime=end_time, ZoneTime=zone_time, Period=period, CurrentDay=current_day,
                       TaskTime=task_time).apply()
     return item

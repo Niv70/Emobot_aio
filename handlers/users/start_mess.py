@@ -20,15 +20,15 @@ from utils.db_api.db_commands import get_name_by_item, db_add_user
 async def answer_name(message: Message, state: FSMContext):
     answer = message.text[:20]  # ограничиваем фантазию пользователя 20ю символами
     # инициализируем список ключей данных
-    # TODO: добавление пользователя в БД
-    await db_add_user(message.from_user.id, message.from_user.first_name, answer)
+    sss = await get_name_by_id(message.from_user.id)
+    if sss is None:
+        await db_add_user(message.from_user.id, message.from_user.first_name, answer)
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
-    await state.update_data(start_t=10)
+    await state.update_data(start_t=8)
     await state.update_data(end_t=17)
     await state.update_data(period=2)
-    await state.update_data(tsk_t=13)
-    await state.update_data(prev_data=0)
+    await state.update_data(tsk_t=99)
     await state.update_data(current_day=0)
     await state.update_data(flag_pool=0)
     await state.update_data(flag_task=0)
@@ -41,16 +41,15 @@ async def answer_name(message: Message, state: FSMContext):
 
 # функция инициализации переменных при повтороном запуске ботика пользователем
 async def user_settings_from_db(message: Message, state: FSMContext):
-    answer = await get_name_by_item(message.from_user.id)
+    user_settings: Emo_users = await get_settings_by_id(message.from_user.id)
     # инициализируем список ключей данных
-    await state.update_data(name_user=answer)
-    await state.update_data(tmz=0)
-    await state.update_data(start_t=10)
-    await state.update_data(end_t=17)
-    await state.update_data(period=2)
-    await state.update_data(tsk_t=13)
-    await state.update_data(prev_data=0)
-    await state.update_data(current_day=0)
+    await state.update_data(name_user=user_settings.name)
+    await state.update_data(tmz=user_settings.ZoneTime)
+    await state.update_data(start_t=user_settings.StartTime)
+    await state.update_data(end_t=user_settings.EndTime)
+    await state.update_data(period=user_settings.Period)
+    await state.update_data(tsk_t=user_settings.TaskTime)
+    await state.update_data(current_day=user_settings.CurrentDay)
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
     await message.answer("Я - ЗаБотик - веселый и заботливый Телеграм-бот. Я помогаю людям фиксировать и исследовать"

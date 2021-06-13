@@ -1,7 +1,7 @@
 # Модуль общих функций (Common functions)
 # import aiogram
 from asyncio import sleep
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 import datetime
 
@@ -12,6 +12,9 @@ import logging
 
 
 # Ввод неотрицательного числа
+from utils.db_api.db_commands import db_update_user_settings
+
+
 async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
@@ -30,7 +33,7 @@ async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int)
 
 # Бесконечный цикл действия ботика
 async def loop_action(message: Message, state: FSMContext):
-    t = await get_time_next_action(state, 1)  # первый запуск
+    t = await get_time_next_action(message, state, 1)  # первый запуск
     while True:
         data = await state.get_data()
         name_user = data.get("name_user")
@@ -72,17 +75,18 @@ async def loop_action(message: Message, state: FSMContext):
             await run_poll(message, state)  # запуск  одного опроса
         elif flag_task:  # можно было бы поставить else, но пусть для надежности будет так
             await run_task(message, state)  # запуск одной задачи
-        t = await get_time_next_action(state, 0)
+        t = await get_time_next_action(message, state, 0)
 
 
 # Определяем время до следующего действия в секундах (т.е. если пропустили что-то, то пропустили)
-async def get_time_next_action(state: FSMContext, flag: int) -> int:
+async def get_time_next_action(message: Message, state: FSMContext, flag: int) -> int:
     data = await state.get_data()  # Достаем имя пользователя
     tmz = data.get("tmz")
     start_t = data.get("start_t")
     end_t = data.get("end_t")
     period = data.get("period")
     tsk_t = data.get("tsk_t")
+    current_day = data.get("current_day")
     c_data = datetime.datetime.now() + datetime.timedelta(hours=tmz)
     flag_pool = 1  # взводим флажок выполнения опроса
     flag_task = 0  # сбрасываем флажок выполнения задачи
@@ -150,9 +154,13 @@ async def run_bye(message: Message, state: FSMContext):
     current_day = data.get("current_day")
     sti = open("./a_stickers/AnimatedSticker2.tgs", 'rb')  # Приветствует воздушным поцелуем
     await message.answer_sticker(sticker=sti)
-    await message.answer("Мы полезно с тобой пообщались, {0}! До новых встреч"
-                         "!".format(name_user), reply_markup=ReplyKeyboardRemove())
+    await message.answer("Мы полезно с тобой пообщались, {0}! До новых встреч!".format(name_user))
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
+    # !!!!! м.б. следует добавить await dp....storage.close()
     # TODO д.б. добавлена команда по выводу статистики из БД
+    await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
+                                  period=data.get("period"),
+                                  end_time=data.get("end_t"), zone_time=data.get("tmz"),
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     logging.info("run_bye 0: Бот пользователя {0}(id={1}) штатно завершил работу. "
                  "current_day={2}".format(name_user, message.from_user.id, current_day))

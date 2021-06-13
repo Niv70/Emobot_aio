@@ -42,7 +42,6 @@ async def answer_emo(message: Message, state: FSMContext):
         await message.answer(a_e_1.format(name_user))
         return
     s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
-    # TODO запись в БД эмоции bd_save_emotion(... s2)
     await db_save_emotions(message.from_user.id, s2)
     logging.info("a_e 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))
@@ -55,7 +54,6 @@ async def answer_reason(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
-    # TODO запись в БД причины bd_save_reason(..., s)
     await db_save_reason(message.from_user.id, s)
     await message.answer(a_r.format(name_user))
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
@@ -84,7 +82,6 @@ async def answer_emo_task(message: Message, state: FSMContext):
         await message.answer(a_e_1.format(name_user))
         return
     s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
-    # TODO запись в БД эмоции bd_save_emotion(... s2)
     await db_save_emotions(message.from_user.id, s2)
     logging.info("a_e_t 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))
@@ -97,7 +94,6 @@ async def answer_reason_task(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
-    # TODO запись в БД причины bd_save_reason(..., s)
     await db_save_reason(message.from_user.id, s)
     await message.answer(a_r.format(name_user))
     logging.info("a_r_t 0: Пользователь {0}(id={1}) ввел причину эмоции: "

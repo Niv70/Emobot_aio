@@ -32,7 +32,7 @@ async def bot_stop(message: Message, state: FSMContext):
     for i in all_task:
         if name_task == i.get_name():
             i.cancel()
-    await state.reset_state()  # для сохранения даннанных в data можно писать await state.reset_state(with_data=False)
+    await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
     sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Жалостливо что-то выпрашивает
     await message.answer_sticker(sticker=sti)
     await message.answer("Возвращайся, {0}! Я буду скучать. Работу можно будет начать сразу с {1}-го "

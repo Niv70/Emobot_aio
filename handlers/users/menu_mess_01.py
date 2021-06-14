@@ -108,6 +108,7 @@ async def set_sett_1(message: Message, state: FSMContext):
     await state.update_data(name_user=name_user)
     await message.answer('Теперь я буду звать тебя "{0}".'.format(name_user))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
@@ -124,6 +125,7 @@ async def set_sett_2(message: Message, state: FSMContext):
     c_data = datetime.datetime.now() + datetime.timedelta(hours=d)
     await message.answer("Мое текущее время стало {0:0>2}:{1:0>2}.".format(c_data.hour, c_data.minute))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
@@ -140,6 +142,7 @@ async def set_sett_3(message: Message, state: FSMContext):
     await state.update_data(start_t=d)
     await message.answer("Итак, начало опроса в {0:0>2}:00.".format(d))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
@@ -156,6 +159,7 @@ async def set_sett_4(message: Message, state: FSMContext):
     await state.update_data(end_t=d)
     await message.answer("Итак, завершение опроса в {0:0>2}:00.".format(d))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
@@ -178,6 +182,7 @@ async def set_sett_5(message: Message, state: FSMContext):
         i = i + d
     await message.answer("и {0:0>2}:00".format(end_t))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
@@ -195,6 +200,7 @@ async def set_sett_6(message: Message, state: FSMContext):
     await state.update_data(tsk_t=d)
     await message.answer('Итак, выполнение задачки ”на прокачку” в: {0:0>2}:00'.format(d))
     await message.answer('Внесение изменения в настройки завершено.')
+    data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))

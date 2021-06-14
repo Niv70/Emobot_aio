@@ -28,7 +28,7 @@ async def bot_stop(message: Message, state: FSMContext):
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     task = asyncio.create_task(on_notify(dp, ""))
     name_task = data.get("name_task")
-    all_task = task.all_tasks(asyncio.get_running_loop())
+    all_task = asyncio.all_tasks(asyncio.get_running_loop())
     for i in all_task:
         if name_task == i.get_name():
             i.cancel()

@@ -25,14 +25,6 @@ async def on_shutdown(dispatcher):
     # Закрываем соединение с БД
     await close_db()
 
-loop = asyncio.get_event_loop()
-task = loop.create_task()
-name = task.get_name()
-alltask = task.all_tasks(loop)
-for i in alltask:
-    if name == i.get_name():
-        i.cancel()
-task.set_name()
-print(task.get_name())
+
 if __name__ == '__main__':
     executor.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown, skip_updates=True)

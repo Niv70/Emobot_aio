@@ -7,6 +7,7 @@ import datetime
 
 from handlers.users.pool_mess import run_poll, run_poll_task
 from handlers.users.task_mess import run_task
+from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 import logging
 
@@ -33,7 +34,7 @@ async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int)
 
 # Бесконечный цикл действия ботика
 async def loop_action(message: Message, state: FSMContext):
-    t = await get_time_next_action(message, state, 1)  # первый запуск
+    t = await get_time_next_action(state, 1)  # первый запуск
     while True:
         data = await state.get_data()
         name_user = data.get("name_user")
@@ -54,19 +55,20 @@ async def loop_action(message: Message, state: FSMContext):
             c_day = c_data.hour
         if c_day != prev_data:
             current_day = current_day + 1
+            if current_day > LAST_DAY:  # проверяем условие на завершение работы
+                await run_bye(message, state)
+                return
             await state.update_data(current_day=current_day)
             prev_data = c_day
             await state.update_data(prev_data=prev_data)
-            await message.answer('<code>------- начался {0}-й день опроса -------</code>'.format(current_day))
+            await message.answer('<code>== начался {0}-й день опроса ==</code>'.format(current_day))
         logging.info('loop_action 1: c_day={0} prev_data={1} current_day={2}'.format(c_day, prev_data, current_day))
-        if current_day > LAST_DAY:  # проверяем условие на завершение работы
-            await run_bye(message, state)
         # Проверка закончил ли пользователь за тайм-аут с предыдущим опросом/задачей/настройкой (<-можно детализировать)
         c_state = await state.get_state()
         logging.info('loop_action 2: c_state={0}'.format(c_state))
         if c_state != "Start:Wait":
             await message.answer('{0}, я не могу больше ждать твоего ответа, т.к. пришло время следующего '
-                                 'вопроса!'.format(name_user))
+                                 'вопроса!'.format(name_user), reply_markup=menu)
         # Запуск следующего действия и рассчет времени сна с установкой флагов
         logging.info('loop_action 3: flag_pool={0} flag_task={1}'.format(flag_pool, flag_task))
         if flag_pool and flag_task:
@@ -75,18 +77,17 @@ async def loop_action(message: Message, state: FSMContext):
             await run_poll(message, state)  # запуск  одного опроса
         elif flag_task:  # можно было бы поставить else, но пусть для надежности будет так
             await run_task(message, state)  # запуск одной задачи
-        t = await get_time_next_action(message, state, 0)
+        t = await get_time_next_action(state, 0)
 
 
 # Определяем время до следующего действия в секундах (т.е. если пропустили что-то, то пропустили)
-async def get_time_next_action(message: Message, state: FSMContext, flag: int) -> int:
+async def get_time_next_action(state: FSMContext, flag: int) -> int:
     data = await state.get_data()  # Достаем имя пользователя
     tmz = data.get("tmz")
     start_t = data.get("start_t")
     end_t = data.get("end_t")
     period = data.get("period")
     tsk_t = data.get("tsk_t")
-    current_day = data.get("current_day")
     c_data = datetime.datetime.now() + datetime.timedelta(hours=tmz)
     flag_pool = 1  # взводим флажок выполнения опроса
     flag_task = 0  # сбрасываем флажок выполнения задачи
@@ -159,8 +160,7 @@ async def run_bye(message: Message, state: FSMContext):
     # !!!!! м.б. следует добавить await dp....storage.close()
     # TODO д.б. добавлена команда по выводу статистики из БД
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
-                                  period=data.get("period"),
-                                  end_time=data.get("end_t"), zone_time=data.get("tmz"),
+                                  period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     logging.info("run_bye 0: Бот пользователя {0}(id={1}) штатно завершил работу. "
                  "current_day={2}".format(name_user, message.from_user.id, current_day))

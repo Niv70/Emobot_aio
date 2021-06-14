@@ -26,16 +26,16 @@ async def bot_stop(message: Message, state: FSMContext):
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
-    task = asyncio.create_task(on_notify(dp, ""))
+    task = asyncio.create_task(on_notify(dp, "Пользователь {0}(id={1}) остановил бота. current_day="
+                                             "{2}".format(name_user, message.from_user.id, current_day)))
+    await task
     name_task = data.get("name_task")
     all_task = task.all_tasks(asyncio.get_running_loop())
     for i in all_task:
         if name_task == i.get_name():
             i.cancel()
-    await state.reset_state()  # для сохранения даннанных в data можно писать await state.reset_state(with_data=False)
+    await state.reset_state()
     sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Жалостливо что-то выпрашивает
     await message.answer_sticker(sticker=sti)
     await message.answer("Возвращайся, {0}! Я буду скучать. Работу можно будет начать сразу с {1}-го "
                          "дня.".format(name_user, current_day), reply_markup=ReplyKeyboardRemove())
-    await on_notify(dp, "Пользователь {0}(id={1}) остановил бота. "
-                        "current_day={2}".format(name_user, message.from_user.id, current_day))

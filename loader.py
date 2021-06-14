@@ -5,7 +5,7 @@ from aiogram.contrib.fsm_storage.files import JSONStorage
 from data import config
 
 bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
-storage = JSONStorage(path="FSM.json")
+storage  = MemoryStorage()  # м.б. будет быстрее чем JSONStorage(path="FSM.json")
 dp = Dispatcher(bot, storage=storage)
 
 LAST_DAY = 2  # Последний день опроса - во время отладки меняем c 18 на 1<х<18

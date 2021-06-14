@@ -12,8 +12,7 @@ from states.states import Start
 from utils.common_func import get_digit, loop_action
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06, choice07
 from keyboards.default import menu
-from utils.db_api.db_commands import get_name_by_id, db_add_user, get_settings_by_id
-
+from utils.db_api.db_commands import get_name_by_id, db_add_user, get_settings_by_id, db_update_user_settings
 
 # Обработчик ввода имени пользователя на стадии начала работы бота
 from utils.db_api.models import Emo_users
@@ -33,7 +32,7 @@ async def answer_name(message: Message, state: FSMContext):
     await state.update_data(period=2)
     await state.update_data(tsk_t=99)
     await state.update_data(current_day=0)
-    await state.update_data(flag_pool=0)
+    await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
     await message.answer("Я - ЗаБотик - веселый и заботливый Телеграм-бот. Я помогаю людям фиксировать и исследовать"
                          " собственные эмоции. Если ты соглашаешься участвовать в этой работе, то я начну регулярно "
@@ -112,8 +111,8 @@ async def press_call02_key1(call: CallbackQuery, state: FSMContext):
     name_user = data.get("name_user")
     await call.message.answer("Отлично, {0}! Всегда обращайся к нему особенно по началу, чтобы дать максимально точный"
                               " ответ, который я смогу считать и зафиксировать. Если ты захочешь заглянуть в него, "
-                              "нажми на кнопку «Термометр», которая по завершению настроек опроса появится под строкой"
-                              " ввода текста.".format(name_user), reply_markup=choice05)
+                              " выбери служебное сообщение «Термометр», которое по завершению настроек опроса появится"
+                              " под строкой ввода текста.".format(name_user), reply_markup=choice05)
     await Start.Call_03.set()
 
 
@@ -130,9 +129,9 @@ async def press_call03_key(call: CallbackQuery, state: FSMContext):
                               "страшок, злобинушка, печалька или грустинка. И это важно, потому что  чаще всего именно"
                               " эти слабые сигналы мы и упускаем. В итоге осознание, того, что именно с нами происходит"
                               ", появляется гораздо позднее, чем могло бы. Если ты не сможешь найти в «Эмоциональном "
-                              "термометре» точное название своей эмоции, нажми на кнопку «Список эмоций и чувств», "
-                              "которая по завершению настроек опроса также появится под строкой ввода текста. "
-                              "Отобразится свыше 120 различных эмоций и чувств. Эмоция – это кратковременное "
+                              "термометре» точное название своей эмоции, выбери служебное сообщение  «Список эмоций и"
+                              " чувств», которое по завершению настроек опроса также появится под строкой ввода текста."
+                              " Отобразится свыше 120 различных эмоций и чувств. Эмоция – это кратковременное "
                               "переживание человека по поводу ситуации или события. Чувство – это уже более длительное"
                               " и более сложное состояние. Ты можешь фиксировать чувство или эмоцию.\nЕсли ты захочешь,"
                               " то можешь использовать собственные формулировки эмоций.".format(name_user),
@@ -182,12 +181,12 @@ async def answer_tst(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     if answer == "я чувствую интерес":
         await message.answer("У тебя здорово получается!\nЗачастую, один раз в день, я буду давать"
-                             " тебе интересную задачку ”на прокачку”. Постарайся выполнить ее честно и быстро - это"
+                             " тебе интересную ”задачку на прокачку”. Постарайся выполнить ее честно и быстро - это"
                              " ОЧЕНЬ ВАЖНО!")
         await message.answer("Отлично, {0}! Блок ознакомительной информации закончен, можно перейти к настройкам "
-                             "времени опроса.Если ты захочешь их позже изменить, то можешь это сделать нажав кнопку"
-                             " «Настройки», которая по завершению настроек опроса также появится под строкой ввода "
-                             "текста.".format(name_user))
+                             "времени опроса. Если ты захочешь их позже изменить, то можешь это сделать выберав "
+                             "служебное сообщение «Настройки», которое по завершению настроек опроса также появится "
+                             "под строкой ввода текста.".format(name_user))
         await set_settings(message, state)  # следующее состояние установится внутри этой функции
     else:
         await message.answer("{0}, я не распознаю твой ответ. Напиши в формулировке  <b><i>Я чувствую "
@@ -253,21 +252,18 @@ async def answer_start_t(message: Message, state: FSMContext):
     await state.update_data(start_t=d)
     await message.answer("Итак, начало опроса в {0:0>2}:00.".format(d))
     await message.answer("{0}, пожалуйста, введи <i>одним числом в часах</i> удобное <b>время завершения опроса</b>"
-                         " от 1 до 23:".format(name_user))
+                         " от {1} до 23:".format(name_user, d+1))
     await Start.set_end_t.set()  # или можно await Start.next()
 
 
 # Обработчик ввода цифры Время завершения опроса
 @dp.message_handler(state=Start.set_end_t)
 async def answer_end_t(message: Message, state: FSMContext):
-    d = await get_digit(message, state, 1, 23)  # преобразовываем сообщение в цифру
-    if d < 0:  # проверка коррктностии ввода пользователя
-        return
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     start_t = data.get("start_t")
-    if d <= start_t:
-        await message.answer('{0}, время завершения опроса д.б. больше времени начала опроса!'.format(name_user))
+    d = await get_digit(message, state, start_t+1, 23)  # преобразовываем сообщение в цифру
+    if d < 0:  # проверка коррктностии ввода пользователя
         return
     await state.update_data(end_t=d)
     await message.answer("Итак, завершение опроса в {0:0>2}:00.".format(d))
@@ -293,33 +289,34 @@ async def answer_period(message: Message, state: FSMContext):
         await message.answer("{0:0>2}:00".format(start_t + i))
         i = i + d
     await message.answer("и {0:0>2}:00".format(end_t))
-    await message.answer('{0}, пожалуйста, введи <i>одним числом в часах</i> удобное <b>время выполнения задачки'
-                         ' ”на прокачку”</b> от 0 до 23 (если время задачки и время опроса совпадут, выполнение '
-                         'задачки начнется сразу после опроса):'.format(name_user))
+    await message.answer('{0}, пожалуйста, введи <i>одним числом в часах</i> удобное <b>время выполнения ”задачки'
+                         ' на прокачку”</b> от {1} до {2} (если время задачки и время опроса совпадут, выполнение '
+                         'задачки начнется сразу после опроса):'.format(name_user, start_t, end_t))
     await Start.set_tsk_t.set()  # или можно await Start.next()
 
 
-# Обработчик ввода цифры Время задачки ”на прокачку”
+# Обработчик ввода цифры Время ”задачки на прокачку”
 @dp.message_handler(state=Start.set_tsk_t)
 async def answer_tsk_t(message: Message, state: FSMContext):
-    d = await get_digit(message, state, 0, 23)  # преобразовываем сообщение в цифру
-    if d < 0:  # проверка коррктностии ввода пользователя
-        return
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     start_t = data.get("start_t")
     end_t = data.get("end_t")
-    if d < start_t or d > end_t:
-        await message.answer('{0}, время выполнения задачки ”на прокачку” д.б. в границах начала и завершения'
-                             ' опроса!'.format(name_user))
+    d = await get_digit(message, state, start_t, end_t)  # преобразовываем сообщение в цифру
+    if d < 0:  # проверка коррктностии ввода пользователя
         return
     await state.update_data(tsk_t=d)
-    await message.answer('Итак, выполнение задачки ”на прокачку” в: {0:0>2}:00'.format(d))
+    await message.answer('Итак, выполнение ”задачки на прокачку” в: {0:0>2}:00'.format(d))
     await message.answer("Отлично, {0}! Настройки заверешены - опрос начнется с наступлением следующего "
                          "дня.".format(name_user))
-    await message.answer('А, вот ещё. Если ты захочешь зафиксировать эмоцию или решить задачку ”на прокачку” для '
-                         'текущего дня работы без моего напоминания - просто нажми для этого кнопку "Фиксировать эмоцию'
-                         ' сейчас" или "Выполнить задачку ”на прокачку”" под строкой ввода текста', reply_markup=menu)
+    await message.answer('А, вот ещё. Если ты захочешь зафиксировать эмоцию или решить ”задачку на прокачку” для '
+                         'текущего дня работы без моего напоминания - просто выбери служебное сообщение "Фиксировать '
+                         'эмоцию сейчас" или "Выполнить ”задачку на прокачку”" под строкой ввода текста',
+                         reply_markup=menu)
+    data = await state.get_data()
+    await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
+                                  period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
     task_loop_action = asyncio.create_task(loop_action(message, state))
     name_task = task_loop_action.get_name()

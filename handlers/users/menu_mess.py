@@ -4,12 +4,52 @@ from aiogram.dispatcher.filters import Text
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from handlers.users.pool_mess import run_poll
-from handlers.users.task_mess import run_task
 from loader import dp
 from states.states import Sett, Start
-from utils.common_func import get_digit
+from utils.common_func import get_digit, run_poll, run_task
 from utils.db_api.db_commands import db_update_user_settings
+
+
+Possible_Emotions = ['злость', 'трепет', 'угрюмость', 'отчужденность',
+                     'гнев', 'обеспокоенность ', 'серьезность', 'неловкость',
+                     'возмущение', 'испуг', 'подавленность', 'удивление',
+                     'ненависть', 'тревога', 'разочарование', 'шок',
+                     'обида', 'волнение', 'боль', 'поражение',
+                     'сердитость', 'боязнь', 'застенчивость', 'остолбенение',
+                     'досада', 'ужас', 'покинутость', 'изумление',
+                     'раздражение', 'ощущение угрозы', 'удрученность', 'потрясение',
+                     'оскорбленность', 'ошеломленность', 'усталость', 'энтузиазм',
+                     'воинственность', 'опасение', 'глупость', 'восторг',
+                     'бунтарство', 'уныние', 'апатия', 'возбужденность',
+                     'сопротивление', 'ощущение тупика', 'самодовольство', 'страсть',
+                     'зависть', 'запутанность', 'скука', 'эйфория',
+                     'надменность', 'потерянность', 'истощение', 'трепет',
+                     'презрение', 'дезориентация', 'расстройство', 'решимость',
+                     'отвращение', 'бессвязность', 'упадок сил', 'дерзость',
+                     'подавленность', 'одиночество', 'нетерпеливость', 'удовлетворенность',
+                     'уязвленность', 'изолированность', 'вспыльчивость', 'гордость',
+                     'подозрительноость', 'грусть', 'тоска', 'сентиментальность',
+                     'настороженность', 'печаль', 'стыд', 'счастье',
+                     'озабоченность', 'горе', 'вина', 'радость',
+                     'тревожность', 'угнетенность', 'униженность', 'блаженство',
+                     'страх', 'мрачность', 'ущемленность', 'забавность',
+                     'нервозность', 'отчаяние', 'смущение', 'восхищение',
+                     'ожидание', 'опустошенность', 'неудобство', 'триумф',
+                     'взволнованность', 'беспомощность', 'тяжесть', 'удовольствие',
+                     'слабость', 'сожаление', 'мечтательность',
+                     'ранимость', 'скорбь', 'очарование',
+                     'неудовольствие', 'растерянность ', 'принятие']
+
+
+@dp.message_handler(Text(equals="Список эмоций и чувств"), state='*')
+async def get_list(message: Message):
+    await message.answer("{}".format(Possible_Emotions))
+
+
+@dp.message_handler(Text(equals="Термометр"), state='*')
+async def get_list(message: Message):
+    img = open("./IMG/Термометр.jpg", "rb")
+    await message.answer_photo(img)
 
 
 @dp.message_handler(Text(equals="Фиксировать эмоцию сейчас"), state='*')
@@ -103,7 +143,6 @@ async def set_sett_0(message: Message, state: FSMContext):
 
 @dp.message_handler(state=Sett.Stage1)
 async def set_sett_1(message: Message, state: FSMContext):
-    data = await state.get_data()
     name_user = message.text[:20]
     await state.update_data(name_user=name_user)
     await message.answer('Теперь я буду звать тебя "{0}".'.format(name_user))
@@ -117,7 +156,6 @@ async def set_sett_1(message: Message, state: FSMContext):
 
 @dp.message_handler(state=Sett.Stage2)
 async def set_sett_2(message: Message, state: FSMContext):
-    data = await state.get_data()
     d = await get_digit(message, state, 0, 23)
     if d < 0:
         return

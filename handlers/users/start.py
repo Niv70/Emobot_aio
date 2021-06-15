@@ -9,9 +9,9 @@ from aiogram.types import ReplyKeyboardRemove
 from loader import dp
 from states.states import Start
 from utils.common_func import loop_action
-from utils.db_api.db_commands import get_name_by_id
-from handlers.users.start_mess import user_settings_from_db
+from utils.db_api.db_commands import get_name_by_id, get_settings_by_id
 from keyboards.default import menu
+from utils.db_api.models import Emo_users
 
 
 # Обработка первого вызова команды /start
@@ -44,6 +44,21 @@ async def bot_start(message: types.Message, state: FSMContext):
         data = await state.get_data()
         logging.info('bot_start 0: data={}'.format(data))
         await task_loop_action  # ждем завершения бесконечного цикла действий
+
+
+# функция инициализации переменных при повтороном запуске ботика пользователем
+async def user_settings_from_db(message: types.Message, state: FSMContext):
+    user_settings: Emo_users = await get_settings_by_id(message.from_user.id)
+    # инициализируем список ключей данных
+    await state.update_data(name_user=user_settings.name)
+    await state.update_data(tmz=user_settings.ZoneTime)
+    await state.update_data(start_t=user_settings.StartTime)
+    await state.update_data(end_t=user_settings.EndTime)
+    await state.update_data(period=user_settings.Period)
+    await state.update_data(tsk_t=user_settings.TaskTime)
+    await state.update_data(current_day=user_settings.CurrentDay)
+    await state.update_data(flag_pool=1)
+    await state.update_data(flag_task=0)
 
 
 # Обработка повторного вызова команды /start

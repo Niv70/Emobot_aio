@@ -1,56 +1,13 @@
-# В этом модуле выполняется обработка сообщений в состоянии Задача (Task)
-# from aiogram import types
+# В этом модуле выполняется обработка сообщений для задачи 2-го дня
 from aiogram.types import Message
 # Ключи FSMContext: name_user(str[10]),tmz(int),start_t(int),end_t(int),period(int),tsk_t(int),
 # prev_data(int),current_day(int),flag_pool(int),flag_task(int)
 from aiogram.dispatcher import FSMContext
-import logging
 
-from keyboards.default.menu import tsk02_00, tsk02_02, tsk02_14, menu
+from keyboards.default.menu import tsk02_02, tsk02_14, menu
 from loader import dp
 from states.states import Start, Task02
 from utils.db_api.db_commands import db_save_task
-from handlers.users.task_mess04 import run_tsk04
-
-
-# ============================== Запуск задач текущего дня ==============================
-async def run_task(message: Message, state: FSMContext):
-    data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
-    current_day = data.get("current_day")
-    # начинаем выполнение задачки
-    if current_day != 0 and current_day != 1:
-        sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # Пускает праздничный салют
-        await message.answer_sticker(sticker=sti)
-        await message.answer('{0}! Наступил час потехи - начинаем "задачку на прокачку" эмоционального '
-                             'интеллекта!'.format(name_user))
-        logging.info("run_task 0: current_day={0}".format(current_day))
-    if current_day == 2:  # на 2-й (не на 0-й и 1-й) день работы боты запускаем задачи
-        await run_tsk02(message, state)
-    # elif current_day == 3:
-    #     await run_tsk3(message, state)
-    elif current_day == 4:
-        await run_tsk04(message, state)
-    else:  # переходим в состояние ожидания следующего действия
-        sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
-        await message.answer_sticker(sticker=sti)
-        await message.answer('{0}, для {1}-го дня опроса нет задачки ”на прокачку” - можешь просто немного '
-                             'помедитировать вместе со мной... :)'.format(name_user, current_day))
-        await Start.Wait.set()
-
-
-# ============================== Запуск "задачки на прокачку" 2-го дня ==============================
-async def run_tsk02(message: Message, state: FSMContext):
-    data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
-    await message.answer("{0}, я приготовил для тебя «задачку на прокачку» эмоционального интеллекта. Если ты"
-                         " будешь выполнять все «задачки на прокачку» твоя эмоциональная форма станет сильнее и "
-                         "пластичнее. Сегодня будем прокачивать эмоциональную мышцу, которая отвечает за распознавание"
-                         " эмоций. Если тебе интересно узнать, какие еще мышцы мы будем тренировать в предстоящие 2 "
-                         "недели, кликни кнопку «Модель эмоционального интеллекта» под строкой ввода текста или "
-                         "кнопку «Начать решение задачки»".format(name_user),
-                         reply_markup=tsk02_00)
-    await Task02.Answer_02_01.set()
 
 
 # Обработчик ввода 1го ответа (Начать) к задачке "на прокачку" 2-го дня

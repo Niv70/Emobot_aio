@@ -8,29 +8,16 @@ import logging
 
 from loader import dp
 from states.states import Pool, Start
-from .task_mess import run_task
+from utils.common_func import run_task
 from utils.db_api.db_commands import db_save_emotions, db_save_reason
 
 
 # Общий блок сообщений для веток: опрос и опрос+задача. Сделал здесь для удобства правки
-quest = [", что ты сейчас чувствуешь?", ", какая эмоция сейчас внутри тебя?",
-         ", прислушайся какая эмоция сейчас внутри тебя?", ", тук-тук-тук, что ты сейчас чувствуешь?"]
 comment = ["Понимаю, такое бывает.", "Знакомая эмоция. Фиксирую.", "Понимаю тебя. Записываю.",
            "Есть контакт. Записано.", "Все зафиксировал!"]
-r_p = "{0}{1}"
 a_e_1 = "{0}, попробуй все-таки написать: <b><i>Я чувствую ЭМОЦИЯ</i></b>"
 a_e_2 = "Как думаешь, {0}, чем эта эмоция вызвана?"
 a_r = "{0}"
-
-
-# Запуск опроса эмоции
-async def run_poll(message: Message, state: FSMContext):
-    data = await state.get_data()
-    name_user = data.get("name_user")
-    sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
-    await message.answer_sticker(sticker=sti)
-    await message.answer(r_p.format(name_user, choice(quest)))
-    await Pool.Emo.set()
 
 
 # Обработчик ввода эмоции
@@ -61,16 +48,6 @@ async def answer_reason(message: Message, state: FSMContext):
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     await Start.Wait.set()
-
-
-# Запуск опроса эмоции c последующим запуском задачи
-async def run_poll_task(message: Message, state: FSMContext):
-    data = await state.get_data()
-    name_user = data.get("name_user")
-    sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
-    await message.answer_sticker(sticker=sti)
-    await message.answer(r_p.format(name_user, choice(quest)))
-    await Pool.EmoTask.set()
 
 
 # Обработчик ввода эмоции

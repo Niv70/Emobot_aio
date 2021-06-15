@@ -1,15 +1,15 @@
 # Модуль общих функций (Common functions)
-# import aiogram
 from asyncio import sleep
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
+from random import choice
 import datetime
+import logging
 
-from handlers.users.pool_mess import run_poll, run_poll_task
-from handlers.users.task_mess import run_task
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-import logging
+from states.states import Start, Pool, Task02, Task04
+from keyboards.default.menu import tsk02_00, tsk04_00
 
 
 # Ввод неотрицательного числа
@@ -172,3 +172,82 @@ async def run_bye(message: Message, state: FSMContext):
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))
     logging.info("run_bye 0: Бот пользователя {0}(id={1}) штатно завершил работу. "
                  "current_day={2}".format(name_user, message.from_user.id, current_day))
+
+
+# ===================== Блок функций вытащенных из других модулей для инкапсуляции common_func.py =====================
+quest = [", что ты сейчас чувствуешь?", ", какая эмоция сейчас внутри тебя?",
+         ", прислушайся какая эмоция сейчас внутри тебя?", ", тук-тук-тук, что ты сейчас чувствуешь?"]
+r_p = "{0}{1}"
+
+
+# Запуск опроса эмоции
+async def run_poll(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
+    await message.answer_sticker(sticker=sti)
+    await message.answer(r_p.format(name_user, choice(quest)))
+    await Pool.Emo.set()
+
+
+# Запуск опроса эмоции c последующим запуском задачи
+async def run_poll_task(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
+    await message.answer_sticker(sticker=sti)
+    await message.answer(r_p.format(name_user, choice(quest)))
+    await Pool.EmoTask.set()
+
+
+# Запуск задач текущего дня
+async def run_task(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    current_day = data.get("current_day")
+    # начинаем выполнение задачки
+    if current_day != 0 and current_day != 1:
+        sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # Пускает праздничный салют
+        await message.answer_sticker(sticker=sti)
+        await message.answer('{0}! Наступил час потехи - начинаем "задачку на прокачку" эмоционального '
+                             'интеллекта!'.format(name_user))
+        logging.info("run_task 0: current_day={0}".format(current_day))
+    if current_day == 2:  # на 2-й (не на 0-й и 1-й) день работы боты запускаем задачи
+        await run_tsk02(message, state)
+    # elif current_day == 3:
+    #     await run_tsk3(message, state)
+    elif current_day == 4:
+        await run_tsk04(message, state)
+    else:  # переходим в состояние ожидания следующего действия
+        sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
+        await message.answer_sticker(sticker=sti)
+        await message.answer('{0}, для {1}-го дня опроса нет задачки ”на прокачку” - можешь просто немного '
+                             'помедитировать вместе со мной... :)'.format(name_user, current_day))
+        await Start.Wait.set()
+
+
+# Запуск "задачки на прокачку" 2-го дня
+async def run_tsk02(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    await message.answer("{0}, я приготовил для тебя «задачку на прокачку» эмоционального интеллекта. Если ты"
+                         " будешь выполнять все «задачки на прокачку» твоя эмоциональная форма станет сильнее и "
+                         "пластичнее. Сегодня будем прокачивать эмоциональную мышцу, которая отвечает за распознавание"
+                         " эмоций. Если тебе интересно узнать, какие еще мышцы мы будем тренировать в предстоящие 2 "
+                         "недели, кликни кнопку «Модель эмоционального интеллекта» под строкой ввода текста или "
+                         "кнопку «Начать решение задачки»".format(name_user),
+                         reply_markup=tsk02_00)
+    await Task02.Answer_02_01.set()
+
+
+# Запуск "задачки на прокачку" 4-го дня
+async def run_tsk04(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    img = open("./IMG/День_04_1.jpg", "rb")
+    await message.answer_photo(img)
+    await message.answer("Привет, {0}! Я приготовил для тебя семь фотографий. Посмотри на первую из них и попробуй "
+                         "определить эмоцию героя. Напиши ответ в виде одного слова "
+                         "<b><i>ЭМОЦИЯ</i></b>.".format(name_user),
+                         reply_markup=tsk04_00)
+    await Task04.Answer_04_01.set()

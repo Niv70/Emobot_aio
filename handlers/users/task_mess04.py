@@ -1,24 +1,11 @@
 # В этом модуле выполняется обработка сообщений в состоянии Задача (Task) для 4го дня
 from aiogram.types import Message
-from aiogram.dispatcher import FSMContext
+# from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk04_00
+from keyboards.default.menu import menu
 from loader import dp
 from states.states import Start, Task04
 from utils.db_api.db_commands import db_save_task
-
-
-# ============================== Запуск "задачки на прокачку" 4-го дня ==============================
-async def run_tsk04(message: Message, state: FSMContext):
-    data = await state.get_data()  # Достаем имя пользователя
-    name_user = data.get("name_user")
-    img = open("./IMG/День_04_1.jpg", "rb")
-    await message.answer_photo(img)
-    await message.answer("Привет, {0}! Я приготовил для тебя семь фотографий. Посмотри на первую из них и попробуй "
-                         "определить эмоцию героя. Напиши ответ в виде одного слова "
-                         "<b><i>ЭМОЦИЯ</i></b>.".format(name_user),
-                         reply_markup=tsk04_00)
-    await Task04.Answer_04_01.set()
 
 
 # Обработчик ввода 1го ответа (ЭМОЦИЯ) к задачке "на прокачку" 4-го дня

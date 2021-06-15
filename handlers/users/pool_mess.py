@@ -15,10 +15,12 @@ from utils.db_api.db_commands import db_save_emotions, db_save_reason
 # Общий блок сообщений для веток: опрос и опрос+задача. Сделал здесь для удобства правки
 quest = [", что ты сейчас чувствуешь?", ", какая эмоция сейчас внутри тебя?",
          ", прислушайся какая эмоция сейчас внутри тебя?", ", тук-тук-тук, что ты сейчас чувствуешь?"]
+comment = ["Понимаю, такое бывает.", "Знакомая эмоция. Фиксирую.", "Понимаю тебя. Записываю.",
+           "Есть контакт. Записано.", "Все зафиксировал!"]
 r_p = "{0}{1}"
 a_e_1 = "{0}, попробуй все-таки написать: <b><i>Я чувствую ЭМОЦИЯ</i></b>"
 a_e_2 = "Как думаешь, {0}, чем эта эмоция вызвана?"
-a_r = "Спасибо, {0}, информация сохранена."
+a_r = "{0}"
 
 
 # Запуск опроса эмоции
@@ -55,7 +57,7 @@ async def answer_reason(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
     await db_save_reason(message.from_user.id, s)
-    await message.answer(a_r.format(name_user))
+    await message.answer(a_r.format(choice(comment)))
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     await Start.Wait.set()
@@ -95,7 +97,7 @@ async def answer_reason_task(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
     await db_save_reason(message.from_user.id, s)
-    await message.answer(a_r.format(name_user))
+    await message.answer(a_r.format(choice(comment)))
     logging.info("a_r_t 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     await run_task(message, state)

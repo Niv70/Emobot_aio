@@ -81,11 +81,11 @@ async def set_sett_0(message: Message, state: FSMContext):
         await Sett.Stage2.set()
     elif d == 3:
         await message.answer('{0}, введи <i>одним числом в часах</i> удобное <b>время начала опроса</b>'
-                             ' от 1 до {1}:'.format(name_user, end_t))
+                             ' от 0 до {1}:'.format(name_user, end_t-1))
         await Sett.Stage3.set()
     elif d == 4:
         await message.answer('{0}, введи <i>одним числом в часах</i> удобное <b>время завершения опроса</b>'
-                             ' от {1} до 23:'.format(name_user, start_t))
+                             ' от {1} до 23:'.format(name_user, start_t+1))
         await Sett.Stage4.set()
     elif d == 5:
         await message.answer('{0}, введи <i>одним числом в часах</i> удобную <b>периодичность опроса</b>'

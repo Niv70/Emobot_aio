@@ -1,7 +1,7 @@
 # Модуль общих функций (Common functions)
 # import aiogram
 from asyncio import sleep
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
 import datetime
 
@@ -67,8 +67,16 @@ async def loop_action(message: Message, state: FSMContext):
         c_state = await state.get_state()
         logging.info('loop_action 2: c_state={0}'.format(c_state))
         if c_state != "Start:Wait":
-            await message.answer('{0}, я не могу больше ждать твоего ответа, т.к. пришло время следующего '
-                                 'вопроса!'.format(name_user), reply_markup=menu)
+            c_state = c_state[:4]  # берем только название класса без состояния
+            if c_state == "Pool":
+                await message.answer('{0}, текущий опрос эмоции был пропущен, т.к. пришло время следующего '
+                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
+            elif c_state == "Task":
+                await message.answer('{0}, решение "задачки на прокачку" был прервано, т.к. пришло время следующего '
+                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
+            else:
+                await message.answer('{0}, я не могу больше ждать твоего ответа, т.к. пришло время следующего '
+                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
         # Запуск следующего действия и рассчет времени сна с установкой флагов
         logging.info('loop_action 3: flag_pool={0} flag_task={1}'.format(flag_pool, flag_task))
         if flag_pool and flag_task:
@@ -155,9 +163,9 @@ async def run_bye(message: Message, state: FSMContext):
     current_day = data.get("current_day")
     sti = open("./a_stickers/AnimatedSticker2.tgs", 'rb')  # Приветствует воздушным поцелуем
     await message.answer_sticker(sticker=sti)
-    await message.answer("Мы полезно с тобой пообщались, {0}! До новых встреч!".format(name_user))
+    await message.answer("Мы полезно с тобой пообщались, {0}! До новых встреч!".format(name_user),
+                         reply_markup=ReplyKeyboardRemove())
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
-    # !!!!! м.б. следует добавить await dp....storage.close()
     # TODO д.б. добавлена команда по выводу статистики из БД
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),

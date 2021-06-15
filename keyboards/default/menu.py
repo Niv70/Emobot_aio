@@ -32,7 +32,7 @@ pool = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk2_00 = ReplyKeyboardMarkup(
+tsk02_00 = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="Модель эмоционального интеллекта"),
@@ -79,6 +79,19 @@ tsk02_14 = ReplyKeyboardMarkup(
         [
             KeyboardButton(text="Выход из галереи"),
         ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk04_00 = ReplyKeyboardMarkup(
+    keyboard=[
         [
             KeyboardButton(text="Список эмоций и чувств"),
         ],

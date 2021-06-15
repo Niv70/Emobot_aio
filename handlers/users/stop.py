@@ -38,7 +38,7 @@ async def bot_stop(message: Message, state: FSMContext):
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
     sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Жалостливо что-то выпрашивает
     await message.answer_sticker(sticker=sti)
-    await message.answer("Возвращайся, {0}! Я буду скучать. Работу можно будет начать сразу с {1}-го "
+    await message.answer("Возвращайся, {0}! Я буду скучать. Работу можно будет начать с {1}-го "
                          "дня.".format(name_user, current_day), reply_markup=ReplyKeyboardRemove())
     await on_notify(dp, "Пользователь {0}(id={1}) остановил бота. "
                         "current_day={2}".format(name_user, message.from_user.id, current_day))

@@ -8,7 +8,7 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task03, Task04
+from states.states import Start, Pool, Task02, Task03, Task04, Task05
 from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00
 from utils.db_api.db_commands import db_update_user_settings
 
@@ -216,6 +216,8 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk03(message, state)
     elif current_day == 4:
         await run_tsk04(message, state)
+    elif current_day == 5:
+        await run_tsk05(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
@@ -261,3 +263,17 @@ async def run_tsk04(message: Message, state: FSMContext):
                          "<b><i>ЭМОЦИЯ</i></b>.".format(name_user),
                          reply_markup=tsk04_00)
     await Task04.Answer_04_01.set()
+
+
+# Запуск "задачки на прокачку" 5-го дня
+async def run_tsk05(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Я заметил, что мое настроение не всегда совпадает с настроением моей команды. На"
+                         "верное, и у тебя такое бывало: то шеф не в духе, а то коллега, наоборот, подозрительно "
+                         "весел.".format(name_user), reply_markup=tsk03_00)  # клавиатура tsk03_00 подходит по смыслу
+    await message.answer("Вот тебе задачка на прокачку!\n Мы с командой как раз пересматривали советскую классику кинем"
+                         "атографа и нашли интересный фрагмент в фильме “Служебный роман”. Попробуй посмотреть его и оп"
+                         "ределить, какие эмоции испытывал Новосельцев в этом фрагменте. Если готов начать кликни на сл"
+                         "ужебное сообщение «Начать решение задачки» под строкой ввода текста.")
+    await Task05.Answer_05_01.set()

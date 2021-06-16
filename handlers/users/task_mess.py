@@ -10,6 +10,7 @@ from states.states import Start, Task02
 from utils.db_api.db_commands import db_save_task
 
 
+
 # Обработчик ввода 1го ответа (Начать) к задачке "на прокачку" 2-го дня
 @dp.message_handler(state=Task02.Answer_02_01)
 async def answer_02_01(message: Message, state: FSMContext):
@@ -328,7 +329,7 @@ async def answer_02_17(message: Message, state: FSMContext):
     await Task02.next()
 
 
-# Обработчик ввода 18го ответа (пссле Выход из галереи) к задачке "на прокачку" 2-го дня
+# Обработчик ввода 18го ответа (после Выход из галереи) к задачке "на прокачку" 2-го дня
 @dp.message_handler(state=Task02.Answer_02_18)
 async def answer_02_18(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -338,6 +339,7 @@ async def answer_02_18(message: Message, state: FSMContext):
     await message.answer("Интересный комментарий! {0}, спасибо за прогулку по галерее! Завтра захвати наушники, у меня"
                          " будет к тебе интересное задание.".format(name_user), reply_markup=menu)
     await Start.Wait.set()
+
 
 # await message.answer('{0}, я не могу больше ждать твоего ответа, т.к. пришло время следующего '
 #                      'вопроса!'.format(name_user), reply_markup=menu)

@@ -49,6 +49,12 @@ class Task02(StatesGroup):
     Answer_02_17 = State()
     Answer_02_18 = State()  # бот переходит к ожиданию след.опроса
 
+# Класс состояний обработки сообщений при выполнении задачки "на прокачку" 3-го дня
+class Task03(StatesGroup):
+    Answer_03_01 = State()
+    Answer_03_02 = State()
+    Answer_03_03 = State()
+
 
 # Класс состояний обработки сообщений при выполнении задачки "на прокачку" 4-го дня
 class Task04(StatesGroup):

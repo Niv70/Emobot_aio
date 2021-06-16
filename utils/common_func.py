@@ -8,9 +8,8 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task04
-from keyboards.default.menu import tsk02_00, tsk04_00
-
+from states.states import Start, Pool, Task02, Task03, Task04
+from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00
 
 # Ввод неотрицательного числа
 from utils.db_api.db_commands import db_update_user_settings
@@ -123,7 +122,7 @@ async def get_time_next_action(state: FSMContext, flag: int) -> int:
             await state.update_data(flag_task=flag_task)  # взводим флажок выполнения задачи
         logging.info('g_t_n_a 0: c_hour={0} c_minute={1} start_t={2} prev_data={3} flag_task={4} t='
                      '{5}'.format(c_hour, c_minute, start_t, prev_data, flag_task, t))
-        return t+10  # запас надежности в 10 секунд
+        return t + 10  # запас надежности в 10 секунд
     # обработка вызова функции из цикла действий
     if c_hour >= end_t:  # рассчет времени задержки после завершения опроса в текущем дне
         t = ((HOUR_IN_DAY - c_hour) * SEC_IN_H - c_minute * SEC_IN_M) + start_t * SEC_IN_H
@@ -135,7 +134,7 @@ async def get_time_next_action(state: FSMContext, flag: int) -> int:
             flag_task = 1
         logging.info('g_t_n_a 1: !!_ЧУШЬ_!! c_hour={0} c_minute={1} start_t={2} flag_task={3} t='
                      '{4}'.format(c_hour, c_minute, start_t, flag_task, t))
-    else:    # рассчет времени задержки в рамках опроса текущего дня
+    else:  # рассчет времени задержки в рамках опроса текущего дня
         p = period
         while c_hour >= start_t + p:  # находим час следующего опроса
             p = p + period
@@ -153,7 +152,7 @@ async def get_time_next_action(state: FSMContext, flag: int) -> int:
     await state.update_data(flag_task=flag_task)
     logging.info('g_t_n_a 2: c_hour={0} c_minute={1} start_t={2} end_t={3} flag_pool={4} flag_task={5} t='
                  '{6}'.format(c_hour, c_minute, start_t, end_t, flag_pool, flag_task, t))
-    return t+10  # запас надежности в 10 секунд
+    return t + 10  # запас надежности в 10 секунд
 
 
 # Штатное завершение работы бота
@@ -214,15 +213,15 @@ async def run_task(message: Message, state: FSMContext):
         logging.info("run_task 0: current_day={0}".format(current_day))
     if current_day == 2:  # на 2-й (не на 0-й и 1-й) день работы боты запускаем задачи
         await run_tsk02(message, state)
-    # elif current_day == 3:
-    #     await run_tsk3(message, state)
+    elif current_day == 3:
+        await run_tsk03(message, state)
     elif current_day == 4:
         await run_tsk04(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
         await message.answer('{0}, для {1}-го дня опроса нет задачки ”на прокачку” - можешь просто немного '
-                             'помедитировать вместе со мной... :)'.format(name_user, current_day))
+                             'по медитировать вместе со мной... :)'.format(name_user, current_day))
         await Start.Wait.set()
 
 
@@ -238,6 +237,19 @@ async def run_tsk02(message: Message, state: FSMContext):
                          "кнопку «Начать решение задачки»".format(name_user),
                          reply_markup=tsk02_00)
     await Task02.Answer_02_01.set()
+
+
+# Запуск "задачки на прокачку" 3-го дня
+async def run_tsk03(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0} Вчера мы с тобой были в картинной галерее, а сегодня я тебя приглашаю "
+                         "на секретное здание в филармонию. Надень наушники и прослушай последовательно три музыкальных"
+                         "фрагмента. Слушай внимательно, можешь даже закрыть глаза. Почувствуй, какую эмоцию у тебя"
+                         " вызывает эта музыка.".format(name_user), reply_markup=tsk03_00)
+    audio = open("./SND/Задача 3-1.mp3", "rb")
+    await message.answer_audio(audio)
+    await Task03.Answer_03_01.set()
 
 
 # Запуск "задачки на прокачку" 4-го дня

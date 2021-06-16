@@ -90,6 +90,48 @@ tsk02_14 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+
+tsk03_00 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Интересный факт о композиторе"),
+        ],
+        [
+            KeyboardButton(text="Следующий музыкальный фрагмент"),
+        ],
+        [
+            KeyboardButton(text="Решить задачу позднее"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+tsk03_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Интересный факт о композиторе"),
+        ],
+        [
+            KeyboardButton(text="Решить задачу позднее"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+
 tsk04_00 = ReplyKeyboardMarkup(
     keyboard=[
         [

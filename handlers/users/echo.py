@@ -9,7 +9,7 @@ from loader import dp
 async def bot_echo(message: types.Message):
     sti = open("./a_stickers/AnimatedSticker6.tgs", 'rb')  # Ест попкорн в 3д очках
     await message.answer_sticker(sticker=sti)
-    await message.reply("Оба-на! Ты послал мне соообщение, но я не знаю как его понять :)")
+    await message.reply("Оба-на! Мне пришло от тебя соообщение, но я не знаю как его понять :)")
 
 
 # Эхо хендлер, куда летят ВСЕ сообщения с указанным состоянием

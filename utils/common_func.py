@@ -10,11 +10,10 @@ from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04
 from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00
-
-# Ввод неотрицательного числа
 from utils.db_api.db_commands import db_update_user_settings
 
 
+# Ввод неотрицательного числа
 async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
@@ -60,7 +59,7 @@ async def loop_action(message: Message, state: FSMContext):
             await state.update_data(current_day=current_day)
             prev_data = c_day
             await state.update_data(prev_data=prev_data)
-            await message.answer('<code>== начался {0}-й день опроса ==</code>'.format(current_day))
+            await message.answer('<code>=== начался {0}-й день ===</code>'.format(current_day))
         logging.info('loop_action 1: c_day={0} prev_data={1} current_day={2}'.format(c_day, prev_data, current_day))
         # Проверка закончил ли пользователь за тайм-аут с предыдущим опросом/задачей/настройкой (<-можно детализировать)
         c_state = await state.get_state()
@@ -87,7 +86,7 @@ async def loop_action(message: Message, state: FSMContext):
         t = await get_time_next_action(state, 0)
 
 
-# Определяем время до следующего действия в секундах (т.е. если пропустили что-то, то пропустили)
+# Определяем время до следующего действия в секундах
 async def get_time_next_action(state: FSMContext, flag: int) -> int:
     data = await state.get_data()  # Достаем имя пользователя
     tmz = data.get("tmz")
@@ -229,26 +228,25 @@ async def run_task(message: Message, state: FSMContext):
 async def run_tsk02(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
-    await message.answer("{0}, я приготовил для тебя «задачку на прокачку» эмоционального интеллекта. Если ты"
-                         " будешь выполнять все «задачки на прокачку» твоя эмоциональная форма станет сильнее и "
-                         "пластичнее. Сегодня будем прокачивать эмоциональную мышцу, которая отвечает за распознавание"
-                         " эмоций. Если тебе интересно узнать, какие еще мышцы мы будем тренировать в предстоящие 2 "
-                         "недели, кликни кнопку «Модель эмоционального интеллекта» под строкой ввода текста или "
-                         "кнопку «Начать решение задачки»".format(name_user),
+    await message.answer("{0}, я приготовил для тебя «задачку на прокачку» эмоционального интеллекта. Если ты будешь вы"
+                         "полнять все «задачки на прокачку» твоя эмоциональная форма станет сильнее и пластичнее. Сегод"
+                         "ня будем прокачивать эмоциональную мышцу, которая отвечает за распознавание эмоций. Если тебе"
+                         " интересно узнать, какие еще мышцы мы будем тренировать в предстоящие 2 недели, кликни на слу"
+                         "жебное сообщение «Модель эмоционального интеллекта» под строкой ввода текста или на «Начать р"
+                         "ешение задачки».".format(name_user),
                          reply_markup=tsk02_00)
     await Task02.Answer_02_01.set()
 
 
 # Запуск "задачки на прокачку" 3-го дня
 async def run_tsk03(message: Message, state: FSMContext):
-    data = await state.get_data()  # Достаем имя пользователя
+    data = await state.get_data()  # TODO отправка аудио выполнена без последующего вопроса - переделал порядок и меню
     name_user = data.get("name_user")
-    await message.answer("Привет, {0} Вчера мы с тобой были в картинной галерее, а сегодня я тебя приглашаю "
+    await message.answer("Привет, {0}! Вчера мы с тобой были в картинной галерее, а сегодня я тебя приглашаю "
                          "на секретное здание в филармонию. Надень наушники и прослушай последовательно три музыкальных"
                          "фрагмента. Слушай внимательно, можешь даже закрыть глаза. Почувствуй, какую эмоцию у тебя"
-                         " вызывает эта музыка.".format(name_user), reply_markup=tsk03_00)
-    audio = open("./SND/Задача 3-1.mp3", "rb")
-    await message.answer_audio(audio)
+                         " вызывает эта музыка. Если готов начать кликни на служебное сообщение «Начать решение задачки"
+                         "» под строкой ввода текста.".format(name_user), reply_markup=tsk03_00)
     await Task03.Answer_03_01.set()
 
 

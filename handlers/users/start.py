@@ -31,12 +31,15 @@ async def bot_start(message: types.Message, state: FSMContext):
         await user_settings_from_db(message, state)
         data = await state.get_data()
         tsk_t = data.get("tsk_t")
+        current_day = data.get("current_day")
+        start_t = data.get("start_t")
         if tsk_t > 90:
             await message.answer("Привет! Как тебя зовут?")
             await Start.set_user_name.set()  # или можно await Start.first()
             return
-        await message.answer("Привет! Рад еще раз видеть тебя, {0}! Твои настройки восстановлены из БД - опрос начнется"
-                             " с наступлением следующего дня.".format(str0), reply_markup=menu)
+        await message.answer("Привет! Рад еще раз видеть тебя, {0}! Твои настройки восстановлены из БД на {1}-й день."
+                             " Опрос по расписанию начнется с наступлением времени начала опроса ({2:0>2}:00)"
+                             ".".format(str0, current_day, start_t), reply_markup=menu)
         await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
         task_loop_action = asyncio.create_task(loop_action(message, state))
         name_task = task_loop_action.get_name()

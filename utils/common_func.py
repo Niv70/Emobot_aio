@@ -9,7 +9,7 @@ import logging
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07
-from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00, tsk06_00, tsk07_00
+from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00
 from utils.db_api.db_commands import db_update_user_settings
 
 
@@ -112,7 +112,9 @@ async def get_time_next_action(state: FSMContext, flag: int) -> int:
         await state.update_data(prev_data=prev_data)
         if c_hour < start_t:  # настройки завершены сегодня до наступления начала опроса
             t = (start_t - c_hour) * SEC_IN_H - c_minute * SEC_IN_M
-            await state.update_data(current_day=1)  # считаем,что пошел 1й день опроса
+            current_day = data.get("current_day")
+            if current_day == 0:
+                await state.update_data(current_day=1)  # считаем, что пошел 1-й день опроса
         else:  # настройки завершены после наступления начала опроса - выполнение опроса начнется завтра
             t = ((HOUR_IN_DAY - c_hour) * SEC_IN_H - c_minute * SEC_IN_M) + start_t * SEC_IN_H
         if tsk_t == start_t:
@@ -236,8 +238,8 @@ async def run_tsk02(message: Message, state: FSMContext):
                          "полнять все «задачки на прокачку» твоя эмоциональная форма станет сильнее и пластичнее. Сегод"
                          "ня будем прокачивать эмоциональную мышцу, которая отвечает за распознавание эмоций. Если тебе"
                          " интересно узнать, какие еще мышцы мы будем тренировать в предстоящие 2 недели, кликни на слу"
-                         "жебное сообщение «Модель эмоционального интеллекта» под строкой ввода текста или на «Начать р"
-                         "ешение задачки».".format(name_user),
+                         "жебное сообщение «Модель эмоционального интеллекта» под строкой ввода текста или на «Выполнит"
+                         "ь позже!».".format(name_user),
                          reply_markup=tsk02_00)
     await Task02.Answer_02_01.set()
 
@@ -258,12 +260,9 @@ async def run_tsk03(message: Message, state: FSMContext):
 async def run_tsk04(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
-    img = open("./IMG/День_04_1.jpg", "rb")
-    await message.answer_photo(img)
-    await message.answer("Привет, {0}! Я приготовил для тебя семь фотографий. Посмотри на первую из них и попробуй "
-                         "определить эмоцию героя. Напиши ответ в виде одного слова "
-                         "<b><i>ЭМОЦИЯ</i></b>.".format(name_user),
-                         reply_markup=tsk04_00)
+    await message.answer('Привет, {0}! Очередная "задачка на прокачку" эмоционального интеллекта готова.\nПредлагаю '
+                         'кликнуть на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на '
+                         '«Выполнить позже!»'.format(name_user), reply_markup=tsk02_01)
     await Task04.Answer_04_01.set()
 
 

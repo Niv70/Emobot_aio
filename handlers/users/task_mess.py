@@ -4,13 +4,13 @@ from aiogram.types import Message
 # prev_data(int),current_day(int),flag_pool(int),flag_task(int)
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import tsk02_02, tsk02_14, menu
+from keyboards.default.menu import tsk02_01, tsk02_05, tsk02_17, menu, pool
 from loader import dp
 from states.states import Start, Task02
 from utils.db_api.db_commands import db_save_task
 
 
-# Обработчик ввода 1го ответа (Начать) к задачке "на прокачку" 2-го дня
+# Обработчик ввода 1го ответа (Модель) к задачке "на прокачку" 2-го дня
 @dp.message_handler(state=Task02.Answer_02_01)
 async def answer_02_01(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
@@ -21,24 +21,46 @@ async def answer_02_01(message: Message, state: FSMContext):
                              "эмоций других людей, использование эмоций для решения задач, понимание причин эмоций и "
                              "управление своими эмоциями и эмоциями других.  Это и есть наш эмоциональный мышечный "
                              "каркас.")
-        await message.answer("{0}, предлагаю кликнуть на служебное сообщение «Начать решение задачки» под строкой ввода"
-                             " текста".format(name_user))
+        await message.answer("{0}, предлагаю кликнуть на служебное сообщение «Выполнить сейчас!» под строкой ввода"
+                             " текста или на «Выполнить позже!»".format(name_user), reply_markup=tsk02_01)
+    elif s == "Выполнить позже!":
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
+                             reply_markup=menu)
+        await Start.Wait.set()
         return
-    elif s == "Начать решение задачки":
-        await message.answer("Приглашаю тебя в маленькую картинную галерею. В ней всего пять картин, но каждая из них "
-                             "обязательно разбудит в тебе новую эмоцию. Постарайся ее уловить и сформулировать. Но "
-                             "прежде, давай узнаем твою текущую эмоцию.")
-        await message.answer("{0}, что ты сейчас чувствуешь?".format(name_user))
     else:
         await message.answer("{0}, кликни на служебное сообщение «Модель эмоционального интеллекта» под строкой ввода т"
-                             "екста или на «Начать решение задачки»".format(name_user))
+                             "екста или на «Выполнить позже!»".format(name_user))
+        return
+    await Task02.next()
+
+
+# Обработчик ввода 2го ответа (Начать) к задачке "на прокачку" 2-го дня
+@dp.message_handler(state=Task02.Answer_02_02)
+async def answer_02_02(message: Message, state: FSMContext):
+    data = await state.get_data()  # Достаем имя пользователя
+    name_user = data.get("name_user")
+    s = message.text
+    if s == "Выполнить сейчас!":
+        await message.answer("Приглашаю тебя в маленькую картинную галерею. В ней всего пять картин, но каждая из них "
+                             "обязательно разбудит в тебе новую эмоцию. Постарайся ее уловить и сформулировать. Но "
+                             "прежде, давай узнаем твою текущую эмоцию.", reply_markup=pool)
+        await message.answer("{0}, что ты сейчас чувствуешь?".format(name_user))
+    elif s == "Выполнить позже!":
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
+                             reply_markup=menu)
+        await Start.Wait.set()
+        return
+    else:
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода т"
+                             "екста или на «Выполнить позже!»".format(name_user))
         return
     await Task02.next()
 
 
 # Обработчик ввода 2го ответа  (эмоция текущая) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_02)
-async def answer_02_02(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_03)
+async def answer_02_03(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -50,14 +72,13 @@ async def answer_02_02(message: Message, state: FSMContext):
     await message.answer("Зафиксировал. А теперь, добро пожаловать в галерею.")
     img = open("./IMG/День_02_1.jpg", "rb")
     await message.answer_photo(img)
-    await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user),
-                         reply_markup=tsk02_02)
+    await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user))
     await Task02.next()
 
 
 # Обработчик ввода 3го ответа (эмоция к 1-й картине) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_03)
-async def answer_02_03(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_04)
+async def answer_02_04(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -71,20 +92,20 @@ async def answer_02_03(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 4го ответа (реакция на 1-ю картину) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_04)
-async def answer_02_04(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_05)
+async def answer_02_05(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Следующая картина»".format(name_user))
+                         "на «Следующая картина»".format(name_user), reply_markup=tsk02_05)
     await Task02.next()
 
 
 # Обработчик ввода 5го ответа (Следующая для 1й картины) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_05)
-async def answer_02_05(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_06)
+async def answer_02_06(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
@@ -102,7 +123,8 @@ async def answer_02_05(message: Message, state: FSMContext):
     elif s == "Следующая картина":
         img = open("./IMG/День_02_2.jpg", "rb")
         await message.answer_photo(img)
-        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user))
+        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user),
+                             reply_markup=pool)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста "
                              "или на «Следующая картина»".format(name_user))
@@ -111,8 +133,8 @@ async def answer_02_05(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 6го ответа (эмоция к 2-й картине) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_06)
-async def answer_02_06(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_07)
+async def answer_02_07(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -126,20 +148,20 @@ async def answer_02_06(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 7го ответа (реакция на 2-ю картину) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_07)
-async def answer_02_07(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_08)
+async def answer_02_08(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Следующая картина»".format(name_user))
+                         "на «Следующая картина»".format(name_user), reply_markup=tsk02_05)
     await Task02.next()
 
 
 # Обработчик ввода 8го ответа (Следующая для 2й картины) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_08)
-async def answer_02_08(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_09)
+async def answer_02_09(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
@@ -157,7 +179,8 @@ async def answer_02_08(message: Message, state: FSMContext):
     elif s == "Следующая картина":
         img = open("./IMG/День_02_3.jpg", "rb")
         await message.answer_photo(img)
-        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user))
+        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user),
+                             reply_markup=pool)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста "
                              "или на «Следующая картина»".format(name_user))
@@ -166,8 +189,8 @@ async def answer_02_08(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 9го ответа (эмоция к 3-й картине) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_09)
-async def answer_02_09(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_10)
+async def answer_02_10(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -181,20 +204,20 @@ async def answer_02_09(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 10го ответа (реакция на 3-ю картину) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_10)
-async def answer_02_10(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_11)
+async def answer_02_11(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Следующая картина»".format(name_user))
+                         "на «Следующая картина»".format(name_user), reply_markup=tsk02_05)
     await Task02.next()
 
 
 # Обработчик ввода 11го ответа (Следующая для 3й картины) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_11)
-async def answer_02_11(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_12)
+async def answer_02_12(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
@@ -212,7 +235,8 @@ async def answer_02_11(message: Message, state: FSMContext):
     elif s == "Следующая картина":
         img = open("./IMG/День_02_4.jpg", "rb")
         await message.answer_photo(img)
-        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user))
+        await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user),
+                             reply_markup=pool)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста "
                              "или на «Следующая картина»".format(name_user))
@@ -221,8 +245,8 @@ async def answer_02_11(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 12го ответа (эмоция к 4-й картине) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_12)
-async def answer_02_12(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_13)
+async def answer_02_13(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -236,20 +260,20 @@ async def answer_02_12(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 13го ответа (реакция на 4-ю картину) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_13)
-async def answer_02_13(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_14)
+async def answer_02_14(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Следующая картина»".format(name_user))
+                         "на «Следующая картина»".format(name_user), reply_markup=tsk02_05)
     await Task02.next()
 
 
 # Обработчик ввода 14го ответа (Следующая для 4я картины) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_14)
-async def answer_02_11(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_15)
+async def answer_02_15(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
@@ -266,7 +290,7 @@ async def answer_02_11(message: Message, state: FSMContext):
         img = open("./IMG/День_02_5.jpg", "rb")
         await message.answer_photo(img)
         await message.answer("{0}, что ты сейчас чувствуешь, глядя на эту картину?".format(name_user),
-                             reply_markup=tsk02_14)
+                             reply_markup=pool)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста "
                              "или на «Следующая картина»".format(name_user))
@@ -275,8 +299,8 @@ async def answer_02_11(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 15го ответа (эмоция к 5-й картине) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_15)
-async def answer_02_15(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_16)
+async def answer_02_16(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s1 = message.text[0:11]
@@ -290,20 +314,20 @@ async def answer_02_15(message: Message, state: FSMContext):
 
 
 # Обработчик ввода 16го ответа (реакция на 5-ю картину) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_16)
-async def answer_02_16(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_17)
+async def answer_02_17(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Выход из галереи»".format(name_user))
+                         "на «Выход из галереи»".format(name_user), reply_markup=tsk02_17)
     await Task02.next()
 
 
 # Обработчик ввода 17го ответа (Следующая для 5я картины) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_17)
-async def answer_02_17(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_18)
+async def answer_02_18(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text
@@ -323,14 +347,14 @@ async def answer_02_17(message: Message, state: FSMContext):
         await message.answer("{0}, что нового ты узнал о себе после завершения упражнения?".format(name_user))
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста "
-                             "или на «Следующая картина»".format(name_user))
+                             "или на «Выход из галереи»".format(name_user))
         return
     await Task02.next()
 
 
 # Обработчик ввода 18го ответа (после Выход из галереи) к задачке "на прокачку" 2-го дня
-@dp.message_handler(state=Task02.Answer_02_18)
-async def answer_02_18(message: Message, state: FSMContext):
+@dp.message_handler(state=Task02.Answer_02_19)
+async def answer_02_19(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами

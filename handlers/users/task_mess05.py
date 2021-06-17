@@ -2,13 +2,13 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk04_00
+from keyboards.default.menu import menu, pool
 from loader import dp
 from states.states import Start, Task05
 from utils.db_api.db_commands import db_save_task
 
 
-# Обработчик ввода 1го ответа (Начать) к "задачке на прокачку" 5-го дня
+# Обработчик ввода 1го ответsа (Начать) к "задачке на прокачку" 5-го дня
 @dp.message_handler(state=Task05.Answer_05_01)
 async def answer_05_01(message: Message, state: FSMContext):
     s = message.text
@@ -17,7 +17,7 @@ async def answer_05_01(message: Message, state: FSMContext):
     if s == "Начать решение задачки":
         await message.answer("https://www.youtube.com/watch?v=QgR2ozFrzk4")
         await message.answer("Какие эмоции удалось заменить у Новосельцева в этом фрагменте (перечисли через запятую)?",
-                             reply_markup=tsk04_00)
+                             reply_markup=pool)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Начать решение задачки» под строкой ввода "
                              "текста.".format(name_user))

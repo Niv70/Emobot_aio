@@ -38,7 +38,7 @@ tsk02_00 = ReplyKeyboardMarkup(
             KeyboardButton(text="Модель эмоционального интеллекта"),
         ],
         [
-            KeyboardButton(text="Начать решение задачки"),
+            KeyboardButton(text="Выполнить позже!"),
         ],
         [
             KeyboardButton(text="Список эмоций и чувств"),
@@ -50,7 +50,25 @@ tsk02_00 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
-tsk02_02 = ReplyKeyboardMarkup(
+tsk02_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выполнить сейчас!"),
+        ],
+        [
+            KeyboardButton(text="Выполнить позже!"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+tsk02_05 = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="Интересный факт о картине"),
@@ -68,7 +86,7 @@ tsk02_02 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
-tsk02_14 = ReplyKeyboardMarkup(
+tsk02_17 = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="Интересный факт о картине"),
@@ -139,8 +157,26 @@ tsk03_06 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk04_00 = ReplyKeyboardMarkup(
+tsk04_02 = ReplyKeyboardMarkup(
     keyboard=[
+        [
+            KeyboardButton(text="Следующее фото"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+tsk04_10 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Завершить упражнение"),
+        ],
         [
             KeyboardButton(text="Список эмоций и чувств"),
         ],

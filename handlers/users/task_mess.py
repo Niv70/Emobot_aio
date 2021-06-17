@@ -297,7 +297,7 @@ async def answer_02_16(message: Message, state: FSMContext):
     s = message.text[0:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 2, s)
     await message.answer("{0}, кликни на служебное сообщение «Интересный факт о картине» под строкой ввода текста или "
-                         "на «Следующая картина»".format(name_user))
+                         "на «Выход из галереи»".format(name_user))
     await Task02.next()
 
 

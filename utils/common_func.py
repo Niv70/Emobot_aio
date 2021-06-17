@@ -64,17 +64,16 @@ async def loop_action(message: Message, state: FSMContext):
         # Проверка закончил ли пользователь за тайм-аут с предыдущим опросом/задачей/настройкой (<-можно детализировать)
         c_state = await state.get_state()
         logging.info('loop_action 2: c_state={0}'.format(c_state))
+        if c_state == "None":  # дополнительная проверка завершения цикла по команде /stop
+            return
         if c_state != "Start:Wait":
             c_state = c_state[:4]  # берем только название класса без состояния
             if c_state == "Pool":
-                await message.answer('{0}, текущий опрос эмоции был пропущен, т.к. пришло время следующего '
-                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
+                await message.answer('Прошлое напоминание пропущено', reply_markup=menu)
             elif c_state == "Task":
-                await message.answer('{0}, решение "задачки на прокачку" был прервано, т.к. пришло время следующего '
-                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
-            else:
-                await message.answer('{0}, я не могу больше ждать твоего ответа, т.к. пришло время следующего '
-                                     'вопроса по расписанию!'.format(name_user), reply_markup=menu)
+                await message.answer('Решение задачки пропущено', reply_markup=menu)
+            else:  # или было можно сделать elif c_state == "Sett":
+                await message.answer('Изменение настроек пропущено'.format(name_user), reply_markup=menu)
         # Запуск следующего действия и рассчет времени сна с установкой флагов
         logging.info('loop_action 3: flag_pool={0} flag_task={1}'.format(flag_pool, flag_task))
         if flag_pool and flag_task:
@@ -141,7 +140,7 @@ async def get_time_next_action(state: FSMContext, flag: int) -> int:
         if (start_t + p >= tsk_t) and (tsk_t > c_hour):
             t = (tsk_t - c_hour) * SEC_IN_H - c_minute * SEC_IN_M
             flag_task = 1  # взводим флажок выполнения задачи
-            if start_t + p > tsk_t:
+            if (start_t + p > tsk_t) and (tsk_t < end_t):
                 flag_pool = 0  # опускаем флажок выполнения опроса
         elif start_t + p > end_t:  # вышли за время опроса из-за сокращенного последнего врменного отрезка
             t = (end_t - c_hour) * SEC_IN_H - c_minute * SEC_IN_M
@@ -225,7 +224,7 @@ async def run_task(message: Message, state: FSMContext):
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
         await message.answer('{0}, для {1}-го дня опроса нет задачки ”на прокачку” - можешь просто немного '
-                             'по медитировать вместе со мной... :)'.format(name_user, current_day))
+                             'помедитировать вместе со мной... :)'.format(name_user, current_day))
         await Start.Wait.set()
 
 
@@ -290,6 +289,7 @@ async def run_tsk06(message: Message, state: FSMContext):
                          " ты обязательно сделаешь маленькие открытия в области своих эмоций.".format(name_user),
                          reply_markup=tsk06_00)
     await Task06.Answer_06_01.set()
+
 
 # Запуск "задачки на прокачку" 7-го дня
 async def run_tsk07(message: Message, state: FSMContext):

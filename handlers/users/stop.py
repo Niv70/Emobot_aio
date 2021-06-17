@@ -22,7 +22,6 @@ async def bot_stop(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     current_day = data.get("current_day")
-    await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))

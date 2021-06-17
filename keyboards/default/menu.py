@@ -151,3 +151,85 @@ tsk04_00 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+tsk06_00 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Начать решение задачки"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk06_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выгрузка"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+tsk06_02 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Прочитать притчу сейчас"),
+        ],
+        [
+            KeyboardButton(text="Завершить упражнение"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk07_00 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Начать решение задачки"),
+        ],
+        [
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk07_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)

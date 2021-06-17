@@ -1,13 +1,15 @@
-from gino import Gino
+from gino import Gino, create_engine
 from gino.schema import GinoSchemaVisitor
 from data.config import POSTGRES_URI
 
 db = Gino()
-
+engine0 = None
 
 async def open_db():
     # Устанавливаем связь с базой данных
-    await db.set_bind(POSTGRES_URI)
+    engine0 = await create_engine(POSTGRES_URI)
+    db.bind = engine0
+    #await db.set_bind()
     db.gino: GinoSchemaVisitor
 
 

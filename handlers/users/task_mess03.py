@@ -103,7 +103,8 @@ async def answer_03_05(message: Message, state: FSMContext):
     elif s == "Следующий музыкальный фрагмент":
         audio = open("./SND/Задача 3-3.mp3", "rb")
         await message.answer_audio(audio)
-        await message.answer("{0}, что ты чувствуешь после прослушивания музыки?".format(name_user))
+        await message.answer("{0}, что ты чувствуешь после прослушивания музыки?".format(name_user),
+                             reply_markup=tsk03_06)
     else:
         await message.answer("{0}, кликни на служебное сообщение «Интересный факт о композиторе» под строкой ввода "
                              "текста или на «Следующий музыкальный фрагмент».".format(name_user))

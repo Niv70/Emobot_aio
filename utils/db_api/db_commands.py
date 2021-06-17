@@ -1,13 +1,13 @@
 import datetime
 import logging
-
+import pandas as pd
 import sqlalchemy
 from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey, desc)
 from sqlalchemy import sql, func
 from gino import Gino
 
 from utils.db_api.models import Emo_users, Emotions, Tasks
-from utils.db_api.database import db
+from utils.db_api.database import db, engine0
 
 
 async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
@@ -28,6 +28,11 @@ async def db_update_user_settings(user_id, name="None", start_time=8, period=2, 
                       TaskTime=task_time).apply()
     return item
 
+async def db_update_current_day(user_id, current_day=0):
+    item: Emo_users
+    item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
+    await item.update(user_id=user_id, CurrentDay=current_day).apply()
+    return item
 
 async def get_name_by_id(user_id):
     item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
@@ -76,3 +81,13 @@ async def stat_five_emotions(user_id):
     for i in stats:
         str_stats += "{0:20s} : {1:3d}\n".format(i[0], i[1])
     return str_stats
+
+
+async def upload_xls(user_id):
+    sf = pd.read_sql("SELECT public.emotions.fix_date AS Дата, public.emotions.fix_time AS Время,"
+                     "public.emotions.emotion AS Эмоция, public.emotions.reason AS Причина FROM public.emotions WHERE public.emotions.user_id={0}".format(user_id),engine0)
+    writer = pd.ExcelWriter("./Emotions-{0}.xlsx".format(user_id), engine='xlsxwriter', date_format="dd-mm-yyyy",
+                            datetime_format="hh:mm")
+    sf.to_excel(writer, sheet_name="Реестр эмоций")
+    writer.save()
+    return "./Emotions-{0}.xlsx".format(user_id)

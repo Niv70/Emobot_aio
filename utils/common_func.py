@@ -8,8 +8,8 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task03, Task04, Task05
-from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00
+from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07
+from keyboards.default.menu import tsk02_00, tsk03_00, tsk04_00, tsk06_00, tsk07_00
 from utils.db_api.db_commands import db_update_user_settings
 
 
@@ -207,8 +207,7 @@ async def run_task(message: Message, state: FSMContext):
     if current_day != 0 and current_day != 1:
         sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # Пускает праздничный салют
         await message.answer_sticker(sticker=sti)
-        await message.answer('{0}! Наступил час потехи - начинаем "задачку на прокачку" эмоционального '
-                             'интеллекта!'.format(name_user))
+        await message.answer('{0}, пришло время для «задачки на прокачку»!'.format(name_user))
         logging.info("run_task 0: current_day={0}".format(current_day))
     if current_day == 2:  # на 2-й (не на 0-й и 1-й) день работы боты запускаем задачи
         await run_tsk02(message, state)
@@ -218,6 +217,10 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk04(message, state)
     elif current_day == 5:
         await run_tsk05(message, state)
+    elif current_day == 6:
+        await run_tsk06(message, state)
+    elif current_day == 7:
+        await run_tsk07(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
@@ -242,7 +245,7 @@ async def run_tsk02(message: Message, state: FSMContext):
 
 # Запуск "задачки на прокачку" 3-го дня
 async def run_tsk03(message: Message, state: FSMContext):
-    data = await state.get_data()  # TODO отправка аудио выполнена без последующего вопроса - переделал порядок и меню
+    data = await state.get_data()
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Вчера мы с тобой были в картинной галерее, а сегодня я тебя приглашаю "
                          "на секретное здание в филармонию. Надень наушники и прослушай последовательно три музыкальных"
@@ -277,3 +280,22 @@ async def run_tsk05(message: Message, state: FSMContext):
                          "ределить, какие эмоции испытывал Новосельцев в этом фрагменте. Если готов начать кликни на сл"
                          "ужебное сообщение «Начать решение задачки» под строкой ввода текста.")
     await Task05.Answer_05_01.set()
+
+
+# Запуск "задачки на прокачку" 6-го дня
+async def run_tsk06(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Сегодня тебе предстоит непростая «задачка на прокачку». Я уверен, что сегодня"
+                         " ты обязательно сделаешь маленькие открытия в области своих эмоций.".format(name_user),
+                         reply_markup=tsk06_00)
+    await Task06.Answer_06_01.set()
+
+# Запуск "задачки на прокачку" 7-го дня
+async def run_tsk07(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Уверен, ты готов к новому заданию. Мы с моей командой часто"
+                         " играем в игру «Что испытываю?». Задача простая – я задаю ситуацию, а ты "
+                         "определяешь эмоцию. Сыграем сейчас?".format(name_user), reply_markup=tsk07_00)
+    await Task07.Answer_07_01.set()

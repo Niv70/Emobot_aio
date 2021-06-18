@@ -34,6 +34,7 @@ async def set_c_day_x(message: types.Message):
 
 @dp.message_handler(Command("day02"), state=None)
 async def set_c_day_x(message: types.Message):
+    await db_update_current_day(message.from_user.id, current_day=2)
     await message.answer("Текущий день установлен в 2")
 
 

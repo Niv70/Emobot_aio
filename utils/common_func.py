@@ -8,8 +8,8 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task09, Task10
-from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00
+from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task09, Task10, Task11
+from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00, tsk07_01
 from utils.db_api.db_commands import db_update_user_settings
 
 
@@ -226,6 +226,8 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk09(message, state)
     elif current_day == 10:
         await run_tsk10(message, state)
+    elif current_day == 11:
+        await run_tsk11(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
@@ -325,3 +327,13 @@ async def run_tsk10(message: Message, state: FSMContext):
                          "Сильные приятные эмоции помогают в решении "
                          "таких задач.".format(name_user), reply_markup=tsk10_00)
     await Task10.Answer_10_01.set()
+
+
+# Запуск "задачки на прокачку" 11-го дня
+async def run_tsk11(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("И снова здравствуй, {0}! Надеюсь, не отвлекаю? А то мое"
+                         " появление может вызвать разные эмоции :-)".format(name_user), reply_markup=tsk07_01)
+    await message.answer("Кстати, а что ты сейчас чувствуешь?")
+    await Task11.Answer_11_01.set()

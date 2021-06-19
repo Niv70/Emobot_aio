@@ -12,7 +12,7 @@ from utils.notify_admins import on_notify
 # Обработка повторного вызова команды /stop
 @dp.message_handler(Command("stop"), state=None)
 async def bot_restop(message: Message):
-    await message.answer("ЗаБотик уже остановлен :)")
+    await message.answer("ЗаБотик уже остановлен 😊")
     # д.б. добавлена команда по закрытию БД
 
 

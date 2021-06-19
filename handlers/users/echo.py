@@ -9,7 +9,7 @@ from loader import dp
 async def bot_echo(message: types.Message):
     sti = open("./a_stickers/AnimatedSticker6.tgs", 'rb')  # Ест попкорн в 3д очках
     await message.answer_sticker(sticker=sti)
-    await message.reply("Оба-на! Мне пришло от тебя соообщение, но я не знаю как его понять :)")
+    await message.reply("Оба-на! Мне пришло от тебя соообщение, но я не знаю как его понять 😊")
 
 
 # Эхо хендлер, куда летят ВСЕ сообщения с указанным состоянием
@@ -17,9 +17,11 @@ async def bot_echo(message: types.Message):
 async def bot_echo_all(message: types.Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
+    c_state = await state.get_state()
     sti = open("./a_stickers/AnimatedSticker6.tgs", 'rb')  # Ест попкорн в 3д очках
     await message.answer_sticker(sticker=sti)
-    await message.reply("{0}, я не ждал от тебя этого сообщения и не знаю как его понять :)".format(name_user))
+    await message.reply("{0}, я не ждал от тебя этого сообщения и не знаю как его понять 😊 ({1}"
+                        ")".format(name_user, c_state))
     # state = await state.get_state()
     # await message.answer(f"Эхо в состоянии <code>{state}</code>.\n"
     #                     f"\nСодержание сообщения:\n"

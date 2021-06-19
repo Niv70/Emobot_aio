@@ -8,7 +8,7 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task09, Task10, Task11
+from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task08, Task09, Task10, Task11
 from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00, tsk07_01
 from utils.db_api.db_commands import db_update_user_settings
 
@@ -222,6 +222,8 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk06(message, state)
     elif current_day == 7:
         await run_tsk07(message, state)
+    elif current_day == 8:
+        await run_tsk08(message, state)
     elif current_day == 9:
         await run_tsk09(message, state)
     elif current_day == 10:
@@ -306,6 +308,16 @@ async def run_tsk07(message: Message, state: FSMContext):
     await Task07.Answer_07_01.set()
 
 
+# Запуск "задачки на прокачку" 8-го дня
+async def run_tsk08(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Сегодня мы потренируемся анализировать и понимать причины эмоций свои и "
+                         "других.  Если готов начать кликни на служебное сообщение «Выполнить сейчас!» под строкой "
+                         "ввода текста или на «Выполнить позже!»".format(name_user), reply_markup=tsk02_01)
+    await Task08.Answer_08_01.set()
+
+
 # Запуск "задачки на прокачку" 9-го дня
 async def run_tsk09(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -314,6 +326,7 @@ async def run_tsk09(message: Message, state: FSMContext):
                          "интеллекта. Сегодня будем прокачивать мышцу понимания "
                          "причин эмоций".format(name_user), reply_markup=tsk09_00)
     await Task09.Answer_09_01.set()
+
 
 # Запуск "задачки на прокачку" 10-го дня
 async def run_tsk10(message: Message, state: FSMContext):

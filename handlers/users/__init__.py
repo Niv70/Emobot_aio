@@ -12,6 +12,7 @@ from . import task_mess04
 from . import task_mess05
 from . import task_mess06
 from . import task_mess07
+from . import task_mess08
 from . import task_mess09
 from . import task_mess10
 from . import task_mess11

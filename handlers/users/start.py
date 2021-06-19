@@ -67,4 +67,4 @@ async def user_settings_from_db(message: types.Message, state: FSMContext):
 # Обработка повторного вызова команды /start
 @dp.message_handler(CommandStart(), state='*')
 async def bot_restart(message: types.Message):
-    await message.answer("ЗаБотик уже работает :)")
+    await message.answer("ЗаБотик уже работает 😊")

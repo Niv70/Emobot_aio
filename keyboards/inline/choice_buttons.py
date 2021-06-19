@@ -57,15 +57,3 @@ choice07 = InlineKeyboardMarkup(inline_keyboard=[
         InlineKeyboardButton(text="нет", callback_data="choice:Start_Call06:Нет")
     ]
 ])
-
-# choice09 = InlineKeyboardMarkup(
-#     inline_keyboard=[
-#         [
-#             InlineKeyboardButton(text="Презрение", callback_data="choice:Answer09:Презрение"),
-#             InlineKeyboardButton(text="Недоверие", callback_data="choice:Answer09:Недоверие")
-#         ],
-#         [
-#             InlineKeyboardButton(text="Интерес", callback_data="choice:Answer09:Интерес"),
-#             InlineKeyboardButton(text="Радость", callback_data="choice:Answer09:Радость")
-#         ]]
-# )

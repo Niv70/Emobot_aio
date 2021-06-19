@@ -270,6 +270,22 @@ tsk07_01 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+tsk08_11 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Показать пример"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
 tsk09_00 = ReplyKeyboardMarkup(
     keyboard=[
         [

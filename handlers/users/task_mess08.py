@@ -1,4 +1,4 @@
-# В этом модуле выполняется обработка сообщений для задачи 2-го дня
+# В этом модуле выполняется обработка сообщений для задачи 8-го дня
 from aiogram.types import Message
 # Ключи FSMContext: name_user(str[10]),tmz(int),start_t(int),end_t(int),period(int),tsk_t(int),
 # prev_data(int),current_day(int),flag_pool(int),flag_task(int)
@@ -49,8 +49,9 @@ async def answer_08_02(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>страха</i></b> (цифра 4)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: утрате или потере? (ответь вводом "
-                         "цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: утрате или потере? (ответь вводом цифры от 1 до 8"
+                         ")".format(name_user))
     await Task08.next()
 
 
@@ -69,8 +70,9 @@ async def answer_08_03(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>печали</i></b> (цифра 3)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: отторжении вещей, людей? (ответь вво"
-                         "дом цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: отторжении вещей, людей? (ответь вводом цифры от 1"
+                         " до 8)".format(name_user))
     await Task08.next()
 
 
@@ -89,8 +91,9 @@ async def answer_08_04(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>отвращения</i></b> (цифра 7)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: получении чего-то желаемого? (ответ"
-                         "ь вводом цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: получении чего-то желаемого? (ответь вводом цифры "
+                         "от 1 до 8)".format(name_user))
     await Task08.next()
 
 
@@ -109,8 +112,9 @@ async def answer_08_05(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>радости</i></b> (цифра 1)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: получении новой нужной информации? "
-                         "(ответь вводом цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: получении новой нужной информации? (ответь вводом "
+                         "цифры от 1 до 8)".format(name_user))
     await Task08.next()
 
 
@@ -129,8 +133,9 @@ async def answer_08_06(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>интереса</i></b> (цифра 5)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: появлении чего-то неожиданного? "
-                         "(ответь вводом цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: появлении чего-то неожиданного? (ответь вводом циф"
+                         "ры от 1 до 8)".format(name_user))
     await Task08.next()
 
 
@@ -149,8 +154,9 @@ async def answer_08_07(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>удивления</i></b> (цифра 8)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: принятии ситуации или слов другого "
-                         "человека? (ответь вводом цифры от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: принятии ситуации или слов другого человека? (отве"
+                         "ть вводом цифры от 1 до 8)".format(name_user))
     await Task08.next()
 
 
@@ -169,9 +175,10 @@ async def answer_08_08(message: Message, state: FSMContext):
     else:
         await message.answer("{}, большинство людей ответили бы, что это причина <b><i>доверия</i></b> (цифра 6)"
                              ".".format(name_user))
-    await message.answer("{}, какую эмоцию ты, скорее всего, почувствуешь при: недосягаемости желаемого, непреодоли"
-                         "мого препятствия, несправедливости или отстаивании «своих границ»? (ответь вводом цифры "
-                         "от 1 до 8)".format(name_user))
+    await message.answer("{}, какую эмоцию (1.Злость 2.Радость 3.Печаль 4.Страх 5.Интерес 6.Доверие 7.Отвращение 8.Удив"
+                         "ление) ты, скорее всего, почувствуешь при: недосягаемости желаемого, непреодолимого препятств"
+                         "ия, несправедливости или отстаивании «своих границ»? (ответь вводом цифры от 1 до 8"
+                         ")".format(name_user))
     await Task08.next()
 
 
@@ -251,7 +258,7 @@ async def answer_08_12(message: Message, state: FSMContext):
 
 # Обработчик ввода 13го ответа (Завершить упражнение) к задачке "на прокачку" 8-го дня
 @dp.message_handler(state=Task08.Answer_08_13)
-async def answer_08_12(message: Message, state: FSMContext):
+async def answer_08_13(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")

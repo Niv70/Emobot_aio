@@ -269,3 +269,64 @@ tsk07_01 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+tsk09_00 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выполнить сейчас"),
+        ],
+        [
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+tsk09_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Презрение"),
+            KeyboardButton(text="Недоверие"),
+        ],
+        [
+            KeyboardButton(text="Интерес"),
+            KeyboardButton(text="Радость"),
+        ],
+        [
+            KeyboardButton(text="Продолжить"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk10_00 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выполнить сейчас"),
+        ],
+        [
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)

@@ -8,8 +8,8 @@ import logging
 
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
-from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07
-from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00
+from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task09, Task10
+from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00
 from utils.db_api.db_commands import db_update_user_settings
 
 
@@ -222,6 +222,10 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk06(message, state)
     elif current_day == 7:
         await run_tsk07(message, state)
+    elif current_day == 9:
+        await run_tsk09(message, state)
+    elif current_day == 10:
+        await run_tsk10(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
@@ -298,3 +302,26 @@ async def run_tsk07(message: Message, state: FSMContext):
                          " играем в игру «Что испытываю?». Задача простая – я задаю ситуацию, а ты "
                          "определяешь эмоцию. Сыграем сейчас?".format(name_user), reply_markup=tsk07_00)
     await Task07.Answer_07_01.set()
+
+
+# Запуск "задачки на прокачку" 9-го дня
+async def run_tsk09(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Я приготовил для тебя очередную «задачку на прокачку» эмоционального "
+                         "интеллекта. Сегодня будем прокачивать мышцу понимания "
+                         "причин эмоций".format(name_user), reply_markup=tsk09_00)
+    await Task09.Answer_09_01.set()
+
+# Запуск "задачки на прокачку" 10-го дня
+async def run_tsk10(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет-привет, {0}! А у нас радостное событие –  юбилей 😊 !\nУже 10-ый день мы с тобой "
+                         "общаемся и изучаем эмоциональный интеллект! Я так рад, что не могу сосредоточиться "
+                         "и заполнить отчет за прошедшие дни. Поэтому, решил применить свою эмоцию для мотивации"
+                         " команды на новые свершения и провести с ними мозговой штурм, чтобы придумать "
+                         "интересные задачки на прокачку.\n"
+                         "Сильные приятные эмоции помогают в решении "
+                         "таких задач.".format(name_user), reply_markup=tsk10_00)
+    await Task10.Answer_10_01.set()

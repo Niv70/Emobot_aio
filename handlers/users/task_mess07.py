@@ -1,4 +1,4 @@
-# В этом модуле выполняется обработка сообщений в состоянии Задача (Task) для 5го дня
+# В этом модуле выполняется обработка сообщений в состоянии Задача (Task) для 7го дня
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
@@ -8,6 +8,9 @@ from states.states import Start, Task07
 
 
 # Обработчик ввода 1го ответа (Начать) к "задачке на прокачку" 7-го дня
+from utils.db_api.db_commands import db_save_task
+
+
 @dp.message_handler(state=Task07.Answer_07_01)
 async def answer_07_01(message: Message, state: FSMContext):
     s = message.text
@@ -43,6 +46,7 @@ async def answer_07_02(message: Message, state: FSMContext):
         await message.answer("Отлично! {0}, ты прав на 100%".format(name_user))
     else:
         await message.answer("Подумай {0}, может быть это страх или вина?\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда руководитель снова возвращает документ на доработку")
     await Task07.next()
 
@@ -59,6 +63,7 @@ async def answer_07_03(message: Message, state: FSMContext):
         await message.answer("Подумай {0}, может быть это раздражение/злость?\nПопробуй еще раз".format(name_user))
     await message.answer(
         "Я чувствую это тогда, когда получаю на доработку документ, который считал идеально подготовленным")
+    await db_save_task(message.from_user.id, 7, s)
     await Task07.next()
 
 
@@ -72,6 +77,7 @@ async def answer_07_04(message: Message, state: FSMContext):
         await message.answer("{0}, я тоже удивляюсь такому".format(name_user))
     else:
         await message.answer("{0},а может быть первая эмоция - удивление?\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда вижу точно такую же вещь на ком-нибудь другом")
     await Task07.next()
 
@@ -86,6 +92,7 @@ async def answer_07_05(message: Message, state: FSMContext):
         await message.answer("{0}, поддерживаю!".format(name_user))
     else:
         await message.answer("Может - досаду?\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда жду результаты экзамена")
     await Task07.next()
 
@@ -100,6 +107,7 @@ async def answer_07_05(message: Message, state: FSMContext):
         await message.answer("Да {0}, да!".format(name_user))
     else:
         await message.answer("А я например испытываю волнение?\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда вижу точно такую же вещь на ком-нибудь другом")
     await Task07.next()
 
@@ -114,6 +122,7 @@ async def answer_07_06(message: Message, state: FSMContext):
         await message.answer("Правильная, нормальная реакция {0}!".format(name_user))
     else:
         await message.answer("Обычно люди чувствуют обиду.\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда смотрю на горящий костер в кругу теплой компании")
     await Task07.next()
 
@@ -128,6 +137,7 @@ async def answer_07_07(message: Message, state: FSMContext):
         await message.answer("И я тоже {0}!".format(name_user))
     else:
         await message.answer("Многие при этом чувствуют умиротворение/спокойствие.\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда не признают мои заслуги")
     await Task07.next()
 
@@ -142,6 +152,7 @@ async def answer_07_08(message: Message, state: FSMContext):
         await message.answer("{0}, а кто туту не почувствует обиду!".format(name_user))
     else:
         await message.answer("Большинство - обижается.\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда слушаю любимую музыку")
     await Task07.next()
 
@@ -156,6 +167,7 @@ async def answer_07_09(message: Message, state: FSMContext):
         await message.answer("Согласен с тобой {0}!".format(name_user))
     else:
         await message.answer("А я чувствую удовольствие/радость.\nПопробуй еще раз".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда признают результаты моего труда")
     await Task07.next()
 
@@ -168,6 +180,7 @@ async def answer_07_10(message: Message):
         await message.answer("Конечно же! Молодец!")
     else:
         await message.answer("А я чувствую удовольствие/радость.\nПопробуй еще раз")
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда мой ребенок выигрывает соревнования")
     await Task07.next()
 
@@ -180,6 +193,7 @@ async def answer_07_11(message: Message):
         await message.answer("Как и все родители!!!")
     else:
         await message.answer("Подумай может это - гордость.\nПопробуй еще раз")
+    await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда интересную идею предлагает человек, от которого этого не ожидал")
     await Task07.next()
 
@@ -194,6 +208,7 @@ async def answer_07_12(message: Message, state: FSMContext):
         await message.answer("На верное все вокруг удивились!")
     else:
         await message.answer("{0}, многие обычно удивляются!".format(name_user))
+    await db_save_task(message.from_user.id, 7, s)
     sti = open("./a_stickers/AnimatedSticker4.tgs", 'rb')  # хлопушка
     await message.answer_sticker(sticker=sti)
     await message.answer("Ух ты, удивил!!! Твое мастерство растет с каждым днем! Кстати, ты знал,"

@@ -7,8 +7,9 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.dispatcher import FSMContext
 import logging
 
+
 from loader import dp
-from states.states import Start
+from states.states import Start, Task09
 from utils.common_func import get_digit, loop_action
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06, choice07
 from keyboards.default import menu
@@ -318,3 +319,35 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     data = await state.get_data()
     logging.info('answer_tsk_t 0: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
     await task_loop_action  # ждем завершения бесконечного цикла действий
+
+# # Обработчик нажатия кнопки "Презрение"
+# @dp.callback_query_handler(text="choice:Answer09:Презрение", state=Task09.Answer_09_01)
+# async def press_g091(call: CallbackQuery, state: FSMContext):
+#     await call.message.answer("<h>Презрение<\h>", parse_mode="HTML")
+#     await call.message.answer("Твой коллега, надел на официальную встречу национальную одежду ОАЭ. "
+#                               "Это может быть воспринято как насмешка.\n"
+#                               "Арабы слишком гордятся своей национальной одеждой.")
+#
+# # Обработчик нажатия кнопки "Презрение"
+# @dp.callback_query_handler(text="choice:Answer09:Недоверие", state=Task09.Answer_09_01)
+# async def press_g092(call: CallbackQuery, state: FSMContext):
+#     await call.message.answer("<h>Недоверие<\h>", parse_mode="HTML")
+#     await call.message.answer("Твой коллега, надел на официальную встречу национальную одежду ОАЭ. "
+#                               "Это может быть воспринято как насмешка.\n"
+#                               "Арабы слишком гордятся своей национальной одеждой.")
+#
+# # Обработчик нажатия кнопки "Презрение"
+# @dp.callback_query_handler(text="choice:Answer09:Интерес", state=Task09.Answer_09_01)
+# async def press_g093(call: CallbackQuery, state: FSMContext):
+#     await call.message.answer("<h>Интерес<\h>", parse_mode="HTML")
+#     await call.message.answer("Твой коллега, надел на официальную встречу национальную одежду ОАЭ. "
+#                               "Это может быть воспринято как насмешка.\n"
+#                               "Арабы слишком гордятся своей национальной одеждой.")
+#
+# # Обработчик нажатия кнопки "Презрение"
+# @dp.callback_query_handler(text="choice:Answer09:Радость", state=Task09.Answer_09_01)
+# async def press_g094(call: CallbackQuery, state: FSMContext):
+#     await call.message.answer("<h>Радость<\h>", parse_mode="HTML")
+#     await call.message.answer("Твой коллега, надел на официальную встречу национальную одежду ОАЭ. "
+#                               "Это может быть воспринято как насмешка.\n"
+#                               "Арабы слишком гордятся своей национальной одеждой.")

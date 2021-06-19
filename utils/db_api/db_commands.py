@@ -3,11 +3,15 @@ import logging
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey, desc)
-from sqlalchemy import sql, func
+from sqlalchemy import sql, func, create_engine
 from gino import Gino
 
+from data.config import POSTGRES_URI
 from utils.db_api.models import Emo_users, Emotions, Tasks
-from utils.db_api.database import db, engine0
+from utils.db_api.database import db
+# не удалять !!!
+import psycopg2
+import xlsxwriter
 
 
 async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
@@ -84,6 +88,7 @@ async def stat_five_emotions(user_id):
 
 
 async def upload_xls(user_id):
+    engine0 = create_engine(POSTGRES_URI)
     sf = pd.read_sql("SELECT public.emotions.fix_date AS Дата, public.emotions.fix_time AS Время,"
                      "public.emotions.emotion AS Эмоция, public.emotions.reason AS Причина FROM public.emotions WHERE public.emotions.user_id={0}".format(user_id),engine0)
     writer = pd.ExcelWriter("./Emotions-{0}.xlsx".format(user_id), engine='xlsxwriter', date_format="dd-mm-yyyy",

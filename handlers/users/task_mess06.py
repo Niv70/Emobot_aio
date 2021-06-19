@@ -2,7 +2,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk06_01, tsk06_02
+from keyboards.default.menu import menu, tsk06_01, tsk06_02, tsk07_01
 from loader import dp
 from states.states import Start, Task06
 from utils.db_api.db_commands import db_save_task, upload_xls
@@ -32,8 +32,9 @@ async def answer_06_02(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     if s == "Выгрузка":
         filename = await upload_xls(message.from_user.id)
-        await message.answer_document(filename, caption="Выгрузка зарегистрированных эмоций")
-        await message.answer("Что интересного ты заметил {0}?".format(name_user), reply_markup=None)
+        file = open(filename, "rb")
+        await message.answer_document(file, caption="Выгрузка зарегистрированных эмоций")
+        await message.answer("Что интересного ты заметил {0}?".format(name_user), reply_markup=tsk07_01)
     else:
         await message.answer("{0}, Нажми кнопку «Выгрузка» под строкой ввода "
                              "текста.".format(name_user))
@@ -85,7 +86,7 @@ async def answer_06_03(message: Message, state: FSMContext):
             " Папа сказал, что этот праздник есть у всех, только не все"
             " его замечают. Многие просто забыли"
             " об этом празднике. Если хочешь, приходи в субботу к нам. Переночуешь,"
-            " а утром вместе с нами попразднуешь!\n".format(name_user))
+            " а утром вместе с нами попразднуешь!\n".format(name_user), reply_markup=menu)
     elif s == "Завершить упражнение":
         await message.answer("До встречи! Жди напоминалку по графику.", reply_markup=menu)
     else:

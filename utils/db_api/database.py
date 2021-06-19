@@ -3,13 +3,13 @@ from gino.schema import GinoSchemaVisitor
 from data.config import POSTGRES_URI
 
 db = Gino()
-engine0 = None
 
 async def open_db():
+    global engine0
     # Устанавливаем связь с базой данных
-    engine0 = await create_engine(POSTGRES_URI)
-    db.bind = engine0
-    #await db.set_bind()
+    #engine0 = await create_engine(POSTGRES_URI)
+    #db.bind = engine0
+    await db.set_bind(POSTGRES_URI)
     db.gino: GinoSchemaVisitor
 
 

@@ -43,7 +43,15 @@ Possible_Emotions = ['злость', 'трепет', 'угрюмость', 'от
 
 @dp.message_handler(Text(equals="Список эмоций и чувств"), state='*')
 async def get_list(message: Message):
-    await message.answer("{}".format(Possible_Emotions))
+    str1 = "<pre>"
+    index = 1
+    for iter2 in Possible_Emotions:
+        str1 += "{0:16s} ".format(iter2)
+        if index % 2 == 0:
+            str1 += "\n"
+        index += 1
+    str1 += "</pre>"
+    await message.answer(str1)
 
 
 @dp.message_handler(Text(equals="Термометр"), state='*')

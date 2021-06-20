@@ -80,10 +80,11 @@ async def stat_five_emotions(user_id):
     stats = await db.select([Emotions.emotion, func.count(Emotions.emotion), ]).select_from(Emotions).group_by(
         Emotions.emotion).order_by(desc(func.count(Emotions.emotion))).where(Emotions.user_id == user_id).limit(
         5).gino.all()
-    str_stats = " Самые часто испытываемые эмоции\n" \
-                "==================================\n"
+    str_stats = "<pre>Самые часто испытываемые эмоции\n" \
+                "===============================\n"
     for i in stats:
         str_stats += "{0:20s} : {1:3d}\n".format(i[0], i[1])
+    str_stats += "</pre>"
     return str_stats
 
 

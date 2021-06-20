@@ -11,7 +11,7 @@ from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task08, Task09, Task10, Task11, \
     Task12, Task13, Task14
 from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00, tsk07_01
-from utils.db_api.db_commands import db_update_user_settings
+from utils.db_api.db_commands import db_update_user_settings, stat_five_emotions
 
 
 # Ввод неотрицательного числа
@@ -167,6 +167,8 @@ async def run_bye(message: Message, state: FSMContext):
                          reply_markup=ReplyKeyboardRemove())
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
     # TODO д.б. добавлена команда по выводу статистики из БД
+    str0 = await stat_five_emotions(message.from_user.id)
+    await message.answer(str0)
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"))

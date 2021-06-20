@@ -10,7 +10,7 @@ from utils.db_api.db_commands import db_save_task
 
 # Обработчик ввода 1го ответа (Начать) к "задачке на прокачку" 11-го дня
 @dp.message_handler(state=Task11.Answer_11_01)
-async def Answer_11_01(message: Message, state: FSMContext):
+async def answer_11_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -20,7 +20,7 @@ async def Answer_11_01(message: Message, state: FSMContext):
 
 
 @dp.message_handler(state=Task11.Answer_11_02)
-async def Answer_11_02(message: Message, state: FSMContext):
+async def answer_11_02(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -44,7 +44,7 @@ async def Answer_11_02(message: Message, state: FSMContext):
 
 #
 @dp.message_handler(state=Task11.Answer_11_03)
-async def Answer_11_03(message: Message, state: FSMContext):
+async def answer_11_03(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -70,7 +70,7 @@ async def Answer_11_03(message: Message, state: FSMContext):
 
 #
 @dp.message_handler(state=Task11.Answer_11_04)
-async def Answer_11_04(message: Message, state: FSMContext):
+async def answer_11_04(message: Message, state: FSMContext):
     s = message.text
     await db_save_task(message.from_user.id, 11, s)
     await message.answer("Используй свои эмоции по полной 😉")

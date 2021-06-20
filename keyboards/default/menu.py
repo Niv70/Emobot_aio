@@ -362,3 +362,91 @@ tsk11_00 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+tsk13_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Кейс 1"),
+            KeyboardButton(text="Кейс 2"),
+        ],
+        [
+            KeyboardButton(text="Продолжить"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk13_02 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выполнить задание"),
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+
+tsk13_03 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk14_01 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Давай потренируемся"),
+            KeyboardButton(text="Выполнить позже"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)
+
+tsk14_02 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Понравилось!"),
+            KeyboardButton(text="Сомневаюсь в его эффективности"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)

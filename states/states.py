@@ -144,6 +144,7 @@ class Task09(StatesGroup):
     Answer_09_06 = State()
 
 
+
 # Класс состояний обработки сообщений при выполнении задачки "на прокачку" 10-го дня
 class Task10(StatesGroup):
     Answer_10_01 = State()
@@ -165,6 +166,23 @@ class Task12(StatesGroup):
     Answer_12_02 = State()
     Answer_12_03 = State()
     Answer_12_04 = State()
+
+
+
+# Класс состояний обработки сообщений при выполнении задачки "на прокачку" 13-го дня
+class Task13(StatesGroup):
+    Answer_13_01 = State()
+    Answer_13_02 = State()
+    Answer_13_03 = State()
+    Answer_13_04 = State()
+
+
+# Класс состояний обработки сообщений при выполнении задачки "на прокачку" 14-го дня
+class Task14(StatesGroup):
+    Answer_14_01 = State()
+    Answer_14_02 = State()
+    Answer_14_03 = State()
+    Answer_14_04 = State()
 
 
 # Класс состояний обработки сообщений при нажатии текстовой кнопки Настройки. Сделал отдельным классом, чтобы при

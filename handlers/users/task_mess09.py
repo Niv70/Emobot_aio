@@ -13,7 +13,7 @@ from utils.db_api.db_commands import db_save_task
 
 
 @dp.message_handler(state=Task09.Answer_09_01)
-async def Answer_09_01(message: Message, state: FSMContext):
+async def answer_09_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -47,7 +47,7 @@ async def Answer_09_01(message: Message, state: FSMContext):
 
 
 @dp.message_handler(state=Task09.Answer_09_02)
-async def Answer_09_02(message: Message, state: FSMContext):
+async def answer_09_02(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -84,7 +84,7 @@ async def Answer_09_02(message: Message, state: FSMContext):
 
 
 @dp.message_handler(state=Task09.Answer_09_03)
-async def Answer_09_03(message: Message, state: FSMContext):
+async def answer_09_03(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -103,7 +103,7 @@ async def Answer_09_03(message: Message, state: FSMContext):
     await Task09.next()
 
 @dp.message_handler(state=Task09.Answer_09_04)
-async def Answer_09_04(message: Message, state: FSMContext):
+async def answer_09_04(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -122,7 +122,7 @@ async def Answer_09_04(message: Message, state: FSMContext):
     await Task09.next()
 
 @dp.message_handler(state=Task09.Answer_09_05)
-async def Answer_09_05(message: Message, state: FSMContext):
+async def answer_09_05(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
@@ -134,7 +134,7 @@ async def Answer_09_05(message: Message, state: FSMContext):
     await Task09.next()
 
 @dp.message_handler(state=Task09.Answer_09_06)
-async def Answer_09_06(message: Message, state: FSMContext):
+async def answer_09_06(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")

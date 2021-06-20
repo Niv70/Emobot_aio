@@ -9,7 +9,7 @@ import logging
 from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task08, Task09, Task10, Task11, \
-    Task12
+    Task12, Task13, Task14
 from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00, tsk07_01
 from utils.db_api.db_commands import db_update_user_settings
 
@@ -200,7 +200,6 @@ async def run_poll_task(message: Message, state: FSMContext):
     await Pool.EmoTask.set()
 
 
-# Запуск задач текущего дня
 async def run_task(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
@@ -233,6 +232,10 @@ async def run_task(message: Message, state: FSMContext):
         await run_tsk11(message, state)
     elif current_day == 12:
         await run_tsk12(message, state)
+    elif current_day == 13:
+        await run_tsk13(message, state)
+    elif current_day == 14:
+        await run_tsk14(message, state)
     else:  # переходим в состояние ожидания следующего действия
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
@@ -375,3 +378,23 @@ async def run_tsk12(message: Message, state: FSMContext):
                          "е сообщение «Выполнить сейчас!» под строкой ввода текста или на «Выполнить позже!"
                          "»".format(name_user), reply_markup=tsk02_01)
     await Task12.Answer_12_01.set()
+
+# Запуск "задачки на прокачку" 13-го дня
+async def run_tsk13(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! У «Пульта управления эмоциями» несколько кнопок."
+                         " Вчера ты познакомился с одной из них – «Тело». Сегодня мы поговорим"
+                         ", как можно работать с эмоциями "
+                         "через Речь/Мышление. ".format(name_user), reply_markup=tsk10_00)
+    await Task13.Answer_13_01.set()
+
+# Запуск "задачки на прокачку" 14-го дня
+async def run_tsk14(message: Message, state: FSMContext):
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await message.answer("Привет, {0}! Я приготовил для тебя «задачку на прокачку» "
+                         "мышцы эмоционального интеллекта, связанной с управлением"
+                         " собственными эмоциями.".format(name_user), reply_markup=tsk10_00)
+    await message.answer("Кстати, а что ты сейчас чувствуешь?")
+    await Task14.Answer_14_01.set()

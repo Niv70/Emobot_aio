@@ -27,8 +27,8 @@ async def answer_12_01(message: Message, state: FSMContext):
         await Start.Wait.set()
         return
     else:
-        await message.answer("{}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на «В"
-                             "ыполнить позже!»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста \n"
+                             "или на «Выполнить позже!»".format(name_user))
         return
     await Task12.next()
 

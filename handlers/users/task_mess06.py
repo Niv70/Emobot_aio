@@ -13,8 +13,8 @@ async def answer_06_01(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s == "Начать решение задачки":
-        await message.answer("Кликни на плашку «Выгрузка» и сделай выгрузку эмоций и причин за шесть дней."
-                             "{0} поисследуй результаты под призмой следующих вопросов: Каких эмоций больше:"
+        await message.answer("Кликни на плашку «Выгрузка» и сделай выгрузку эмоций и причин за шесть дней.\n"
+                             "{0}, поисследуй результаты под призмой следующих вопросов: Каких эмоций больше:"
                              " положительных или отрицательных? Чаще всего утром какие эмоции ты испытываешь?"
                              " Какие эмоции ты испытываешь на работе, а какие - дома? Что ты чувствуешь"
                              " вечером?".format(name_user), reply_markup=tsk06_01)
@@ -56,11 +56,11 @@ async def answer_06_03(message: Message, state: FSMContext):
 
 
 @dp.message_handler(state=Task06.Answer_06_04)
-async def answer_06_03(message: Message, state: FSMContext):
+async def answer_06_04(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Прочитать притчу сейчас":
+    if s == "Прочитать историю сейчас":
         await message.answer(
             "Детская площадка. Две девочки качаются на качелях и ведут неторопливую, светскую беседу.\n"
             "— Что-то давно никакого праздника не было, — задумчиво говорит одна. — Жалко!\n"
@@ -87,10 +87,25 @@ async def answer_06_03(message: Message, state: FSMContext):
             " его замечают. Многие просто забыли"
             " об этом празднике. Если хочешь, приходи в субботу к нам. Переночуешь,"
             " а утром вместе с нами попразднуешь!\n".format(name_user), reply_markup=menu)
+        await message.answer("Интересная история, не правда-ли? Поделись, пожалуйста, своим "
+                             "секретом утреннего настроя! Напиши в чат в произвольной форме.")
+        await Task06.next()
+        return
     elif s == "Завершить упражнение":
         await message.answer("До встречи! Жди напоминалку по графику.", reply_markup=menu)
     else:
         await message.answer("{0}, Нажми кнопку «Прочитать притчу сейчас» под строкой ввода "
                              "текста.\n Или «Завершить упражнение»".format(name_user))
         return
+    await Start.Wait.set()
+
+
+@dp.message_handler(state=Task06.Answer_06_05)
+async def answer_06_05(message: Message, state: FSMContext):
+    s = message.text
+    data = await state.get_data()
+    name_user = data.get("name_user")
+    await db_save_task(message.from_user.id, 6, s)
+    await message.answer("{0}, спасибо! Возьму на вооружение твой способ утреннего настроя! "
+                         "До встречи!".format(name_user), reply_markup=menu)
     await Start.Wait.set()

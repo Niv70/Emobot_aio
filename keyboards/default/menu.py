@@ -222,7 +222,7 @@ tsk06_01 = ReplyKeyboardMarkup(
 tsk06_02 = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Прочитать притчу сейчас"),
+            KeyboardButton(text="Прочитать историю сейчас"),
         ],
         [
             KeyboardButton(text="Завершить упражнение"),

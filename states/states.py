@@ -99,6 +99,7 @@ class Task06(StatesGroup):
     Answer_06_02 = State()
     Answer_06_03 = State()
     Answer_06_04 = State()
+    Answer_06_05 = State()
 
 
 # Класс состояний обработки сообщений при выполнении задачки "на прокачку" 7-го дня
@@ -115,7 +116,7 @@ class Task07(StatesGroup):
     Answer_07_10 = State()
     Answer_07_11 = State()
     Answer_07_12 = State()
-
+    Answer_07_13 = State()
 
 # Класс состояний обработки сообщений при выполнении задачки "на прокачку" 8-го дня
 class Task08(StatesGroup):

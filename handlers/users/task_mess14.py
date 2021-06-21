@@ -85,7 +85,7 @@ async def answer_14_03(message: Message, state: FSMContext):
             await message.answer("Замур-р-р-чательно! Наверное, ты отметил даже зеленые глаза у коллеги! "
                            "Чем неожиданнее будут находки, тем эффективнее работает техника переключения.")
         else:
-            await message.answer("Да ты настоящий сыщик! А сможешь найти еще больше предметов зеленого цвета?")
+            await message.answer("Да ты настоящий сыщик! А сможешь найти еще больше предметов синего цвета?")
         await message.answer("Как тебе это упражнение?", reply_markup=tsk14_02)
         await Task14.next()
     else:
@@ -118,6 +118,8 @@ async def answer_14_04(message: Message, state: FSMContext):
                              " собственного дыхания. Техника «смена фокуса» занимает не более минуты "
                              "и помогает быстро регулировать свое состояние.", reply_markup=menu)
         await message.answer("Если хочешь, посмотри как это работает на опыте других.")
+        video = open("./VIDEO/Муха и Самурай.mp4", "rb")
+        await message.answer_video(video)
         await message.answer("Благодарю за тренировку! Жди напоминание по графику.")
     else:
         await message.answer("{0}, кликни на «Понравилось!»"

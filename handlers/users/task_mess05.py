@@ -51,4 +51,5 @@ async def answer_05_03(message: Message, state: FSMContext):
     await db_save_task(message.from_user.id, 5, s)
     await message.answer("Учти эту эмоцию, {0}, когда будешь обращаться к нему/ней. :)".format(name_user),
                          reply_markup=menu)
+    await message.answer("{0}, спасибо за эмоциональную кинематографическую разминку".format(name_user))
     await Start.Wait.set()

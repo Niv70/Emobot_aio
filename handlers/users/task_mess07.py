@@ -2,7 +2,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk07_01
+from keyboards.default.menu import menu, pool
 from loader import dp
 from states.states import Start, Task07
 
@@ -16,13 +16,13 @@ async def answer_07_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Начать решение задачки":
+    if s == "Выполнить сейчас!":
         sti = open("./a_stickers/AnimatedSticker9.tgs", 'rb')  # радуется
         await message.answer_sticker(sticker=sti)
         await message.answer("Отлично! Посмотрим, как ты научился определять эмоции\nОтвечай на мои вопросы:",
-                             reply_markup=tsk07_01)
+                             reply_markup=pool)
         await message.answer("Я чувствовал это тогда, когда впервые получил двойку в школе")
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."
@@ -30,8 +30,8 @@ async def answer_07_01(message: Message, state: FSMContext):
         await Start.Wait.set()
         return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Начать решение задачки» под строкой ввода "
-                             "текста.\n Или «Выполнить позже»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на"
+                             " «Выполнить позже!»".format(name_user))
         return
     await Task07.next()
 

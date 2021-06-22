@@ -108,27 +108,3 @@ async def set_c_day_x(message: types.Message):
 async def set_c_day_x(message: types.Message):
     await db_update_current_day(message.from_user.id, current_day=14)
     await message.answer("Текущий день установлен в 14")
-
-
-@dp.message_handler(Command("day15"), state=None)
-async def set_c_day_x(message: types.Message):
-    await db_update_current_day(message.from_user.id, current_day=15)
-    await message.answer("Текущий день установлен в 15")
-
-
-@dp.message_handler(Command("day16"), state=None)
-async def set_c_day_x(message: types.Message):
-    await db_update_current_day(message.from_user.id, current_day=16)
-    await message.answer("Текущий день установлен в 16")
-
-
-@dp.message_handler(Command("day17"), state=None)
-async def set_c_day_x(message: types.Message):
-    await db_update_current_day(message.from_user.id, current_day=17)
-    await message.answer("Текущий день установлен в 17")
-
-
-@dp.message_handler(Command("day18"), state=None)
-async def set_c_day_x(message: types.Message):
-    await db_update_current_day(message.from_user.id, current_day=18)
-    await message.answer("Текущий день установлен в 18")

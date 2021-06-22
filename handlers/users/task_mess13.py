@@ -2,7 +2,7 @@
 from aiogram.types import Message, ParseMode
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk07_01, tsk13_01, tsk13_02, tsk13_03
+from keyboards.default.menu import menu, tsk13_01, tsk13_02, tsk13_03
 from loader import dp
 from states.states import Start, Task13
 from utils.db_api.db_commands import db_save_task
@@ -14,24 +14,23 @@ async def answer_13_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Выполнить сейчас":
+    if s == "Выполнить сейчас!":
         await message.answer("В психологии есть такое понятие, как подстройка. Если два собеседника "
                              "ведут себя похожим образом, эта похожесть поведения сближает их и"
                              " делает контакт между ними более прочным. В частности, один из важных "
                              "параметров для установления контакта - похожесть голосовых характеристик"
                              " (высота тона, скорость, интонация). Что происходит, когда мы игнорируем "
                              "речевую подстройку, ты можешь прочитать в кейсах", reply_markup=tsk13_01)
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
-        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке в"
-                             " течение 24 часов.".format(name_user),
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
                              reply_markup=menu)
         await Start.Wait.set()
         return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас» под строкой ввода "
-                             "текста.\n Или «Выполнить позже»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода "
+                             "текста или на «Выполнить позже!».".format(name_user))
         return
     await Task13.next()
 

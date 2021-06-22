@@ -2,7 +2,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk07_01, tsk10_00, tsk11_00
+from keyboards.default.menu import menu, tsk11_00, tsk02_01
 from loader import dp
 from states.states import Start, Task11
 from utils.db_api.db_commands import db_save_task
@@ -15,7 +15,7 @@ async def answer_11_01(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     await db_save_task(message.from_user.id, 11, s)
-    await message.answer("Вот тебе задачка на прокачку!", reply_markup=tsk10_00)
+    await message.answer("Вот тебе задачка на прокачку!", reply_markup=tsk02_01)
     await Task11.next()
 
 
@@ -24,10 +24,10 @@ async def answer_11_02(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Выполнить сейчас":
+    if s == "Выполнить сейчас!":
         await message.answer("Помогает ли сейчас твоя эмоция выполнять текущую задачу? Да или нет?",
                              reply_markup=tsk11_00)
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."
@@ -36,8 +36,8 @@ async def answer_11_02(message: Message, state: FSMContext):
         await Start.Wait.set()
         return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас» под строкой ввода "
-                             "текста.\n Или «Выполнить позже»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода "
+                             "текста или на «Выполнить позже!».".format(name_user))
         return
     await Task11.next()
 
@@ -54,7 +54,7 @@ async def answer_11_03(message: Message, state: FSMContext):
     elif s.lower() == "нет":
         await message.answer("Важно использовать потенциал эмоции. Какие задачи были бы продуктивны в твоей "
                              "эмоции?".format(name_user))
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."

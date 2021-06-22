@@ -2,7 +2,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk07_01, tsk09_01
+from keyboards.default.menu import menu, pool, tsk09_01
 
 from loader import dp
 from states.states import Start, Task09
@@ -17,7 +17,7 @@ async def answer_09_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Выполнить сейчас":
+    if s == "Выполнить сейчас!":
         await message.answer("Я приготовил для тебя интересный кейс. Это кейс я согласовал с одним знакомым "
                              "шейхом из Арабских Эмиратов, поэтому, он максимально достоверный. ")
         await message.answer("«При чем же здесь шейх?» – спросишь ты.")
@@ -31,7 +31,7 @@ async def answer_09_01(message: Message, state: FSMContext):
                              " в переговорах. Хочешь узнать, что в твоем поведении или в "
                              "поведении твоего коллеги могло вызвать такую реакцию?",
                              reply_markup=tsk09_01)
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."
@@ -40,8 +40,8 @@ async def answer_09_01(message: Message, state: FSMContext):
         await Start.Wait.set()
         return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас» под строкой ввода "
-                             "текста.\n Или «Выполнить позже»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода "
+                             "текста или на «Выполнить позже!».".format(name_user))
         return
     await Task09.next()
 
@@ -76,7 +76,7 @@ async def answer_09_02(message: Message, state: FSMContext):
                              " в коммуникации?  Думаю, что важно анализировать и прогнозировать свои"
                              " действия в коммуникации, и понимать, к чему они могут привести. "
                              "А теперь давай перейдем к национальным особенностям коммуникации. "
-                             "Давай разберем три ситуации. ".format(name_user), reply_markup= tsk07_01)
+                             "Давай разберем три ситуации. ".format(name_user), reply_markup=pool)
         await message.answer("<b>Ситуация №1</b>", parse_mode="HTML")
         await message.answer("Представь, что ты опоздал на встречу  на 5 минут. Как думаешь, какую эмоцию"
                              " это вызовет у твоего коллеги? Напиши название эмоции.")

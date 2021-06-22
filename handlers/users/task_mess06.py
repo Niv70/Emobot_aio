@@ -2,25 +2,31 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk06_01, tsk06_02, tsk07_01
+from keyboards.default.menu import menu, tsk06_01, tsk06_02, pool
 from loader import dp
 from states.states import Start, Task06
 from utils.db_api.db_commands import db_save_task, upload_xls
+
 
 @dp.message_handler(state=Task06.Answer_06_01)
 async def answer_06_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Начать решение задачки":
+    if s == "Выполнить сейчас!":
         await message.answer("Кликни на плашку «Выгрузка» и сделай выгрузку эмоций и причин за шесть дней.\n"
                              "{0}, поисследуй результаты под призмой следующих вопросов: Каких эмоций больше:"
                              " положительных или отрицательных? Чаще всего утром какие эмоции ты испытываешь?"
                              " Какие эмоции ты испытываешь на работе, а какие - дома? Что ты чувствуешь"
                              " вечером?".format(name_user), reply_markup=tsk06_01)
+    elif s == "Выполнить позже!":
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
+                             reply_markup=menu)
+        await Start.Wait.set()
+        return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Начать решение задачки» под строкой ввода "
-                             "текста.".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на"
+                             " «Выполнить позже!»".format(name_user))
         return
     await Task06.next()
 
@@ -34,7 +40,7 @@ async def answer_06_02(message: Message, state: FSMContext):
         filename = await upload_xls(message.from_user.id)
         file = open(filename, "rb")
         await message.answer_document(file, caption="Выгрузка зарегистрированных эмоций")
-        await message.answer("Что интересного ты заметил {0}?".format(name_user), reply_markup=tsk07_01)
+        await message.answer("Что интересного ты заметил {0}?".format(name_user), reply_markup=pool)
     else:
         await message.answer("{0}, Нажми кнопку «Выгрузка» под строкой ввода "
                              "текста.".format(name_user))
@@ -82,7 +88,7 @@ async def answer_06_04(message: Message, state: FSMContext):
             "— Так раньше и было. А как только мы стали отмечать этот"
             " праздник, почти все дни или хорошие "
             "или очень хорошие. Редко-редко что-то не очень хорошее происходит.\n"
-            " Почему же тогда у других людей такого праздника нет?\n" \
+            " Почему же тогда у других людей такого праздника нет?\n"
             " Папа сказал, что этот праздник есть у всех, только не все"
             " его замечают. Многие просто забыли"
             " об этом празднике. Если хочешь, приходи в субботу к нам. Переночуешь,"

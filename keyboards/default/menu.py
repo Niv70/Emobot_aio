@@ -105,21 +105,6 @@ tsk02_17 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk03_00 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Начать решение задачки"),
-        ],
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
 tsk03_01 = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -188,22 +173,6 @@ tsk04_10 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk06_00 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Начать решение задачки"),
-        ],
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
-
 tsk06_01 = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -238,38 +207,6 @@ tsk06_02 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk07_00 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Начать решение задачки"),
-        ],
-        [
-            KeyboardButton(text="Выполнить позже"),
-        ],
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
-
-tsk07_01 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
-
 tsk08_11 = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -286,24 +223,6 @@ tsk08_11 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk09_00 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Выполнить сейчас"),
-        ],
-        [
-            KeyboardButton(text="Выполнить позже"),
-        ],
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
 tsk09_01 = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -328,29 +247,10 @@ tsk09_01 = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-tsk10_00 = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="Выполнить сейчас"),
-        ],
-        [
-            KeyboardButton(text="Выполнить позже"),
-        ],
-        [
-            KeyboardButton(text="Список эмоций и чувств"),
-        ],
-        [
-            KeyboardButton(text="Термометр"),
-            KeyboardButton(text="Настройки")
-        ],
-    ],
-    resize_keyboard=True
-)
-
 tsk11_00 = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Выполнить позже"),
+            KeyboardButton(text="Выполнить позже!"),
         ],
         [
             KeyboardButton(text="Список эмоций и чувств"),
@@ -399,8 +299,6 @@ tsk13_02 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
-
-
 tsk13_03 = ReplyKeyboardMarkup(
     keyboard=[
         [

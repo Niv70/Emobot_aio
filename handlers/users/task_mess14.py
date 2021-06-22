@@ -2,7 +2,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default.menu import menu, tsk07_01, tsk14_01, tsk14_02
+from keyboards.default.menu import menu, tsk14_01, tsk14_02
 from loader import dp
 from states.states import Start, Task14
 from utils.db_api.db_commands import db_save_task
@@ -14,7 +14,7 @@ async def answer_14_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Выполнить сейчас":
+    if s == "Выполнить сейчас!":
         await message.answer("Замур-р-р-чательно! Сегодня освоим одну из кнопок твоего Пульта"
                              " управления эмоциями, которая называется «фокус». Сейчас расскажу,"
                              " как ею пользоваться.\nКогда мы находимся в напряженном эмоциональном "
@@ -25,7 +25,7 @@ async def answer_14_01(message: Message, state: FSMContext):
                              " В этот момент важно привести себя в ресурсное состояние, а для этого есть простой "
                              "прием: изменить фокус внимания.\n Эта техника удерживает разрастание "
                              "негативной эмоции и сглаживает её градус.", reply_markup=tsk14_01)
-    elif s == "Выполнить позже":
+    elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."
@@ -35,8 +35,8 @@ async def answer_14_01(message: Message, state: FSMContext):
         return
     else:
         await db_save_task(message.from_user.id, 14, s)
-        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас» под строкой ввода "
-                             "текста.\n Или «Выполнить позже»".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода "
+                             "текста или на «Выполнить позже!».".format(name_user))
         return
     await Task14.next()
 

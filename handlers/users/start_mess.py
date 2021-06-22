@@ -311,7 +311,7 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=1, task_time=data.get("tsk_t"))
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
     task_loop_action = asyncio.create_task(loop_action(message, state))
     name_task = task_loop_action.get_name()

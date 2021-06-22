@@ -14,15 +14,20 @@ async def answer_03_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Начать решение задачки":
-        await message.answer("Прослушай музыкальный фрагмент и напиши в чат эмоцию, которую почувствуешь.")
+    if s == "Выполнить сейчас!":
+        await message.answer("Прослушай музыкальный фрагмент и напиши в чат эмоцию, которую почувствуешь.",
+                             reply_markup=tsk03_01)
         audio = open("./SND/Задача 3-1.mp3", "rb")
         await message.answer_audio(audio)
-        await message.answer("{0}, что ты чувствуешь после прослушивания музыки?".format(name_user),
-                             reply_markup=tsk03_01)
+        await message.answer("{0}, что ты чувствуешь после прослушивания музыки?".format(name_user))
+    elif s == "Выполнить позже!":
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
+                             reply_markup=menu)
+        await Start.Wait.set()
+        return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Начать решение задачки» под строкой ввода "
-                             "текста.".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на"
+                             " «Выполнить позже!»".format(name_user))
         return
     await Task03.next()
 

@@ -8,19 +8,25 @@ from states.states import Start, Task05
 from utils.db_api.db_commands import db_save_task
 
 
-# Обработчик ввода 1го ответsа (Начать) к "задачке на прокачку" 5-го дня
+# Обработчик ввода 1го ответа (Начать) к "задачке на прокачку" 5-го дня
 @dp.message_handler(state=Task05.Answer_05_01)
 async def answer_05_01(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    if s == "Начать решение задачки":
-        await message.answer("https://www.youtube.com/watch?v=QgR2ozFrzk4")
+    if s == "Выполнить сейчас!":
+        video = open("./VIDEO/У руководства.mp4", "rb")
+        await message.answer_video(video)
         await message.answer("Какие эмоции удалось заменить у Новосельцева в этом фрагменте (перечисли через запятую)?",
                              reply_markup=pool)
+    elif s == "Выполнить позже!":
+        await message.answer("Ага, понимаю! Но у тебя есть шанс вернуться к этой задачке до начала следующего дня.",
+                             reply_markup=menu)
+        await Start.Wait.set()
+        return
     else:
-        await message.answer("{0}, кликни на служебное сообщение «Начать решение задачки» под строкой ввода "
-                             "текста.".format(name_user))
+        await message.answer("{0}, кликни на служебное сообщение «Выполнить сейчас!» под строкой ввода текста или на"
+                             " «Выполнить позже!»".format(name_user))
         return
     await Task05.next()
 
@@ -49,7 +55,7 @@ async def answer_05_03(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     await db_save_task(message.from_user.id, 5, s)
-    await message.answer("Учти эту эмоцию, {0}, когда будешь обращаться к нему/ней. :)".format(name_user),
+    await message.answer("Учти эту эмоцию, {0}, когда будешь обращаться к нему/ней. 😊".format(name_user),
                          reply_markup=menu)
-    await message.answer("{0}, спасибо за эмоциональную кинематографическую разминку".format(name_user))
+    await message.answer("{0}, спасибо за эмоциональную кинематографическую разминку.".format(name_user))
     await Start.Wait.set()

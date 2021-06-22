@@ -6,12 +6,11 @@ from random import choice
 import datetime
 import logging
 
-from keyboards.default import menu
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task08, Task09, Task10, Task11, \
     Task12, Task13, Task14
-from keyboards.default.menu import tsk02_00, tsk02_01, tsk03_00, tsk06_00, tsk07_00, tsk10_00, tsk09_00, tsk07_01
-from utils.db_api.db_commands import db_update_user_settings, stat_five_emotions, upload_xls
+from keyboards.default.menu import menu, pool, tsk02_00, tsk02_01
+from utils.db_api.db_commands import db_update_user_settings, stat_five_emotions, upload_xls, db_update_current_day
 
 
 # Ввод неотрицательного числа
@@ -58,6 +57,7 @@ async def loop_action(message: Message, state: FSMContext):
                 await run_bye(message, state)
                 return
             await state.update_data(current_day=current_day)
+            await db_update_current_day(message.from_user.id, current_day=current_day)
             prev_data = c_day
             await state.update_data(prev_data=prev_data)
             await message.answer('<code>=== начался {0}-й день ===</code>'.format(current_day))
@@ -166,7 +166,6 @@ async def run_bye(message: Message, state: FSMContext):
     await message.answer("Мы полезно с тобой пообщались, {0}! До новых встреч!".format(name_user),
                          reply_markup=ReplyKeyboardRemove())
     await state.reset_state()  # для сохранения данных в data можно писать await state.reset_state(with_data=False)
-    # TODO д.б. добавлена команда по выводу статистики из БД
     filename = await upload_xls(message.from_user.id)
     file = open(filename, "rb")
     await message.answer_document(file, caption="Выгрузка зарегистрированных эмоций")
@@ -191,7 +190,7 @@ async def run_poll(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
     await message.answer_sticker(sticker=sti)
-    await message.answer(r_p.format(name_user, choice(quest)))
+    await message.answer(r_p.format(name_user, choice(quest)), reply_markup=pool)
     await Pool.Emo.set()
 
 
@@ -201,7 +200,7 @@ async def run_poll_task(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
     await message.answer_sticker(sticker=sti)
-    await message.answer(r_p.format(name_user, choice(quest)))
+    await message.answer(r_p.format(name_user, choice(quest)), reply_markup=pool)
     await Pool.EmoTask.set()
 
 
@@ -245,7 +244,7 @@ async def run_task(message: Message, state: FSMContext):
         sti = open("./a_stickers/AnimatedSticker8.tgs", 'rb')  # Идет с закрытыми глазами по беговой дорожке
         await message.answer_sticker(sticker=sti)
         await message.answer('{0}, для {1}-го дня нет ”задачки на прокачку” - можешь просто немного '
-                             'помедитировать вместе со мной... 😊'.format(name_user, current_day))
+                             'помедитировать вместе со мной... 😊'.format(name_user, current_day), reply_markup=menu)
         await Start.Wait.set()
 
 
@@ -270,8 +269,8 @@ async def run_tsk03(message: Message, state: FSMContext):
     await message.answer("Привет, {0}! Вчера мы с тобой были в картинной галерее, а сегодня я тебя приглашаю "
                          "на секретное здание в филармонию. Надень наушники и прослушай последовательно три музыкальных"
                          "фрагмента. Слушай внимательно, можешь даже закрыть глаза. Почувствуй, какую эмоцию у тебя"
-                         " вызывает эта музыка. Если готов начать, кликни на служебное сообщение «Начать"
-                         " решение задачки» под строкой ввода текста.".format(name_user), reply_markup=tsk03_00)
+                         " вызывает эта музыка. Если готов начать кликни на служебное сообщение «Выполнить сейчас!» под"
+                         " строкой ввода текста или на «Выполнить позже!».".format(name_user), reply_markup=tsk02_01)
     await Task03.Answer_03_01.set()
 
 
@@ -291,11 +290,12 @@ async def run_tsk05(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Я заметил, что мое настроение не всегда совпадает с настроением моей команды. На"
                          "верное, и у тебя такое бывало: то шеф не в духе, а то коллега, наоборот, подозрительно "
-                         "весел.".format(name_user), reply_markup=tsk03_00)  # клавиатура tsk03_00 подходит по смыслу
+                         "весел.".format(name_user))
     await message.answer("Вот тебе задачка на прокачку!\n Мы с командой как раз пересматривали советскую классику кинем"
                          "атографа и нашли интересный фрагмент в фильме “Служебный роман”. Попробуй посмотреть его и оп"
                          "ределить, какие эмоции испытывал Новосельцев в этом фрагменте. Если готов начать кликни на сл"
-                         "ужебное сообщение «Начать решение задачки» под строкой ввода текста.")
+                         "ужебное сообщение «Выполнить сейчас!» под строкой ввода текста или на «Выполнить позже!»"
+                         ".", reply_markup=tsk02_01)
     await Task05.Answer_05_01.set()
 
 
@@ -305,7 +305,7 @@ async def run_tsk06(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Сегодня тебе предстоит непростая «задачка на прокачку». Я уверен, что сегодня"
                          " ты обязательно сделаешь маленькие открытия в области своих эмоций.".format(name_user),
-                         reply_markup=tsk06_00)
+                         reply_markup=tsk02_01)
     await Task06.Answer_06_01.set()
 
 
@@ -315,7 +315,7 @@ async def run_tsk07(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Уверен, ты готов к новому заданию. Мы с моей командой часто"
                          " играем в игру «Что испытываю?». Задача простая – я задаю ситуацию, а ты "
-                         "определяешь эмоцию. Сыграем сейчас?".format(name_user), reply_markup=tsk07_00)
+                         "определяешь эмоцию. Сыграем сейчас?".format(name_user), reply_markup=tsk02_01)
     await Task07.Answer_07_01.set()
 
 
@@ -325,7 +325,7 @@ async def run_tsk08(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Сегодня мы потренируемся анализировать и понимать причины эмоций свои и "
                          "других.  Если готов начать кликни на служебное сообщение «Выполнить сейчас!» под строкой "
-                         "ввода текста или на «Выполнить позже!»".format(name_user), reply_markup=tsk02_01)
+                         "ввода текста или на «Выполнить позже!».".format(name_user), reply_markup=tsk02_01)
     await Task08.Answer_08_01.set()
 
 
@@ -335,7 +335,7 @@ async def run_tsk09(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Я приготовил для тебя очередную «задачку на прокачку» эмоционального "
                          "интеллекта. Сегодня будем прокачивать мышцу понимания "
-                         "причин эмоций".format(name_user), reply_markup=tsk09_00)
+                         "причин эмоций".format(name_user), reply_markup=tsk02_01)
     await Task09.Answer_09_01.set()
 
 
@@ -349,7 +349,7 @@ async def run_tsk10(message: Message, state: FSMContext):
                          " команды на новые свершения и провести с ними мозговой штурм, чтобы придумать "
                          "интересные задачки на прокачку.\n"
                          "Сильные приятные эмоции помогают в решении "
-                         "таких задач.".format(name_user), reply_markup=tsk10_00)
+                         "таких задач.".format(name_user), reply_markup=tsk02_01)
     await Task10.Answer_10_01.set()
 
 
@@ -358,7 +358,7 @@ async def run_tsk11(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     await message.answer("И снова здравствуй, {0}! Надеюсь, не отвлекаю? А то мое"
-                         " появление может вызвать разные эмоции :-)".format(name_user), reply_markup=tsk07_01)
+                         " появление может вызвать разные эмоции :-)".format(name_user), reply_markup=pool)
     await message.answer("Кстати, а что ты сейчас чувствуешь?")
     await Task11.Answer_11_01.set()
 
@@ -384,6 +384,7 @@ async def run_tsk12(message: Message, state: FSMContext):
                          "»".format(name_user), reply_markup=tsk02_01)
     await Task12.Answer_12_01.set()
 
+
 # Запуск "задачки на прокачку" 13-го дня
 async def run_tsk13(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -391,8 +392,9 @@ async def run_tsk13(message: Message, state: FSMContext):
     await message.answer("Привет, {0}! У «Пульта управления эмоциями» несколько кнопок."
                          " Вчера ты познакомился с одной из них – «Тело». Сегодня мы поговорим"
                          ", как можно работать с эмоциями "
-                         "через Речь/Мышление. ".format(name_user), reply_markup=tsk10_00)
+                         "через Речь/Мышление. ".format(name_user), reply_markup=tsk02_01)
     await Task13.Answer_13_01.set()
+
 
 # Запуск "задачки на прокачку" 14-го дня
 async def run_tsk14(message: Message, state: FSMContext):
@@ -400,6 +402,6 @@ async def run_tsk14(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     await message.answer("Привет, {0}! Я приготовил для тебя «задачку на прокачку» "
                          "мышцы эмоционального интеллекта, связанной с управлением"
-                         " собственными эмоциями.".format(name_user), reply_markup=tsk10_00)
-    await message.answer("Кстати, а что ты сейчас чувствуешь?")
+                         " собственными эмоциями.".format(name_user), reply_markup=tsk02_01)
+    # await message.answer("Кстати, а что ты сейчас чувствуешь?") - !обработчика ввода эмоции нет
     await Task14.Answer_14_01.set()

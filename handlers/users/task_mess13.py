@@ -67,7 +67,7 @@ async def answer_13_02(message: Message, state: FSMContext):
                              "чем 100 раз услышать. Я приготовил для тебя видео – посмотри, как это работает и"
                              " возвращайся, нам нужно будет делать небольшое задание. ".format(name_user),
                              reply_markup=tsk13_02)
-        video = open("./VIDEO/Активное слушание.mp4","rb")
+        video = open("./VIDEO/Активное слушание.mp4", "rb")
         await message.answer_video(video)
     else:
         await message.answer("{0}, выбери кейс который хочешь посмотреть.\nИли «Продолжить»".format(name_user))

@@ -7,6 +7,7 @@ from loader import dp
 from states.states import Start, Task10
 from utils.db_api.db_commands import db_save_task
 
+
 # Обработчик ввода 1го ответа (Начать) к "задачке на прокачку" 10-го дня
 @dp.message_handler(state=Task10.Answer_10_01)
 async def answer_10_01(message: Message, state: FSMContext):
@@ -23,7 +24,8 @@ async def answer_10_01(message: Message, state: FSMContext):
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
         await message.answer_sticker(sticker=sti)
         await message.answer("{0}, как жаль, я думал мы весело проведем время."
-                             " Возвращайся скорее – я буду ждать тебя до конца дня".format(name_user), reply_markup=menu)
+                             " Возвращайся скорее – я буду ждать тебя до конца дня".format(name_user),
+                             reply_markup=menu)
         await Start.Wait.set()
         return
     else:
@@ -47,6 +49,7 @@ async def answer_10_02(message: Message, state: FSMContext):
                          "(это приятные по ощущениям эмоции с низкой энергией (например, "
                          "доверие, безмятежность, принятие)".format(name_user))
     await Task10.next()
+
 
 # зеленый
 @dp.message_handler(state=Task10.Answer_10_03)

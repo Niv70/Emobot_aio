@@ -79,7 +79,7 @@ async def answer_14_03(message: Message, state: FSMContext):
     if s.isdigit():
         ans = int(s)
         if (ans > 1) and (ans <= 5):
-            await message.answer("Это была только разминка. Уверен, что можешь найти гораздо больше предметов зеленых"
+            await message.answer("Это была только разминка. Уверен, что можешь найти гораздо больше зеленых"
                                  " предметов вокруг. Нужно только потренироваться переключать внимание!")
         elif 5 < ans <= 10:
             await message.answer("Замур-р-р-чательно! Наверное, ты отметил даже зеленые глаза у коллеги! "
@@ -117,12 +117,12 @@ async def answer_14_04(message: Message, state: FSMContext):
                              "Слушай дальше, и ты услышишь, как скрипит под тобой стул и даже звук"
                              " собственного дыхания. Техника «смена фокуса» занимает не более минуты "
                              "и помогает быстро регулировать свое состояние.", reply_markup=menu)
-        await message.answer("Если хочешь, посмотри как это работает на опыте других.")
-        video = open("./VIDEO/Муха и Самурай.mp4", "rb")
-        await message.answer_video(video)
-        await message.answer("Благодарю за тренировку! Жди напоминание по графику.")
     else:
         await message.answer("{0}, кликни на «Понравилось!»"
                              "\n Или «Сомневаюсь в его эффективности»".format(name_user))
         return
+    await message.answer("Если хочешь, посмотри как это работает на опыте других.")
+    video = open("./VIDEO/Муха и Самурай.mp4", "rb")
+    await message.answer_video(video)
+    await message.answer("Благодарю за тренировку! Жди напоминание по графику.")
     await Start.Wait.set()

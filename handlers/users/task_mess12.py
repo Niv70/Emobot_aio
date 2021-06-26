@@ -38,8 +38,9 @@ async def answer_12_01(message: Message, state: FSMContext):
 async def answer_12_02(message: Message):
     s = message.text[:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_task(message.from_user.id, 12, s)
-    await message.answer("Спасибо! А чтобы тебе было проще, поделюсь своими наработками о портретах базовых эмоций:\n"
-                         "https://disk.yandex.ru/i/rFZ4hFMNFWQRgg")
+    await message.answer("Спасибо! А чтобы тебе было проще, поделюсь своими наработками о портретах базовых эмоций:")
+    doc = open("./DOC/День_12_1.docx", "rb")
+    await message.answer_document(document=doc)
     await message.answer("Какие еще способы управления эмоциями через тело ты знаешь? ( напиши в свободной форме)")
     await Task12.next()
 

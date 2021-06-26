@@ -15,10 +15,11 @@ async def answer_10_01(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s == "Выполнить сейчас!":
-        await message.answer_photo("https://disk.yandex.ru/i/NzWJ1A-WdpqA4Q", caption="Измеритель настроения")
+        img = open("./IMG/День_10_1.jpg", "rb")
+        await message.answer_photo(img)
         await message.answer("Подумай и напиши, какие свои рабочие задачи ты мог бы эффективно выполнить, "
-                             "находясь в эмоциях «красного» квадрата Измерителя настроения.\n(это неприятные по "
-                             "ощущениям эмоции с высокой энергией (например, гнев, злость, отвращение, досада))",
+                             "находясь в эмоциях «красного» квадрата Измерителя настроения.\nЭто неприятные по "
+                             "ощущениям эмоции с высокой энергией (например, гнев, злость, отвращение, досада).",
                              reply_markup=pool)
     elif s == "Выполнить позже!":
         sti = open("./a_stickers/AnimatedSticker7.tgs", 'rb')  # Плачет
@@ -46,8 +47,8 @@ async def answer_10_02(message: Message, state: FSMContext):
                          " за права, критическим подходом и добыванием новой информации")
     await message.answer("Подумай и напиши, какие свои рабочие задачи ты мог бы эффективно выполнить,"
                          " находясь в эмоциях «зеленого» квадрата Измерителя настроения.\n"
-                         "(это приятные по ощущениям эмоции с низкой энергией (например, "
-                         "доверие, безмятежность, принятие)".format(name_user))
+                         "Это приятные по ощущениям эмоции с низкой энергией (например, "
+                         "доверие, безмятежность, принятие).".format(name_user))
     await Task10.next()
 
 
@@ -63,6 +64,7 @@ async def answer_10_03(message: Message, state: FSMContext):
     await message.answer("В какой бы эмоции я ни находился, я всегда знаю, как ее лучше использовать в работе.\n"
                          "А чтобы не забыть, какие задачи решать в той или иной эмоции, я "
                          "использую «Измеритель настроения» с подсказкой.")
-    await message.answer_photo("https://disk.yandex.ru/i/vEKB_kpAUZ64Gw")
+    img = open("./IMG/День_10_2.jpg", "rb")
+    await message.answer_photo(img)
     await message.answer("На сегодня - все! Жди напоминалку по графику.", reply_markup=menu)
     await Start.Wait.set()

@@ -65,7 +65,7 @@ async def answer_13_02(message: Message, state: FSMContext):
     elif s == "Продолжить":
         await message.answer("Легко сказать, но трудно сделать скажешь ты. И будешь прав – лучше один раз увидеть, "
                              "чем 100 раз услышать. Я приготовил для тебя видео – посмотри, как это работает и"
-                             " возвращайся, нам нужно будет делать небольшое задание. ".format(name_user),
+                             " возвращайся, нам нужно будет сделать небольшое задание. ".format(name_user),
                              reply_markup=tsk13_02)
         video = open("./VIDEO/Активное слушание.mp4", "rb")
         await message.answer_video(video)

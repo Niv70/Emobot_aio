@@ -357,8 +357,8 @@ async def run_tsk10(message: Message, state: FSMContext):
 async def run_tsk11(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
-    await message.answer("И снова здравствуй, {0}! Надеюсь, не отвлекаю? А то мое"
-                         " появление может вызвать разные эмоции :-)".format(name_user), reply_markup=pool)
+    await message.answer("{}, надеюсь, не отвлекаю? А то мое"
+                         " появление может вызвать разные эмоции 😊.".format(name_user), reply_markup=pool)
     await message.answer("Кстати, а что ты сейчас чувствуешь?")
     await Task11.Answer_11_01.set()
 

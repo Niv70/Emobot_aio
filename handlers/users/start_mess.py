@@ -9,7 +9,7 @@ import logging
 
 
 from loader import dp
-from states.states import Start, Task09
+from states.states import Start
 from utils.common_func import get_digit, loop_action
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06, choice07
 from keyboards.default import menu
@@ -34,9 +34,9 @@ async def answer_name(message: Message, state: FSMContext):
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
     await message.answer("Я - ЗаБотик - веселый и заботливый Телеграм-бот. Я помогаю людям фиксировать и исследовать"
-                         " собственные эмоции. Если ты соглашаешься участвовать в этой работе, то я начну регулярно "
-                         "измерять твою «эмоциональную температуру» в течение дня.\n"
-                         "Привет, {0}!".format(answer), reply_markup=choice01)
+                         " собственные эмоции.\n{0}, если ты соглашаешься участвовать в этой работе, то я начну "
+                         "регулярно измерять твою «эмоциональную температуру» в течение дня.".format(answer),
+                         reply_markup=choice01)
     await Start.Call_01.set()  # или можно await Start.next()
 
 
@@ -319,4 +319,3 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     data = await state.get_data()
     logging.info('answer_tsk_t 0: start_t={0} end_t={1} data={2}'.format(start_t, end_t, data))
     await task_loop_action  # ждем завершения бесконечного цикла действий
-

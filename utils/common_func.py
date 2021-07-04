@@ -33,7 +33,6 @@ async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int)
 # Бесконечный цикл действия ботика
 async def loop_action(message: Message, state: FSMContext):
     t = await get_time_next_action(state, 1)  # первый запуск
-    t=10
     while True:
         data = await state.get_data()
         name_user = data.get("name_user")

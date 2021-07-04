@@ -34,11 +34,20 @@ async def db_update_user_settings(user_id, name="None", start_time=8, period=2, 
                       TaskTime=task_time, LastDay=last_day).apply()
     return item
 
+
 async def db_update_current_day(user_id, current_day=0):
     item: Emo_users
     item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
     await item.update(user_id=user_id, CurrentDay=current_day).apply()
     return item
+
+
+async def db_update_last_day(user_id, last_day=0):
+    item: Emo_users
+    item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
+    await item.update(user_id=user_id, LastDay=last_day).apply()
+    return item
+
 
 async def get_name_by_id(user_id):
     item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()

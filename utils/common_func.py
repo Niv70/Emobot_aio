@@ -39,7 +39,6 @@ async def loop_action(message: Message, state: FSMContext):
         tmz = data.get("tmz")
         prev_data = data.get("prev_data")
         current_day = data.get("current_day")
-        last_day = data.get("last_day")
         flag_pool = data.get("flag_pool")
         flag_task = data.get("flag_task")
         # тайм-аут до начала следующего действия
@@ -59,9 +58,15 @@ async def loop_action(message: Message, state: FSMContext):
             prev_data = c_day
             await state.update_data(prev_data=prev_data)
             await message.answer('<code>=== начался {0}-й день ===</code>'.format(current_day))
-        logging.info('loop_action 1: c_day={0} prev_data={1} current_day={2}'.format(c_day, prev_data, current_day))
         # Проверяем условие завершения работы
+        data = await state.get_data()    # Скопировал сюда из начала цикла, т.к изменение происходит в параллельной
+        last_day = data.get("last_day")  # задаче за время тайм-аута до начала следующего действия
+        logging.info('loop_action 1: c_day={0} prev_data={1} current_day={2}  last_day='
+                     '{3}'.format(c_day, prev_data, current_day, last_day))
         if current_day > last_day:
+            if last_day == 0:  # пользователь уже не взял доп. 14 дней
+                await run_bye(message, state)
+                return
             if last_day == LAST_DAY:  # пользователь еще не взял доп. 14 дней
                 if current_day - last_day > 1:  # пользователь не ответил на вопрос о доп. днях
                     await message.answer('Выбор режима пропущен')
@@ -184,7 +189,7 @@ async def tsk_run_bye(message: Message, state: FSMContext):
                          reply_markup=ReplyKeyboardRemove())
     await message.answer("{0}, у меня есть к тебе предложение. Я могу продолжить фиксировать информацию о твоём эмоци"
                          "ональном состоянии еще в течение двух недель. Кликни на служебное сообщение под строкой ввода"
-                         " текста для задания режима работы.".format(name_user),
+                         " текста для выбора режима работы.".format(name_user),
                          reply_markup=run_bye_qst)
     await TskRunBye.Answer_RB_01.set()
 

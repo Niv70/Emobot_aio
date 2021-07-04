@@ -32,7 +32,7 @@ async def answer_emo(message: Message, state: FSMContext):
         await message.answer(a_e_1.format(name_user))
         return
     s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
-    await db_save_emotions(message.from_user.id, s2)
+    await db_save_emotions(message.from_user.id, s2, state)
     logging.info("a_e 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))
     await Pool.Reason.set()  # или можно await Start.next()
@@ -44,7 +44,7 @@ async def answer_reason(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
-    await db_save_reason(message.from_user.id, s)
+    await db_save_reason(message.from_user.id, s, state)
     await message.answer(a_r.format(choice(comment)), reply_markup=menu)
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
@@ -62,7 +62,7 @@ async def answer_emo_task(message: Message, state: FSMContext):
         await message.answer(a_e_1.format(name_user))
         return
     s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
-    await db_save_emotions(message.from_user.id, s2)
+    await db_save_emotions(message.from_user.id, s2, state)
     logging.info("a_e_t 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))
     await Pool.ReasonTask.set()  # или можно await Start.next()
@@ -74,7 +74,7 @@ async def answer_reason_task(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
-    await db_save_reason(message.from_user.id, s)
+    await db_save_reason(message.from_user.id, s, state)
     await message.answer(a_r.format(choice(comment)))  # подстрочное меню поменяется в "задачке на прокачку"
     logging.info("a_r_t 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))

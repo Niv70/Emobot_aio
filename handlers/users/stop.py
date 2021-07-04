@@ -24,7 +24,8 @@ async def bot_stop(message: Message, state: FSMContext):
     current_day = data.get("current_day")
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     task = asyncio.create_task(on_notify(dp, "Пользователь {0}(id={1}) остановил бота. current_day="
                                              "{2}".format(name_user, message.from_user.id, current_day)))
     await task

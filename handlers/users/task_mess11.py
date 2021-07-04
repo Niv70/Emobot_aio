@@ -48,7 +48,7 @@ async def answer_11_03(message: Message, state: FSMContext):
     s = message.text
     data = await state.get_data()
     name_user = data.get("name_user")
-    await db_save_task(message.from_user.id, 10, s)
+    await db_save_task(message.from_user.id, 11, s)
     if s.lower() == "да":
         await message.answer("Важно использовать потенциал эмоции. Какие еще задачи продуктивны в этой эмоции?")
     elif s.lower() == "нет":

@@ -158,7 +158,8 @@ async def set_sett_1(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()
 
 
@@ -174,7 +175,8 @@ async def set_sett_2(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()
 
 
@@ -191,7 +193,8 @@ async def set_sett_3(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()
 
 
@@ -208,7 +211,8 @@ async def set_sett_4(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()
 
 
@@ -231,7 +235,8 @@ async def set_sett_5(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()
 
 
@@ -249,5 +254,6 @@ async def set_sett_6(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"))
+                                  current_day=data.get("current_day"), task_time=data.get("tsk_t"),
+                                  last_day=data.get("last_day"))
     await Start.Wait.set()

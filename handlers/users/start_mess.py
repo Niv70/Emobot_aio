@@ -8,7 +8,7 @@ from aiogram.dispatcher import FSMContext
 import logging
 
 
-from loader import dp
+from loader import dp, LAST_DAY
 from states.states import Start
 from utils.common_func import get_digit, loop_action
 from keyboards.inline.choice_buttons import choice01, choice02, choice03, choice04, choice05, choice06, choice07
@@ -31,6 +31,7 @@ async def answer_name(message: Message, state: FSMContext):
     await state.update_data(period=2)
     await state.update_data(tsk_t=99)
     await state.update_data(current_day=0)
+    await state.update_data(last_day=LAST_DAY)
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
     await message.answer("Я - ЗаБотик - веселый и заботливый Телеграм-бот. Я помогаю людям фиксировать и исследовать"
@@ -311,7 +312,7 @@ async def answer_tsk_t(message: Message, state: FSMContext):
     data = await state.get_data()
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
-                                  current_day=1, task_time=data.get("tsk_t"))
+                                  current_day=1, task_time=data.get("tsk_t"), last_day=LAST_DAY)
     await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
     task_loop_action = asyncio.create_task(loop_action(message, state))
     name_task = task_loop_action.get_name()

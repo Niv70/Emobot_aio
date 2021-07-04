@@ -348,3 +348,15 @@ tsk14_02 = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+run_bye_qst = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Да, давай продолжим!"),
+        ],
+        [
+            KeyboardButton(text="Нет, спасибо! Я буду самостоятельно вести Дневник эмоций."),
+        ],
+    ],
+    resize_keyboard=True
+)

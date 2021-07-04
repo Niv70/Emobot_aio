@@ -19,6 +19,6 @@ from . import task_mess11
 from . import task_mess12
 from . import task_mess13
 from . import task_mess14
+from . import task_messRB
 # После start_mess, но до poll и tasks д.б. прописан обработчик команды настройки
 from . import echo
-

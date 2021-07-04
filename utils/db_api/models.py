@@ -31,6 +31,7 @@ class Emo_users(db.Model):
     TaskTime = Column(Integer)
     Period = Column(Integer)
     CurrentDay = Column(Integer)
+    LastDay = Column(Integer)
     def __repr__(self):
         return "{}<{}>".format(self.name, self.user_id)
 

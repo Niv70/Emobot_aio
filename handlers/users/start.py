@@ -60,6 +60,7 @@ async def user_settings_from_db(message: types.Message, state: FSMContext):
     await state.update_data(period=user_settings.Period)
     await state.update_data(tsk_t=user_settings.TaskTime)
     await state.update_data(current_day=user_settings.CurrentDay)
+    await state.update_data(last_day=user_settings.LastDay)
     await state.update_data(flag_pool=1)
     await state.update_data(flag_task=0)
 

@@ -40,7 +40,7 @@ async def answer_06_02(message: Message, state: FSMContext):
         filename = await upload_xls(message.from_user.id)
         file = open(filename, "rb")
         await message.answer_document(file, caption="Выгрузка зарегистрированных эмоций")
-        await message.answer("Что интересного ты заметил {0}?".format(name_user), reply_markup=pool)
+        await message.answer("Что интересного можешь отметить, {0}?".format(name_user), reply_markup=pool)
     else:
         await message.answer("{0}, Нажми кнопку «Выгрузка» под строкой ввода "
                              "текста.".format(name_user))

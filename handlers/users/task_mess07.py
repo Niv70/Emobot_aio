@@ -45,7 +45,7 @@ async def answer_07_02(message: Message, state: FSMContext):
     if s.lower() == "стах" or s.lower() == 'вину' or s.lower() == 'вина':
         await message.answer("Отлично! {0}, ты прав на 100%\nПопробуй ответить на следующий вопрос:".format(name_user))
     else:
-        await message.answer("Подумай {0}, может быть это страх или вина?\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("Подумай {0}, может быть это страх или вина?\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда руководитель снова возвращает документ на доработку")
     await Task07.next()
@@ -58,10 +58,10 @@ async def answer_07_03(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "раздражение" or s.lower() == 'злость':
-        await message.answer("Да {0}, это обычная реакция\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("Да {0}, это обычная реакция\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
         await message.answer("Подумай {0}, может быть это раздражение/злость?\n"
-                             "Попробуй ответить на следующий вопрос:".format(name_user))
+                             "Попробуй определить следующую эмоцию:".format(name_user))
     await message.answer(
         "Я чувствую это тогда, когда получаю на доработку документ, который считал идеально подготовленным")
     await db_save_task(message.from_user.id, 7, s)
@@ -75,9 +75,9 @@ async def answer_07_04(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "удивление":
-        await message.answer("{0}, я тоже удивляюсь такому\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("{0}, я тоже удивляюсь такому\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("{0}, а может быть первая эмоция - удивление?\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("{0}, а может быть первая эмоция - удивление?\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда вижу точно такую же вещь на ком-нибудь другом")
     await Task07.next()
@@ -90,9 +90,9 @@ async def answer_07_05(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "досада" or s.lower() == "досаду":
-        await message.answer("{0}, поддерживаю!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("{0}, поддерживаю!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("Может - досаду?\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("Может - досаду?\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда жду результаты экзамена")
     await Task07.next()
@@ -105,9 +105,9 @@ async def answer_07_06(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "волнение":
-        await message.answer("Да {0}, да!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("Да {0}, да!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("А я например испытываю волнение?\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("А я например испытываю волнение.\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда кто-то не сдерживает своего обещания")
     await Task07.next()
@@ -120,9 +120,9 @@ async def answer_07_07(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "обида" or s.lower() == "обиду":
-        await message.answer("Правильная, нормальная реакция {0}!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("Правильная, нормальная реакция {0}!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("Обычно люди чувствуют обиду.\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("Обычно люди чувствуют обиду.\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда смотрю на горящий костер в кругу теплой компании")
     await Task07.next()
@@ -135,10 +135,10 @@ async def answer_07_08(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "умиротворение" or s.lower() == "спокойствие":
-        await message.answer("И я тоже {0}!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("И я тоже {0}!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
         await message.answer("Многие при этом чувствуют умиротворение/спокойствие.\n"
-                             "Попробуй ответить на следующий вопрос:".format(name_user))
+                             "Попробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда не признают мои заслуги")
     await Task07.next()
@@ -151,9 +151,9 @@ async def answer_07_09(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "обида" or s.lower() == "обиду":
-        await message.answer("{0}, а кто тут не почувствует обиду!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("{0}, а кто тут не почувствует обиду!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("Большинство - обижается.\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("Большинство - обижается.\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда слушаю любимую музыку")
     await Task07.next()
@@ -166,9 +166,9 @@ async def answer_07_10(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s.lower() == "радость" or s.lower() == "удовольствие":
-        await message.answer("Согласен с тобой, {0}!\nОтветь на следующий вопрос:".format(name_user))
+        await message.answer("Согласен с тобой, {0}!\nПопробуй определить следующую эмоцию:".format(name_user))
     else:
-        await message.answer("А я чувствую удовольствие/радость.\nПопробуй ответить на следующий вопрос:".format(name_user))
+        await message.answer("А я чувствую удовольствие/радость.\nПопробуй определить следующую эмоцию:".format(name_user))
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда признают результаты моего труда")
     await Task07.next()
@@ -179,9 +179,9 @@ async def answer_07_10(message: Message, state: FSMContext):
 async def answer_07_11(message: Message):
     s = message.text
     if s.lower() == "гордость":
-        await message.answer("Конечно же! Молодец!\nОтветь на следующий вопрос:")
+        await message.answer("Конечно же! Молодец!\nПопробуй определить следующую эмоцию:")
     else:
-        await message.answer("А я чувствую удовольствие/радость.\nПопробуй ответить на следующий вопрос:")
+        await message.answer("А я чувствую удовольствие/радость.\nПопробуй определить следующую эмоцию:")
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Я чувствую это тогда, когда мой ребенок выигрывает соревнования")
     await Task07.next()
@@ -192,9 +192,9 @@ async def answer_07_11(message: Message):
 async def answer_07_12(message: Message):
     s = message.text
     if s.lower() == "гордость":
-        await message.answer("Как и все родители!!!\nОтветь на следующий вопрос:")
+        await message.answer("Как и все родители!!!\nПопробуй определить следующую эмоцию:")
     else:
-        await message.answer("Подумай может это - гордость.\nПопробуй ответить на следующий вопрос:")
+        await message.answer("Подумай может это - гордость.\nПопробуй определить следующую эмоцию:")
     await db_save_task(message.from_user.id, 7, s)
     await message.answer("Что я чувствую тогда, когда интересную идею предлагает человек, от которого этого не ожидал?")
     await Task07.next()

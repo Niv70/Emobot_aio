@@ -18,7 +18,7 @@ async def answer_09_01(message: Message, state: FSMContext):
     data = await state.get_data()
     name_user = data.get("name_user")
     if s == "Выполнить сейчас!":
-        await message.answer("Я приготовил для тебя интересный кейс. Это кейс я согласовал с одним знакомым "
+        await message.answer("Я приготовил для тебя интересный кейс. Его я согласовал с одним знакомым "
                              "шейхом из Арабских Эмиратов, поэтому, он максимально достоверный. ")
         await message.answer("«При чем же здесь шейх?» – спросишь ты.")
         await message.answer(" Одним из компонентов эмоционального интеллекта"

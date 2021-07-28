@@ -5,7 +5,7 @@ from aiogram.types import Message
 from aiogram.dispatcher import FSMContext
 import logging
 
-from keyboards.default.menu import menu
+from keyboards.default.menu import menu, empty_menu
 from loader import dp, LAST_DAY_2
 from states.states import Start, TskRunBye
 from utils.db_api.db_commands import db_update_last_day
@@ -23,12 +23,12 @@ async def answer_rb_01(message: Message, state: FSMContext):
                              "фиксацию эмоции можно выполнять кликнув по служебному сообщению «Фиксировать эмоцию "
                              "сейчас» под строкой ввода текста. Ты можешь изменить настройки фиксации эмоций кликнув по"
                              " служебному сообщению «Настройки» под строкой ввода текста.",
-                             reply_markup=menu)
+                             reply_markup=empty_menu)
         last_day = LAST_DAY_2
     elif s == "Нет, спасибо! Я буду самостоятельно вести Дневник эмоций.":
         await message.answer("Отлично! Напоминание о фиксации эмоций по графику прекращено. С началом следующего дня "
                              "отобразится завершающая статистическая информация по результатам нашей совместной "
-                             "работы.", reply_markup=menu)
+                             "работы.", reply_markup=empty_menu)
         last_day = 0
     else:
         await message.answer("{}, Кликни на служебное сообщение под строкой ввода текста для задания режима"

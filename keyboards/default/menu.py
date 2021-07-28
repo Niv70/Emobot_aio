@@ -360,3 +360,18 @@ run_bye_qst = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+empty_menu = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Фиксировать эмоцию сейчас"),
+        ],
+        [
+            KeyboardButton(text="Список эмоций и чувств"),
+        ],
+        [
+            KeyboardButton(text="Термометр"),
+            KeyboardButton(text="Настройки")
+        ],
+    ],
+    resize_keyboard=True
+)

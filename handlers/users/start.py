@@ -6,6 +6,7 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 
+from keyboards.default.menu import empty_menu
 from loader import dp
 from states.states import Start
 from utils.common_func import loop_action
@@ -37,9 +38,10 @@ async def bot_start(message: types.Message, state: FSMContext):
             await message.answer("Привет! Как тебя зовут?")
             await Start.set_user_name.set()  # или можно await Start.first()
             return
+        mmenu = lambda cd: empty_menu if (cd > 14) else menu
         await message.answer("Привет! Рад еще раз видеть тебя, {0}! Твои настройки восстановлены из БД на {1}-й день."
                              " Опрос по расписанию начнется с наступлением времени начала опроса ({2:0>2}:00)"
-                             ".".format(str0, current_day, start_t), reply_markup=menu)
+                             ".".format(str0, current_day, start_t), reply_markup=mmenu(current_day))
         await Start.Wait.set()  # это состояние не имеет обработчиков - все сообщения "не команды" попадают в Эхо
         task_loop_action = asyncio.create_task(loop_action(message, state))
         name_task = task_loop_action.get_name()

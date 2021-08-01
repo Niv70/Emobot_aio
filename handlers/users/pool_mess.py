@@ -42,10 +42,11 @@ async def answer_emo(message: Message, state: FSMContext):
 async def answer_reason(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
+    current_day = data.get("current_day")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
     await db_save_reason(message.from_user.id, s, state)
     mmenu = lambda cd: empty_menu if (cd > 14) else menu
-    await message.answer(a_r.format(choice(comment)), reply_markup=mmenu)
+    await message.answer(a_r.format(choice(comment)), reply_markup=mmenu(current_day))
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     await Start.Wait.set()

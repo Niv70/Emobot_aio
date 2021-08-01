@@ -85,11 +85,11 @@ async def loop_action(message: Message, state: FSMContext):
             if flag_task and flag_pool == 0 and current_day > LAST_DAY:
                 pass
             elif c_state == "Pool":
-                await message.answer('Прошлое напоминание пропущено', reply_markup=mmenu)
+                await message.answer('Прошлое напоминание пропущено', reply_markup=mmenu(current_day))
             elif c_state == "Task":
-                await message.answer('Решение задачки пропущено', reply_markup=mmenu)
+                await message.answer('Решение задачки пропущено', reply_markup=mmenu(current_day))
             else:
-                await message.answer('Изменение настроек пропущено'.format(name_user), reply_markup=mmenu)
+                await message.answer('Изменение настроек пропущено'.format(name_user), reply_markup=mmenu(current_day))
         logging.info('loop_action 3: flag_pool={0} flag_task={1}'.format(flag_pool, flag_task))
         if flag_pool and flag_task and current_day <= LAST_DAY:
             await run_poll_task(message, state)

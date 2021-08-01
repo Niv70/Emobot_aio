@@ -9,7 +9,7 @@ import logging
 from loader import SEC_IN_H, SEC_IN_M, HOUR_IN_DAY, LAST_DAY
 from states.states import Start, Pool, Task02, Task03, Task04, Task05, Task06, Task07, Task08, Task09, Task10, Task11, \
     Task12, Task13, Task14, TskRunBye
-from keyboards.default.menu import menu, pool, tsk02_00, tsk02_01, run_bye_qst
+from keyboards.default.menu import menu, pool, tsk02_00, tsk02_01, run_bye_qst, empty_menu
 from utils.db_api.db_commands import db_update_user_settings, stat_five_emotions, upload_xls, db_update_current_day
 
 
@@ -81,14 +81,15 @@ async def loop_action(message: Message, state: FSMContext):
             return
         if c_state != "Start:Wait":
             c_state = c_state[:4]
+            mmenu = lambda cd: empty_menu if (cd > 14) else menu
             if flag_task and flag_pool == 0 and current_day > LAST_DAY:
                 pass
             elif c_state == "Pool":
-                await message.answer('Прошлое напоминание пропущено', reply_markup=menu)
+                await message.answer('Прошлое напоминание пропущено', reply_markup=mmenu)
             elif c_state == "Task":
-                await message.answer('Решение задачки пропущено', reply_markup=menu)
+                await message.answer('Решение задачки пропущено', reply_markup=mmenu)
             else:
-                await message.answer('Изменение настроек пропущено'.format(name_user), reply_markup=menu)
+                await message.answer('Изменение настроек пропущено'.format(name_user), reply_markup=mmenu)
         logging.info('loop_action 3: flag_pool={0} flag_task={1}'.format(flag_pool, flag_task))
         if flag_pool and flag_task and current_day <= LAST_DAY:
             await run_poll_task(message, state)

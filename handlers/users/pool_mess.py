@@ -10,8 +10,7 @@ from loader import dp
 from states.states import Pool, Start
 from utils.common_func import run_task
 from utils.db_api.db_commands import db_save_emotions, db_save_reason
-from keyboards.default.menu import menu
-
+from keyboards.default.menu import menu, empty_menu
 
 # Общий блок сообщений для веток: опрос и опрос+задача. Сделал здесь для удобства правки
 comment = ["Понимаю, такое бывает.", "Знакомая эмоция. Фиксирую.", "Понимаю тебя. Записываю.",
@@ -45,7 +44,8 @@ async def answer_reason(message: Message, state: FSMContext):
     name_user = data.get("name_user")
     s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
     await db_save_reason(message.from_user.id, s, state)
-    await message.answer(a_r.format(choice(comment)), reply_markup=menu)
+    mmenu = lambda cd: empty_menu if (cd > 14) else menu
+    await message.answer(a_r.format(choice(comment)), reply_markup=mmenu)
     logging.info("a_r 0: Пользователь {0}(id={1}) ввел причину эмоции: "
                  "{2}".format(name_user, message.from_user.id, s))
     await Start.Wait.set()

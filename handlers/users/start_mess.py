@@ -23,7 +23,7 @@ async def answer_name(message: Message, state: FSMContext):
     # инициализируем список ключей данных
     sss = await get_name_by_id(message.from_user.id)
     if sss is None:
-        await db_add_user(message.from_user.id, message.from_user.first_name, answer)
+        await db_add_user(message.from_user.id, message.from_user.first_name[:20], answer)
     await state.update_data(name_user=answer)
     await state.update_data(tmz=0)
     await state.update_data(start_t=8)
@@ -303,7 +303,7 @@ async def answer_tsk_t(message: Message, state: FSMContext):
         return
     await state.update_data(tsk_t=d)
     await message.answer('Итак, выполнение ”задачки на прокачку” в: {0:0>2}:00'.format(d))
-    await message.answer("Отлично, {0}! Настройки заверешены - опрос начнется с наступлением следующего "
+    await message.answer("Отлично, {0}! Настройки завершены - опрос начнется с наступлением следующего "
                          "дня.".format(name_user))
     await message.answer('А, вот ещё. Если ты захочешь зафиксировать эмоцию или решить ”задачку на прокачку” для '
                          'текущего дня работы без моего напоминания - просто выбери служебное сообщение "Фиксировать '

@@ -23,8 +23,8 @@ class Emo_users(db.Model):
     query: sql.Select
     # Уникальный идентификатор
     user_id = Column(BigInteger, primary_key=True, unique=True)
-    first_name = Column(String(20))
-    name = Column(String(20))
+    first_name = Column(String(200))
+    name = Column(String(200))
     StartTime = Column(Integer)
     EndTime = Column(Integer)
     ZoneTime = Column(Integer)
@@ -47,8 +47,8 @@ class Emotions(db.Model):
     user_id = Column(BigInteger)
     fix_date = Column(Date)
     fix_time = Column(Time)
-    emotion = Column(String(20))
-    reason =  Column(String(50))
+    emotion = Column(String(200))
+    reason =  Column(String(200))
     fk = db.ForeignKeyConstraint(['user_id'], ['emo_users.user_id'], name="fk")
     def __repr__(self):
         return "{}<{}>".format(self.user_id, self.emotion)

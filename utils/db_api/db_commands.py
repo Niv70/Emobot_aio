@@ -89,7 +89,7 @@ async def db_save_reason(user_id, reason, state: FSMContext):
 async def db_save_task(user_id, task_number, answer):
     item: Tasks  # здесь учет часового пояса не делал (очень много вызовов функции) - обработки ее значений пока нет
     item = await Tasks.create(user_id=user_id, fix_date=datetime.datetime.now().date(),
-                              fix_time=datetime.datetime.now().time(), task_number=task_number, answer=answer)
+                              fix_time=datetime.datetime.now().time(), task_number=task_number, answer=answer[:100])
     return item
 
 

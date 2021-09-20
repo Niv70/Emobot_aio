@@ -30,7 +30,7 @@ async def answer_emo(message: Message, state: FSMContext):
     if s1.lower() != "я чувствую ":
         await message.answer(a_e_1.format(name_user))
         return
-    s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
+    s2 = s2[:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_emotions(message.from_user.id, s2, state)
     logging.info("a_e 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))
@@ -43,7 +43,7 @@ async def answer_reason(message: Message, state: FSMContext):
     data = await state.get_data()  # Достаем имя пользователя
     name_user = data.get("name_user")
     current_day = data.get("current_day")
-    s = message.text[:50]  # ограничиваем фантазию пользователя 50ю символами
+    s = message.text[:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_reason(message.from_user.id, s, state)
     mmenu = lambda cd: empty_menu if (cd > 14) else menu
     await message.answer(a_r.format(choice(comment)), reply_markup=mmenu(current_day))
@@ -62,7 +62,7 @@ async def answer_emo_task(message: Message, state: FSMContext):
     if s1.lower() != "я чувствую ":
         await message.answer(a_e_1.format(name_user))
         return
-    s2 = s2[:20]  # ограничиваем фантазию пользователя 20ю символами
+    s2 = s2[:100]  # ограничиваем фантазию пользователя 100 символами
     await db_save_emotions(message.from_user.id, s2, state)
     logging.info("a_e_t 0: Пользователь {0}(id={1}) ввел эмоцию: {2}".format(name_user, message.from_user.id, s2))
     await message.answer(a_e_2.format(name_user))

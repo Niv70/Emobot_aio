@@ -1,11 +1,9 @@
-import asyncio
 from aiogram import executor
 
-from loader import dp, storage
-import middlewares, filters, handlers
+from loader import dp
+from utils.db_api.database import open_db, close_db
 from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
-from utils.db_api.database import db, open_db, close_db
 
 
 async def on_startup(dispatcher):

@@ -1,1 +1,1 @@
-emo-test-bot: python app.py 
+bot: python app.py

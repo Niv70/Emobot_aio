@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 import sqlalchemy
 from aiogram.dispatcher import FSMContext
-from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey, desc)
+from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey, Boolean, desc)
 from sqlalchemy import sql, func, create_engine
 from gino import Gino
 
@@ -17,21 +17,21 @@ import xlsxwriter
 
 
 async def db_add_user(user_id, first_name, name, start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
-                      task_time=99, last_day=LAST_DAY):
+                      task_time=99, last_day=LAST_DAY, is_started=True):
     item: Emo_users
     item = await Emo_users.create(user_id=user_id, first_name=first_name, name=name, StartTime=start_time,
                                   EndTime=end_time, ZoneTime=zone_time, Period=period, CurrentDay=current_day,
-                                  TaskTime=task_time, LastDay=last_day)
+                                  TaskTime=task_time, LastDay=last_day, is_started=is_started)
     return item
 
 
 async def db_update_user_settings(user_id, name="None", start_time=8, period=2, end_time=17, zone_time=7, current_day=0,
-                                  task_time=99, last_day=LAST_DAY):
+                                  task_time=99, last_day=LAST_DAY, is_started=False):
     item: Emo_users
     item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
     await item.update(user_id=user_id, name=name, StartTime=start_time,
                       EndTime=end_time, ZoneTime=zone_time, Period=period, CurrentDay=current_day,
-                      TaskTime=task_time, LastDay=last_day).apply()
+                      TaskTime=task_time, LastDay=last_day, is_started=is_started).apply()
     return item
 
 
@@ -40,6 +40,21 @@ async def db_update_current_day(user_id, current_day=0):
     item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
     await item.update(user_id=user_id, CurrentDay=current_day).apply()
     return item
+
+
+async def db_update_started(user_id, is_started=True):
+    item: Emo_users
+    item = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
+    await item.update(user_id=user_id, is_started=is_started).apply()
+    return item
+
+
+async def db_is_started(user_id):
+    item: Emo_users = await Emo_users.query.where(Emo_users.user_id == user_id).gino.first()
+    if item is None:
+        return None
+    else:
+        return item.is_started
 
 
 async def db_update_last_day(user_id, last_day=0):
@@ -55,6 +70,15 @@ async def get_name_by_id(user_id):
         return None
     else:
         return item.name
+
+
+async def get_active_users():
+    list_users = []
+    item: Emo_users
+    list_items = await Emo_users.query.where(Emo_users.is_started == True).gino.all()
+    for item in list_items:
+        list_users.append(item.user_id)
+    return list_users
 
 
 async def get_settings_by_id(user_id):
@@ -108,9 +132,10 @@ async def stat_five_emotions(user_id):
 async def upload_xls(user_id):
     engine0 = create_engine(POSTGRES_URI)
     sf = pd.read_sql("SELECT public.emotions.fix_date AS Дата, public.emotions.fix_time AS Время,"
-                     "public.emotions.emotion AS Эмоция, public.emotions.reason AS Причина FROM public.emotions WHERE public.emotions.user_id={0}".format(user_id),engine0)
-    writer = pd.ExcelWriter("./Emotions-{0}.xlsx".format(user_id), engine='xlsxwriter', date_format="dd-mm-yyyy",
+                     "public.emotions.emotion AS Эмоция, public.emotions.reason AS Причина FROM public.emotions WHERE public.emotions.user_id={0}".format(
+        user_id), engine0)
+    writer = pd.ExcelWriter("./XLS/Emotions-{0}.xlsx".format(user_id), engine='xlsxwriter', date_format="dd-mm-yyyy",
                             datetime_format="hh:mm")
     sf.to_excel(writer, sheet_name="Реестр эмоций")
     writer.save()
-    return "./Emotions-{0}.xlsx".format(user_id)
+    return "./XLS/Emotions-{0}.xlsx".format(user_id)

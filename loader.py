@@ -1,11 +1,15 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-# from aiogram.contrib.fsm_storage.files import JSONStorage
+#from aiogram.contrib.fsm_storage.files import JSONStorage
+#from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from data import config
 
 bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()  # м.б. будет быстрее чем JSONStorage(path="FSM.json")
+#storage = JSONStorage(path="FSM.json")
+#storage = RedisStorage2(host=config.REDIS_HOST, db=5, port=config.REDIS_PORT, password=config.REDIS_PASS)
+
 dp = Dispatcher(bot, storage=storage)
 
 LAST_DAY = 14  # Последний день опроса - во время отладки меняем c 18 на 1<х<18

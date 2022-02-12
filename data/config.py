@@ -15,3 +15,9 @@ PG_DATABASE = env.str("PG_DATABASE")
 
 POSTGRES_URI = f"postgresql://{PG_USER}:{PG_PASS}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
 
+REDIS_HOST = env.str("REDIS_HOST")
+REDIS_USER = env.str("REDIS_USER")
+REDIS_PORT = env.str("REDIS_PORT")
+REDIS_PASS = env.str("REDIS_PASS")
+REDIS_URI = env.str("REDIS_URI")
+

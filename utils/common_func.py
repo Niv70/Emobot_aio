@@ -32,7 +32,7 @@ async def get_digit(message: Message, state: FSMContext, d_min: int, d_max: int)
 
 # Бесконечный цикл действия ботика
 async def loop_action(message: Message, state: FSMContext):
-    t = await get_time_next_action(state, 1)
+    t = await get_time_next_action(state, 0)
     while True:
         data = await state.get_data()
         name_user = data.get("name_user")
@@ -206,7 +206,7 @@ async def run_bye(message: Message, state: FSMContext):
     await db_update_user_settings(message.from_user.id, name=data.get("name_user"), start_time=data.get("start_t"),
                                   period=data.get("period"), end_time=data.get("end_t"), zone_time=data.get("tmz"),
                                   current_day=data.get("current_day"), task_time=data.get("tsk_t"),
-                                  last_day=data.get("last_day"))
+                                  last_day=data.get("last_day"), is_started=False)
     logging.info("run_bye 0: Бот пользователя {0}(id={1}) штатно завершил работу. "
                  "current_day={2}".format(name_user, message.from_user.id, current_day))
 
@@ -224,7 +224,10 @@ async def run_poll(message: Message, state: FSMContext):
     sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
     await message.answer_sticker(sticker=sti)
     await message.answer(r_p.format(name_user, choice(quest)), reply_markup=pool)
-    await Pool.Emo.set()
+    print(message)
+    print(state.chat)
+    await state.set_state(Pool.Emo)
+
 
 
 # Запуск опроса эмоции c последующим запуском задачи
@@ -234,7 +237,9 @@ async def run_poll_task(message: Message, state: FSMContext):
     sti = open("./a_stickers/AnimatedSticker3.tgs", 'rb')  # Приветствует наступив на хвост мышке
     await message.answer_sticker(sticker=sti)
     await message.answer(r_p.format(name_user, choice(quest)), reply_markup=pool)
-    await Pool.EmoTask.set()
+    print(message)
+    print(state)
+    await state.set_state(Pool.EmoTask)
 
 
 async def run_task(message: Message, state: FSMContext):

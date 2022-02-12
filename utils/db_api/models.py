@@ -1,4 +1,4 @@
-from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, ForeignKey)
+from sqlalchemy import (Column, Integer, String, Sequence, BigInteger, Date, DateTime, Time, Boolean, ForeignKey)
 from sqlalchemy import sql
 from utils.db_api.database import db
 
@@ -25,6 +25,7 @@ class Emo_users(db.Model):
     user_id = Column(BigInteger, primary_key=True, unique=True)
     first_name = Column(String(200))
     name = Column(String(200))
+    is_started = Column(Boolean, default=False)
     StartTime = Column(Integer)
     EndTime = Column(Integer)
     ZoneTime = Column(Integer)
@@ -66,7 +67,7 @@ class Tasks(db.Model):
     fix_date = Column(Date)
     fix_time = Column(Time)
     task_number = Column(Integer)
-    answer = Column(String(100))
+    answer = Column(String(250))
     fk2 = db.ForeignKeyConstraint(['user_id'], ['emo_users.user_id'], name="fk2")
     def __repr__(self):
         return "{}<{}>".format(self.user_id, self.answer)

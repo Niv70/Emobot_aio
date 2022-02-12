@@ -9,7 +9,7 @@ async def set_default_commands(dp):
             types.BotCommand("stop", "Остановить бота"),
             types.BotCommand("stat", "Статистика по зафиксированным эмоциям"),
             # types.BotCommand("reset", "Перезапуск бота"),
-            # types.BotCommand("dbdrop", "Зачистить базу"),
-            # types.BotCommand("dbcreate", "Создать таблицы"),
+        #     types.BotCommand("dbdrop", "Зачистить базу"),
+        #     types.BotCommand("dbcreate", "Создать таблицы"),
         ]
     )
